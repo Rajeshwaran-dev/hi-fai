@@ -4,13 +4,15 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReducedMotion, useIsMobile } from "./hooks/useReducedMotion.js";
 import Preloader from "./components/Preloader.jsx";
 import Navbar from "./components/Navbar.jsx";
-import Hero from "./components/Hero.jsx";
-import Services from "./components/Services.jsx";
-import TargetUsers from "./components/TargetUsers.jsx";
-import HowItWorks from "./components/HowItWorks.jsx";
-import ProjectsSection from "./components/ProjectsSection.jsx";
-import Features from "./components/Features.jsx";
-import CTASection from "./components/CTASection.jsx";
+import {
+  Hero,
+  Services,
+  TargetUsers,
+  HowItWorks,
+  ProjectsSection,
+  Features,
+  CTASection,
+} from "./components/Sections.jsx";
 import Footer from "./components/Footer.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import useCardTilt from "./hooks/useCardTilt.js";

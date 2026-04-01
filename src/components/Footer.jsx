@@ -71,7 +71,13 @@ export default function Footer({ reducedMotion }) {
 
             {/* Col 1 — Brand */}
             <div ref={col1Ref}>
-              <p className="font-display text-[1.45rem] text-gradient md:text-[1.75rem]">HIFAI Skills</p>
+              <a href="#hero" className="inline-flex items-center" aria-label="HIFAI Skills home">
+                <img
+                  src="/logo.png"
+                  alt="HIFAI Skills"
+                  className="h-14 w-auto md:h-16"
+                />
+              </a>
               <p className="mt-1 text-xs uppercase tracking-[0.14em] text-white/60">Human Intelligence for AI Use</p>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/75">
                 Crafting future-ready talent through AI literacy, problem solving, and real-world
