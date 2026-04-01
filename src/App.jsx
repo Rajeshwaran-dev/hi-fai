@@ -15,7 +15,7 @@ import Footer from "./components/Footer.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import useCardTilt from "./hooks/useCardTilt.js";
 import useMagneticButtons from "./hooks/useMagneticButtons.js";
-import useSmoothScroll from "./hooks/useSmoothScroll.js";
+import useSmoothScroll from "./hooks/Usesmoothscroll.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
