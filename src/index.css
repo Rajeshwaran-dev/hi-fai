@@ -1,0 +1,187 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: auto;
+    scroll-padding-top: 90px;
+  }
+  body {
+    margin: 0;
+    font-family: "League Spartan", system-ui, sans-serif;
+    @apply bg-cream text-ink antialiased;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .font-display {
+    font-family: "Anton SC", system-ui, sans-serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent via-accent-cyan to-accent;
+  }
+  .glass {
+    @apply bg-white/40 backdrop-blur-xl border border-white/60 shadow-glass;
+  }
+  .glass-dark {
+    @apply bg-ink/5 backdrop-blur-xl border border-blue-500/10 shadow-glass;
+  }
+
+  .hero-trail-dot {
+    @apply absolute rounded-full bg-gradient-to-br from-accent/60 to-accent-cyan/50 blur-[1px];
+    transform: translate(-50%, -50%);
+  }
+}
+
+.text-sm {
+  font-size: 16px;
+}
+
+.font-geom-heading {
+  font-family: "Geom", sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+/* ═══════════════════════════════════════════
+   Preloader
+═══════════════════════════════════════════ */
+
+.preloader-root {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: radial-gradient(ellipse 140% 110% at 25% 15%, #1a2d47, #0a1525 55%, #040c18 100%);
+}
+
+.preloader-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.20;
+  background-image:
+    linear-gradient(rgba(100, 200, 255, 0.14) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100, 200, 255, 0.14) 1px, transparent 1px);
+  background-size: 30px 30px;
+}
+
+.preloader-glow {
+  position: absolute;
+  width: 28rem;
+  height: 28rem;
+  border-radius: 50%;
+  filter: blur(80px);
+}
+.preloader-glow-left {
+  left: -100px;
+  top: -90px;
+  background: radial-gradient(circle, rgba(30, 80, 220, 0.50), transparent 70%);
+}
+.preloader-glow-right {
+  right: -100px;
+  bottom: -100px;
+  background: radial-gradient(circle, rgba(0, 175, 210, 0.44), transparent 70%);
+}
+
+/* ── Stage layout ── */
+.preloader-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /*
+    Gap of 0 so the hands can be animated to meet at the center.
+    GSAP controls x-translation; the gap here is the resting gap.
+  */
+  gap: 0;
+}
+
+/* ── Hand wrappers ── */
+.preloader-hand-wrap {
+  position: relative;
+  width: clamp(120px, 18vw, 190px);
+  height: clamp(148px, 22vw, 230px);
+  flex-shrink: 0;
+
+  /* Warm orange glow around each hand */
+  filter:
+    drop-shadow(0 18px 32px rgba(0, 0, 0, 0.50))
+    drop-shadow(0  0  26px rgba(255, 160, 90, 0.28));
+}
+
+.preloader-hand-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/*
+  The right hand uses the same SVG but mirrored so the thumb
+  sits on the right outer edge and the palms face each other.
+*/
+.preloader-hand-flip .preloader-hand-svg {
+  transform: scaleX(-1);
+}
+
+/* ── Impact burst ── */
+.preloader-impact {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: clamp(40px, 6vw, 64px);
+  height: clamp(40px, 6vw, 64px);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, #fffef0 0%, #ffd080 40%, #ff9030 100%);
+  filter: drop-shadow(0 0 30px rgba(255, 165, 80, 1));
+}
+
+/* ── Ripple rings — three concentric rings that expand on impact ── */
+.preloader-ripple {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.preloader-ripple-1 {
+  width: clamp(40px, 6vw, 64px);
+  height: clamp(40px, 6vw, 64px);
+  border: 2.5px solid rgba(255, 215, 130, 0.90);
+}
+
+.preloader-ripple-2 {
+  width: clamp(58px, 8.5vw, 90px);
+  height: clamp(58px, 8.5vw, 90px);
+  border: 2px solid rgba(255, 185, 90, 0.60);
+}
+
+.preloader-ripple-3 {
+  width: clamp(78px, 11.5vw, 122px);
+  height: clamp(78px, 11.5vw, 122px);
+  border: 1.5px solid rgba(255, 155, 50, 0.35);
+}
