@@ -427,13 +427,6 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
       >
         <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent via-accent-cyan to-accent" aria-hidden />
         <div className="pointer-events-none absolute -right-24 -top-20 h-48 w-48 rounded-full bg-accent/20 blur-3xl" aria-hidden />
-        <div className="relative z-10 mb-5 h-44 overflow-hidden rounded-2xl border border-accent/15">
-          <img
-            src={service.image}
-            alt={service.title}
-            className="h-full w-full object-cover"
-          />
-        </div>
         <button
           type="button"
           onClick={handleClose}
