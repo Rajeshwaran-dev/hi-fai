@@ -50,6 +50,32 @@
   }
 }
 
+/*
+  Thin light scrollbar for modal scroll containers.
+  Works in Chrome/Edge (webkit) and Firefox (scrollbar-width).
+*/
+.service-modal-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(37, 99, 235, 0.35) transparent;
+}
+
+.service-modal-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.service-modal-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.service-modal-scroll::-webkit-scrollbar-thumb {
+  background: rgba(37, 99, 235, 0.35);
+  border-radius: 999px;
+}
+
+.service-modal-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 99, 235, 0.55);
+}
+
 .text-sm {
   font-size: 16px;
 }

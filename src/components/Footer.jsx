@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -10,6 +10,7 @@ export default function Footer({ reducedMotion }) {
   const col2Ref   = useRef(null);
   const col3Ref   = useRef(null);
   const bottomRef = useRef(null);
+  const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
     const inner = innerRef.current;
@@ -40,6 +41,40 @@ export default function Footer({ reducedMotion }) {
     return () => ctx.revert();
   }, [reducedMotion]);
 
+  // Only show after the user scrolls past the Hero section.
+  useEffect(() => {
+    const update = () => {
+      const hero = document.getElementById("hero");
+      if (!hero) {
+        setShowBackToTop(false);
+        return;
+      }
+
+      // "Past the hero" => hero bottom is above the viewport.
+      const shouldShow = hero.getBoundingClientRect().bottom <= 0;
+      setShowBackToTop(shouldShow);
+    };
+
+    let rafId = 0;
+    const onScrollOrResize = () => {
+      if (rafId) return;
+      rafId = window.requestAnimationFrame(() => {
+        rafId = 0;
+        update();
+      });
+    };
+
+    update();
+    window.addEventListener("scroll", onScrollOrResize, { passive: true });
+    window.addEventListener("resize", onScrollOrResize);
+
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId);
+      window.removeEventListener("scroll", onScrollOrResize);
+      window.removeEventListener("resize", onScrollOrResize);
+    };
+  }, []);
+
   /* ── Hover line animation on footer links ── */
   const handleLinkEnter = (e) => {
     if (reducedMotion) return;
@@ -61,6 +96,20 @@ export default function Footer({ reducedMotion }) {
       <div className="pointer-events-none absolute -left-24 -top-8 h-72 w-72 rounded-full bg-accent/25 blur-3xl" aria-hidden />
       <div className="pointer-events-none absolute -right-28 bottom-0 h-80 w-80 rounded-full bg-accent-cyan/25 blur-3xl" aria-hidden />
       <div className="pointer-events-none absolute left-1/2 top-10 h-44 w-[70%] -translate-x-1/2 rounded-full bg-accent/15 blur-3xl" aria-hidden />
+
+      {showBackToTop && (
+        <a
+          href="#hero"
+          aria-label=""
+          className="fixed bottom-8 right-8 z-[135] flex h-12 items-center justify-center gap-2 rounded-full border border-white/15 bg-ink/70 px-4 text-accent-cyan shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-200 hover:border-accent/40 hover:bg-ink/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+        >
+          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <path d="M12 19V5" />
+            <path d="M5 12l7-7 7 7" />
+          </svg>
+          
+        </a>
+      )}
 
       <div ref={innerRef} className="relative mx-auto max-w-7xl">
         <div className="overflow-hidden rounded-[2rem] border border-white/15 bg-[#07132b] shadow-[0_20px_80px_rgba(0,0,0,0.35)] backdrop-blur-2xl">
@@ -94,23 +143,6 @@ export default function Footer({ reducedMotion }) {
                     {tag}
                   </span>
                 ))}
-              </div>
-
-              {/* CTAs */}
-              <div className="mt-7 flex flex-wrap gap-3">
-                <a
-                  href="#cta"
-                  className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-cyan px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:gap-3 hover:shadow-glow"
-                >
-                  Start With HIFAI
-                  <span className="inline-block transition-transform group-hover:translate-x-0.5">→</span>
-                </a>
-                <a
-                  href="#hero"
-                  className="inline-flex items-center rounded-full border border-white/20 bg-white/10 px-5 py-2.5 text-sm font-semibold text-white transition-all hover:border-accent/40 hover:text-accent-cyan"
-                >
-                  ↑ Back to Top
-                </a>
               </div>
             </div>
 

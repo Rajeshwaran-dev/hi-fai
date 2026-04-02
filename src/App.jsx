@@ -12,7 +12,7 @@ import {
   ProjectsSection,
   Features,
   CTASection,
-} from "./components/Sections.jsx";
+} from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
 import useCardTilt from "./hooks/useCardTilt.js";
