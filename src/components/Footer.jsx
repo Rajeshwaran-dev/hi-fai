@@ -1,10 +1,24 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useRouteTransition } from "./RouteTransitionProvider.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/** Matches primary header navigation routes */
+const FOOTER_NAV_LINKS = [
+  { label: "Home", to: "/" },
+  { label: "School Students", to: "/students/school-students" },
+  { label: "College Students", to: "/students/college-students" },
+  { label: "School Organizations", to: "/school-organizations" },
+  { label: "College Organizations", to: "/college-organizations" },
+  { label: "Learning Hub", to: "/learning-hub" },
+];
+
 export default function Footer({ reducedMotion }) {
+  const location = useLocation();
+  const { transitionTo } = useRouteTransition();
   const innerRef  = useRef(null);
   const col1Ref   = useRef(null);
   const col2Ref   = useRef(null);
@@ -87,7 +101,17 @@ export default function Footer({ reducedMotion }) {
     gsap.to(el, { backgroundSize: "0% 2px", duration: 0.22, ease: "power2.in" });
   };
 
-  const footerLink = "transition-colors duration-200 hover:text-accent bg-[length:0%_2px] bg-gradient-to-r bg-[position:0_100%] bg-no-repeat from-accent to-accent-cyan";
+  const footerLink =
+    "transition-colors duration-200 hover:text-accent bg-[length:0%_2px] bg-gradient-to-r bg-[position:0_100%] bg-no-repeat from-accent to-accent-cyan";
+
+  const handleFooterNavClick = (e, to) => {
+    if (to === location.pathname) {
+      e.preventDefault();
+      return;
+    }
+    e.preventDefault();
+    transitionTo(to);
+  };
 
   return (
     <footer className="relative overflow-hidden border-t border-accent/10 bg-ink px-4 pt-20 pb-14 md:px-8">
@@ -100,14 +124,13 @@ export default function Footer({ reducedMotion }) {
       {showBackToTop && (
         <a
           href="#hero"
-          aria-label=""
+          aria-label="Back to top"
           className="fixed bottom-8 right-8 z-[135] flex h-12 items-center justify-center gap-2 rounded-full border border-white/15 bg-ink/70 px-4 text-accent-cyan shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-200 hover:border-accent/40 hover:bg-ink/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 19V5" />
             <path d="M5 12l7-7 7 7" />
           </svg>
-          
         </a>
       )}
 
@@ -120,10 +143,15 @@ export default function Footer({ reducedMotion }) {
 
             {/* Col 1 — Brand */}
             <div ref={col1Ref}>
-              <a href="#hero" className="inline-flex items-center" aria-label="HIFAI Skills home">
+              <a
+                href="/"
+                onClick={(e) => handleFooterNavClick(e, "/")}
+                className="inline-flex items-center"
+                aria-label="HIfAi home"
+              >
                 <img
-                  src="/logo.png"
-                  alt="HIFAI Skills"
+                  src="/logo-1.png"
+                  alt="HIfAi — human hand and robotic hand high-five"
                   className="h-14 w-auto md:h-16"
                 />
               </a>
@@ -150,19 +178,14 @@ export default function Footer({ reducedMotion }) {
             <nav ref={col2Ref} aria-label="Footer navigation" className="md:pl-6">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-cyan">Explore</p>
               <ul className="mt-4 space-y-3 text-sm font-medium text-white/80">
-                {[
-                  { label: "Home",     href: "#hero"     },
-                  { label: "Services", href: "#services" },
-                  { label: "Audience", href: "#audience" },
-                  { label: "Process",  href: "#how"      },
-                  { label: "Features", href: "#features" },
-                ].map((l) => (
-                  <li key={l.href}>
+                {FOOTER_NAV_LINKS.map((l) => (
+                  <li key={l.to}>
                     <a
-                      href={l.href}
+                      href={l.to}
+                      onClick={(e) => handleFooterNavClick(e, l.to)}
                       onMouseEnter={handleLinkEnter}
                       onMouseLeave={handleLinkLeave}
-                      className={footerLink}
+                      className={`${footerLink} ${location.pathname === l.to ? "text-accent-cyan" : ""}`}
                     >
                       {l.label}
                     </a>

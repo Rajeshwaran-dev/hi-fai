@@ -7,7 +7,7 @@ import GLOBE from "vanta/dist/vanta.globe.min.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HEADLINE = "Human Intelligence for AI Use";
+const HEADLINE = "Human Intelligence for Artificial Control";
 const WORDS = HEADLINE.split(" ");
 
 export function Hero({ reducedMotion, isMobile }) {
@@ -159,14 +159,14 @@ export function Hero({ reducedMotion, isMobile }) {
     <section
       id="hero"
       ref={rootRef}
-      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-x-hidden px-4 pt-24 pb-20 md:pb-16"
+      className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden px-4 pt-24 pb-20 md:pb-16"
     >
       <div ref={vantaRef} className="absolute inset-0 z-0" aria-hidden />
       <div className="pointer-events-none absolute inset-0 z-[1] bg-hero-mesh" aria-hidden />
       <div ref={trailLayerRef} className="pointer-events-none absolute inset-0 z-[11]" aria-hidden />
       <div
         ref={parallaxRef}
-        className="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center"
+        className="relative z-10 mx-auto flex max-w-6xl flex-col items-center text-center"
       >
         <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-white/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700 shadow-sm backdrop-blur-md md:text-sm">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-500" />

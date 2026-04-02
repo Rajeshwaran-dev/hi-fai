@@ -81,7 +81,7 @@ export default function BreadcrumbPage({ title }) {
           style={{ background: 'linear-gradient(90deg, transparent 0%, #bfdbfe 25%, #a5f3fc 75%, transparent 100%)' }} />
 
         {/* Content */}
-        <div className="relative z-10 mx-auto max-w-5xl px-6 pt-8 md:pt-10">
+        <div className="relative z-10 mx-auto max-w-5xl px-6 pt-8 md:pt-20">
 
           {/* ── Breadcrumb nav ── */}
           <nav aria-label="Breadcrumb" className="bc-r1 mb-7 flex items-center justify-center gap-2">

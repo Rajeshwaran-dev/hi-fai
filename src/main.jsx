@@ -12,10 +12,11 @@ createRoot(document.getElementById("root")).render(
       <RouteTransitionProvider>
         <Routes>
           <Route path="/" element={<App />} />
-          <Route path="/explore" element={<BreadcrumbPage title="Explore" />} />
-          <Route path="/evaluate" element={<BreadcrumbPage title="Evaluate" />} />
-          <Route path="/extend" element={<BreadcrumbPage title="Extend" />} />
-          <Route path="/expand" element={<BreadcrumbPage title="Expand" />} />
+          <Route path="/students/school-students" element={<BreadcrumbPage title="School Students" />} />
+          <Route path="/students/college-students" element={<BreadcrumbPage title="College Students" />} />
+          <Route path="/school-organizations" element={<BreadcrumbPage title="School Organizations" />} />
+          <Route path="/college-organizations" element={<BreadcrumbPage title="College Organizations" />} />
+          <Route path="/learning-hub" element={<BreadcrumbPage title="Learning Hub" />} />
           <Route path="/get-started" element={<BreadcrumbPage title="Get Started" />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
