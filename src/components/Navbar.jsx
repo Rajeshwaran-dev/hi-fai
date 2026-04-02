@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
 import gsap from "gsap";
 import { Link, useLocation } from "react-router-dom";
 import { useRouteTransition } from "./RouteTransitionProvider.jsx";
@@ -33,9 +32,7 @@ export default function Navbar({ reducedMotion }) {
   const location = useLocation();
   const { transitionTo } = useRouteTransition(); // kept for logo route transition consistency
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isGetStartedModalOpen, setIsGetStartedModalOpen] = useState(false);
   const [isStudentsMenuOpen, setIsStudentsMenuOpen] = useState(false);
-  const [activeFormTab, setActiveFormTab] = useState("school");
 
   useEffect(() => {
     if (reducedMotion || !barRef.current) return;
@@ -51,11 +48,10 @@ export default function Navbar({ reducedMotion }) {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (!isMobileMenuOpen && !isGetStartedModalOpen) return undefined;
+    if (!isMobileMenuOpen) return undefined;
     const prevOverflow = document.body.style.overflow;
     const onEsc = (event) => {
       if (event.key === "Escape") setIsMobileMenuOpen(false);
-      if (event.key === "Escape") setIsGetStartedModalOpen(false);
     };
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onEsc);
@@ -63,7 +59,7 @@ export default function Navbar({ reducedMotion }) {
       document.body.style.overflow = prevOverflow;
       window.removeEventListener("keydown", onEsc);
     };
-  }, [isMobileMenuOpen, isGetStartedModalOpen]);
+  }, [isMobileMenuOpen]);
 
   useEffect(
     () => () => {
@@ -124,163 +120,6 @@ export default function Navbar({ reducedMotion }) {
       </svg>
     );
   };
-
-  const getStartedModal =
-    isGetStartedModalOpen && typeof document !== "undefined" ? (
-      <div
-        className="fixed inset-0 z-[100] flex min-h-[100dvh] items-center justify-center p-4 sm:p-6"
-        role="dialog"
-        aria-modal="true"
-      >
-        <button
-          type="button"
-          className="absolute inset-0 bg-ink/45 backdrop-blur-md"
-          onClick={() => setIsGetStartedModalOpen(false)}
-          aria-label="Close dialog"
-        />
-
-        <div className="relative z-10 my-auto max-h-[min(94dvh,920px)] w-[min(94vw,900px)] overflow-hidden rounded-[1.8rem] border border-white/60 bg-white/95 shadow-[0_32px_96px_rgba(0,0,0,0.22)] backdrop-blur-2xl">
-          <div
-            className="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-accent via-accent-cyan to-accent"
-            aria-hidden
-          />
-          <button
-            type="button"
-            onClick={() => setIsGetStartedModalOpen(false)}
-            className="absolute right-5 top-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-xl text-ink/50 shadow-sm transition-all hover:rotate-90 hover:bg-white hover:text-ink"
-            aria-label="Close modal"
-          >
-            &times;
-          </button>
-
-          <div className="max-h-[min(94dvh,920px)] overflow-y-auto">
-            <div className="px-6 pb-8 pt-10 md:px-10 md:pt-12">
-              <div className="text-center">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Join Now</p>
-                <h2 className="mt-3 font-geom-heading text-[1.8rem] font-normal leading-tight text-ink md:text-[2.25rem]">
-                  Ready to Start Your Journey?
-                </h2>
-                <p className="mx-auto mt-2 max-w-xl text-sm text-ink/65">
-                  Choose your pathway and tell us more about you.
-                </p>
-              </div>
-
-              <div className="mx-auto mt-7 flex max-w-sm rounded-[1rem] bg-slate-100 p-1.5 shadow-inner">
-                <button
-                  type="button"
-                  onClick={() => setActiveFormTab("school")}
-                  className={`flex-1 rounded-[0.7rem] py-2.5 text-sm font-semibold transition-all ${
-                    activeFormTab === "school"
-                      ? "bg-white text-accent shadow-sm ring-1 ring-black/5"
-                      : "text-slate-500 hover:text-ink"
-                  }`}
-                >
-                  High School
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveFormTab("university")}
-                  className={`flex-1 rounded-[0.7rem] py-2.5 text-sm font-semibold transition-all ${
-                    activeFormTab === "university"
-                      ? "bg-white text-accent shadow-sm ring-1 ring-black/5"
-                      : "text-slate-500 hover:text-ink"
-                  }`}
-                >
-                  University
-                </button>
-              </div>
-
-              <form className="mt-6 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-[0_4px_32px_rgba(15,23,42,0.06)] md:p-7">
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold text-slate-800">First name</span>
-                    <input
-                      type="text"
-                      placeholder="Jane"
-                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold text-slate-800">Last name</span>
-                    <input
-                      type="text"
-                      placeholder="Doe"
-                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold text-slate-800">
-                      {activeFormTab === "school" ? "Grade" : "Program"}
-                    </span>
-                    <select className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/20">
-                      {activeFormTab === "school" ? (
-                        <>
-                          <option>Select grade</option>
-                          <option>Grade 9</option>
-                          <option>Grade 10</option>
-                          <option>Grade 11</option>
-                          <option>Grade 12</option>
-                        </>
-                      ) : (
-                        <>
-                          <option>Select program</option>
-                          <option>Undergraduate</option>
-                          <option>Postgraduate</option>
-                          <option>Diploma</option>
-                        </>
-                      )}
-                    </select>
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold text-slate-800">
-                      {activeFormTab === "school" ? "Institution name" : "University name"}
-                    </span>
-                    <input
-                      type="text"
-                      placeholder={activeFormTab === "school" ? "Your high school" : "Your university"}
-                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold text-slate-800">Phone number</span>
-                    <input
-                      type="tel"
-                      placeholder="+1 ••• ••• ••••"
-                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
-                    />
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold text-slate-800">Email ID</span>
-                    <input
-                      type="email"
-                      placeholder="you@school.edu"
-                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-accent/50 focus:ring-2 focus:ring-accent/20"
-                    />
-                  </label>
-                </div>
-              </form>
-            </div>
-
-            <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 p-6 md:flex-row md:items-center md:justify-between">
-              <button
-                type="button"
-                className="group flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-cyan px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:shadow-glow-cyan md:w-auto"
-              >
-                Submit Application
-                <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsGetStartedModalOpen(false)}
-                className="flex min-h-[48px] items-center justify-center rounded-full border border-slate-200 bg-white px-8 py-3 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:bg-slate-50"
-              >
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    ) : null;
 
   return (
     <header
@@ -376,7 +215,7 @@ export default function Navbar({ reducedMotion }) {
         <button
           type="button"
           data-magnetic
-          onClick={() => setIsGetStartedModalOpen(true)}
+          onClick={() => navigateTo("/get-started")}
           className="ml-auto hidden min-h-[42px] shrink-0 items-center justify-center rounded-full border border-cyan-300/20 bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-5 py-2 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(20,131,255,0.45)] transition-transform duration-200 hover:scale-[1.03] hover:shadow-glow active:scale-[0.98] md:inline-flex md:px-6"
         >
           Get Started
@@ -482,17 +321,12 @@ export default function Navbar({ reducedMotion }) {
 
         <button
           type="button"
-          onClick={() => {
-            setIsMobileMenuOpen(false);
-            setIsGetStartedModalOpen(true);
-          }}
+          onClick={() => navigateTo("/get-started")}
           className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(20,131,255,0.45)]"
         >
           Get Started
         </button>
       </aside>
-
-      {getStartedModal ? createPortal(getStartedModal, document.body) : null}
     </header>
   );
 }

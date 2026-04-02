@@ -4,7 +4,7 @@ import { useReducedMotion } from "../hooks/useReducedMotion.js";
 import { useRouteTransition } from "../components/RouteTransitionProvider.jsx";
 import { useLocation } from "react-router-dom";
 
-export default function BreadcrumbPage({ title }) {
+export default function BreadcrumbPage({ title, subtitle, children }) {
   const reducedMotion = useReducedMotion();
   const { transitionTo } = useRouteTransition();
   const location = useLocation();
@@ -19,8 +19,6 @@ export default function BreadcrumbPage({ title }) {
     <div className="relative w-full bg-white">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-        .bc-wrap * { font-family: 'Plus Jakarta Sans', sans-serif; }
 
         @keyframes bc-fadeUp {
           from { opacity: 0; transform: translateY(14px); }
@@ -81,7 +79,7 @@ export default function BreadcrumbPage({ title }) {
           style={{ background: 'linear-gradient(90deg, transparent 0%, #bfdbfe 25%, #a5f3fc 75%, transparent 100%)' }} />
 
         {/* Content */}
-        <div className="relative z-10 mx-auto max-w-5xl px-6 pt-8 md:pt-20">
+        <div className="relative z-10 mx-auto max-w-6xl px-6 pt-8 md:pt-20">
 
           {/* ── Breadcrumb nav ── */}
           <nav aria-label="Breadcrumb" className="bc-r1 mb-7 flex items-center justify-center gap-2">
@@ -121,11 +119,39 @@ export default function BreadcrumbPage({ title }) {
               {/* Accent underline */}
               <div aria-hidden className="mx-auto mt-3 h-[3px] w-16 rounded-full"
                 style={{ background: 'linear-gradient(90deg, #3b82f6, #06b6d4)' }} />
+              {subtitle ? (
+                <p className="mx-auto mt-5 max-w-2xl text-base font-medium leading-relaxed text-slate-600 md:text-lg">
+                  {subtitle}
+                </p>
+              ) : null}
             </div>
           </div>
 
         </div>
       </section>
+
+      {children ? (
+        <section className="relative w-full overflow-hidden bg-white pb-16 pt-2 md:pb-24 md:pt-4">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-[0.35]"
+            style={{
+              backgroundImage: "radial-gradient(circle, #bfdbfe 1px, transparent 1px)",
+              backgroundSize: "24px 24px",
+            }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: "linear-gradient(180deg, rgba(240,247,255,0.5) 0%, transparent 22%, transparent 100%)",
+            }}
+          />
+          <div className="relative z-10 mx-auto max-w-6xl px-6">
+            <div className="bc-r3">{children}</div>
+          </div>
+        </section>
+      ) : null}
 
       <Footer reducedMotion={reducedMotion} />
     </div>
