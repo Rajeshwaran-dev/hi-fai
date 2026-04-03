@@ -5,6 +5,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+let lenisInstance = null;
+
+/** Active Lenis instance while the home route has mounted smooth scroll (null otherwise). */
+export function getLenisInstance() {
+  return lenisInstance;
+}
+
 /**
  * useSmoothScroll
  * ----------------
@@ -31,6 +38,8 @@ export default function useSmoothScroll(reducedMotion = false) {
       wheelMultiplier: 0.95,
     });
 
+    lenisInstance = lenis;
+
     // Keep GSAP ScrollTrigger in sync
     lenis.on("scroll", ScrollTrigger.update);
 
@@ -52,6 +61,7 @@ export default function useSmoothScroll(reducedMotion = false) {
     return () => {
       gsap.ticker.remove(tickerCb);
       document.removeEventListener("click", handleAnchor);
+      lenisInstance = null;
       lenis.destroy();
     };
   }, [reducedMotion]);

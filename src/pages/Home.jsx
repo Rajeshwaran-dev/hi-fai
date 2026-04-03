@@ -1,5 +1,17 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { Link } from "react-router-dom";
+import {
+  BrainCircuit,
+  Briefcase,
+  GraduationCap,
+  Landmark,
+  LayoutGrid,
+  Orbit,
+  Route,
+  School,
+  Sparkles,
+} from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import * as THREE from "three";
@@ -159,7 +171,7 @@ export function Hero({ reducedMotion, isMobile }) {
     <section
       id="hero"
       ref={rootRef}
-      className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden px-4 pt-24 pb-20 md:pb-16"
+      className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden px-4 pt-32 pb-20 md:pb-16"
     >
       <div ref={vantaRef} className="absolute inset-0 z-0" aria-hidden />
       <div className="pointer-events-none absolute inset-0 z-[1] bg-hero-mesh" aria-hidden />
@@ -196,14 +208,14 @@ export function Hero({ reducedMotion, isMobile }) {
           ref={ctaRef}
           className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4"
         >
-          <a
-            href="#services"
+          <Link
+            to="/learning-hub#services"
             data-magnetic
             className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-3.5 text-center text-sm font-semibold text-white shadow-lg transition-[transform,box-shadow] duration-300 hover:scale-[1.04] hover:shadow-glow md:text-base"
           >
             <span className="relative z-10">Explore Services</span>
             <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
-          </a>
+          </Link>
           <a
             href="#cta"
             data-magnetic
@@ -226,6 +238,786 @@ export function Hero({ reducedMotion, isMobile }) {
   );
 }
 
+const WHY_HIFAI_POINTS = [
+  { text: "Education measures knowledge, not skills.", kind: "gap" },
+  { text: "Core human abilities remain unidentified.", kind: "gap" },
+  { text: "No unified skill assessment exists.", kind: "gap" },
+  { text: "HIfAi maps human intelligence using AI.", kind: "answer" },
+  { text: "Enables focused skill development.", kind: "answer" },
+  { text: "Aligns strengths with future pathways.", kind: "answer" },
+];
+
+export function WhyHifaiSection({ reducedMotion, isMobile }) {
+  const sectionRef = useRef(null);
+  const leftRef = useRef(null);
+  const rightRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || reducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (leftRef.current?.children?.length) {
+        gsap.from(leftRef.current.children, {
+          y: isMobile ? 16 : 28,
+          opacity: 0,
+          stagger: 0.07,
+          duration: 0.65,
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 82%", toggleActions: "play none none none" },
+        });
+      }
+      if (rightRef.current) {
+        gsap.from(rightRef.current, {
+          x: isMobile ? 0 : 28,
+          y: isMobile ? 20 : 0,
+          opacity: 0,
+          duration: 0.75,
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 78%", toggleActions: "play none none none" },
+        });
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, [reducedMotion, isMobile]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden border-t border-blue-100/60 bg-cream px-4 py-16 md:px-8 md:py-24"
+      aria-labelledby="why-hifai-heading"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        aria-hidden
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(37, 99, 235, 0.12) 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute -left-32 top-1/2 h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-blue-400/10 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-cyan-300/15 blur-3xl"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div ref={leftRef} className="flex flex-col">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">Why HIfAi?</p>
+          <h2
+            id="why-hifai-heading"
+            className="mt-3 font-geom-heading text-[clamp(1.85rem,4.2vw,2.75rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
+          >
+            Skills and intelligence,{" "}
+            <span className="relative inline-block">
+              <span className="relative z-10">made visible</span>
+              <span
+                className="absolute -bottom-0.5 left-0 h-2.5 w-full rounded-md bg-gradient-to-r from-cyan-400/45 to-blue-500/40"
+                aria-hidden
+              />
+            </span>
+          </h2>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-ink/65 md:text-[17px]">
+            Traditional systems stop at grades. HIfAi closes the loop between what people know, what they can do,
+            and where they are headed next.
+          </p>
+
+          <ul className="mt-8 space-y-0" role="list">
+            {WHY_HIFAI_POINTS.map(({ text, kind }, i) => (
+              <li
+                key={i}
+                className={`flex gap-4 border-t border-slate-200/80 py-4 first:border-t-0 first:pt-0 md:gap-5 ${
+                  kind === "answer" ? "md:pl-1" : ""
+                }`}
+              >
+                <span
+                  className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${
+                    kind === "gap"
+                      ? "bg-slate-300 ring-2 ring-slate-200/80"
+                      : "bg-gradient-to-br from-blue-600 to-cyan-500 shadow-[0_0_0_3px_rgba(37,99,235,0.15)]"
+                  }`}
+                  aria-hidden
+                />
+                <span
+                  className={`text-[15px] leading-relaxed md:text-base ${
+                    kind === "gap" ? "text-ink/70" : "font-medium text-ink"
+                  }`}
+                >
+                  {text}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div ref={rightRef} className="relative mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none">
+          <div
+            className="absolute -inset-3 rounded-[1.75rem] bg-gradient-to-br from-blue-500/20 via-cyan-400/15 to-blue-600/10 blur-xl md:-inset-4"
+            aria-hidden
+          />
+          <figure className="relative overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_24px_64px_rgba(15,23,42,0.12)] ring-1 ring-ink/5">
+            <img
+              src="/skill-developement.jpg.jpeg"
+              alt="Learners building future-ready skills through guided practice and collaboration"
+              className="aspect-[4/3] h-full w-full object-cover md:aspect-[5/4]"
+              width={800}
+              height={640}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption className="sr-only">Skill development and collaborative learning</figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+const MISSING_LINK_POINTS = [
+  "One-size-fits-all assessments dominate learning.",
+  "Exam results reflect knowledge only.",
+  "Cognitive skills remain unmeasured.",
+  "Students lack visibility of real strengths.",
+  "Educators lack skill-based evaluation tools.",
+];
+
+export function MissingLinkSection({ reducedMotion, isMobile }) {
+  const sectionRef = useRef(null);
+  const imageRef = useRef(null);
+  const contentRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || reducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (imageRef.current) {
+        gsap.from(imageRef.current, {
+          x: isMobile ? 0 : -32,
+          y: isMobile ? 18 : 0,
+          opacity: 0,
+          duration: 0.75,
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none none" },
+        });
+      }
+      if (contentRef.current?.children?.length) {
+        gsap.from(contentRef.current.children, {
+          y: isMobile ? 16 : 28,
+          opacity: 0,
+          stagger: 0.07,
+          duration: 0.65,
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 78%", toggleActions: "play none none none" },
+        });
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, [reducedMotion, isMobile]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden border-t border-slate-200/70 bg-white px-4 py-16 md:px-8 md:py-24"
+      aria-labelledby="missing-link-heading"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        aria-hidden
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(6, 182, 212, 0.11) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute right-0 top-1/2 h-[26rem] w-[26rem] -translate-y-1/2 translate-x-1/4 rounded-full bg-cyan-400/10 blur-3xl"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-blue-500/8 blur-3xl"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div ref={imageRef} className="relative mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none">
+          <div
+            className="absolute -inset-3 rounded-[1.75rem] bg-gradient-to-tr from-cyan-400/25 via-blue-500/12 to-indigo-500/15 blur-xl md:-inset-4"
+            aria-hidden
+          />
+          <figure className="relative overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-slate-100 shadow-[0_24px_64px_rgba(15,23,42,0.1)] ring-1 ring-ink/5">
+            <img
+              src="/high-school-solution.jpg.jpeg"
+              alt="Classroom and institutional learning where assessment often stops at exam scores"
+              className="aspect-[4/3] h-full w-full object-cover md:aspect-[5/4]"
+              width={800}
+              height={640}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption className="sr-only">School and organizational learning context</figcaption>
+          </figure>
+        </div>
+
+        <div ref={contentRef} className="flex flex-col">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-700">Education today</p>
+          <h2
+            id="missing-link-heading"
+            className="mt-3 font-geom-heading text-[clamp(1.85rem,4.2vw,2.75rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
+          >
+            This Missing Link{" "}
+            <span className="relative inline-block">
+              <span className="relative z-10">in Education</span>
+              <span
+                className="absolute -bottom-0.5 left-0 h-2.5 w-full rounded-md bg-gradient-to-r from-blue-500/40 to-cyan-400/45"
+                aria-hidden
+              />
+            </span>
+          </h2>
+          <p className="mt-4 max-w-xl text-base leading-relaxed text-ink/65 md:text-[17px]">
+            When measurement ends at marks, both learners and teachers lose the signal they need for the next best
+            step—skills stay invisible and decisions stay guesswork.
+          </p>
+
+          <ul className="mt-8 space-y-0" role="list">
+            {MISSING_LINK_POINTS.map((text, i) => (
+              <li
+                key={i}
+                className="flex gap-4 border-t border-slate-200/80 py-4 first:border-t-0 first:pt-0 md:gap-5"
+              >
+                <span
+                  className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-br from-slate-400 to-slate-500 ring-2 ring-slate-200/90"
+                  aria-hidden
+                />
+                <span className="text-[15px] leading-relaxed text-ink/75 md:text-base">{text}</span>
+              </li>
+            ))}
+            <li className="mt-2 flex gap-4 rounded-2xl border border-blue-200/70 bg-gradient-to-r from-blue-50/95 to-cyan-50/50 p-5 md:gap-5 md:p-6">
+              <span
+                className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white shadow-md"
+                aria-hidden
+              >
+                !
+              </span>
+              <p className="text-[15px] font-semibold leading-relaxed text-ink md:text-base">
+                This gap limits academic and career decisions.
+              </p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, body, footerTags, gradient }) {
+  const innerRef = useRef(null);
+  const glowRef = useRef(null);
+
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || reducedMotion) return;
+
+    gsap.set(el, { transformOrigin: "50% 50%", transformPerspective: 1000 });
+
+    const maxTilt = 9;
+    const setRX = gsap.quickTo(el, "rotateX", { duration: 0.35, ease: "power3.out" });
+    const setRY = gsap.quickTo(el, "rotateY", { duration: 0.35, ease: "power3.out" });
+    const setY = gsap.quickTo(el, "y", { duration: 0.35, ease: "power3.out" });
+
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      setRX(-py * maxTilt);
+      setRY(px * maxTilt);
+      setY(-6);
+      if (glowRef.current) {
+        gsap.to(glowRef.current, {
+          left: `${((e.clientX - r.left) / r.width) * 100}%`,
+          top: `${((e.clientY - r.top) / r.height) * 100}%`,
+          opacity: 0.55,
+          duration: 0.25,
+        });
+      }
+    };
+
+    const onLeave = () => {
+      setRX(0);
+      setRY(0);
+      setY(0);
+      if (glowRef.current) gsap.to(glowRef.current, { opacity: 0, duration: 0.45 });
+    };
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, [reducedMotion]);
+
+  return (
+    <article ref={cardRef} className="group/card h-full perspective-[1400px]">
+      <div
+        className={`relative h-full rounded-[1.65rem] bg-gradient-to-br p-[1.5px] shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-500 ease-out ${gradient} group-hover/card:shadow-[0_32px_72px_rgba(37,99,235,0.22)] group-hover/card:p-[2px]`}
+      >
+        <div
+          ref={innerRef}
+          className="what-is-card-inner relative h-full overflow-hidden rounded-[1.58rem] border border-white/90 bg-gradient-to-b from-white/98 to-cream/90 shadow-inner backdrop-blur-md transition-[box-shadow] duration-500 group-hover/card:border-blue-200/60 group-hover/card:shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <div
+            ref={glowRef}
+            className="pointer-events-none absolute h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-cyan-300/35 via-blue-400/30 to-indigo-400/25 blur-3xl opacity-0 transition-opacity duration-300"
+            style={{ left: "50%", top: "50%" }}
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl transition-all duration-700 group-hover/card:scale-125 group-hover/card:bg-cyan-400/15"
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -bottom-20 -left-12 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl transition-all duration-700 group-hover/card:translate-y-[-10px]"
+            aria-hidden
+          />
+
+          <div className="relative z-10 flex h-full flex-col p-8 md:p-10">
+            <div className="flex items-start justify-between gap-4">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-700 shadow-sm transition-all duration-500 group-hover/card:scale-110 group-hover/card:border-blue-300 group-hover/card:shadow-md">
+                {icon}
+              </span>
+              <span className="rounded-full border border-blue-200/70 bg-blue-50/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-700 transition-colors duration-300 group-hover/card:border-cyan-300/80 group-hover/card:bg-cyan-50/90">
+                {chip}
+              </span>
+            </div>
+
+            <h3 className="mt-6 font-geom-heading text-[1.45rem] font-normal leading-tight tracking-[-0.02em] text-ink md:text-[1.65rem] transition-transform duration-500 group-hover/card:translate-x-0.5">
+              {title}
+            </h3>
+            {acronym ? (
+              <p className="mt-2 text-sm font-semibold tracking-wide text-blue-600/95">{acronym}</p>
+            ) : null}
+
+            <p className="mt-5 flex-1 text-[15px] leading-relaxed text-ink/72 md:text-base">{body}</p>
+
+            {footerTags?.length ? (
+              <div className="mt-8 flex flex-wrap gap-2 border-t border-blue-100/80 pt-6">
+                {footerTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-lg border border-slate-200/90 bg-white/80 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm transition-all duration-300 group-hover/card:border-blue-200 group-hover/card:bg-gradient-to-r group-hover/card:from-blue-50 group-hover/card:to-cyan-50/80 group-hover/card:text-blue-900"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            ) : null}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body, gradient }) {
+  const innerRef = useRef(null);
+  const glowRef = useRef(null);
+
+  useEffect(() => {
+    const el = innerRef.current;
+    if (!el || reducedMotion) return;
+
+    gsap.set(el, { transformOrigin: "50% 50%", transformPerspective: 1000 });
+
+    const maxTilt = 8;
+    const setRX = gsap.quickTo(el, "rotateX", { duration: 0.32, ease: "power3.out" });
+    const setRY = gsap.quickTo(el, "rotateY", { duration: 0.32, ease: "power3.out" });
+    const setY = gsap.quickTo(el, "y", { duration: 0.32, ease: "power3.out" });
+
+    const onMove = (e) => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      setRX(-py * maxTilt);
+      setRY(px * maxTilt);
+      setY(-5);
+      if (glowRef.current) {
+        gsap.to(glowRef.current, {
+          left: `${((e.clientX - r.left) / r.width) * 100}%`,
+          top: `${((e.clientY - r.top) / r.height) * 100}%`,
+          opacity: 0.5,
+          duration: 0.22,
+        });
+      }
+    };
+
+    const onLeave = () => {
+      setRX(0);
+      setRY(0);
+      setY(0);
+      if (glowRef.current) gsap.to(glowRef.current, { opacity: 0, duration: 0.4 });
+    };
+
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, [reducedMotion]);
+
+  return (
+    <article ref={cardRef} className="group/ben h-full perspective-[1300px]">
+      <div
+        className={`relative h-full rounded-[1.4rem] bg-gradient-to-br p-[1.5px] shadow-[0_14px_40px_rgba(15,23,42,0.07)] transition-all duration-500 ease-out ${gradient} group-hover/ben:shadow-[0_26px_64px_rgba(37,99,235,0.18)] group-hover/ben:p-[2px]`}
+      >
+        <div
+          ref={innerRef}
+          className="relative h-full overflow-hidden rounded-[1.33rem] border border-white/90 bg-gradient-to-b from-white/98 to-cream/95 backdrop-blur-sm transition-[box-shadow] duration-500 group-hover/ben:border-blue-200/55"
+          style={{ transformStyle: "preserve-3d" }}
+        >
+          <div
+            ref={glowRef}
+            className="pointer-events-none absolute h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-blue-300/30 via-cyan-300/25 to-indigo-300/20 blur-3xl opacity-0"
+            style={{ left: "50%", top: "50%" }}
+            aria-hidden
+          />
+          <div
+            className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-blue-500/10 blur-2xl transition-all duration-500 group-hover/ben:scale-110 group-hover/ben:bg-cyan-400/12"
+            aria-hidden
+          />
+
+          <div className="relative z-10 flex h-full flex-col p-6 md:p-8">
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200/75 bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-700 shadow-sm transition-all duration-500 group-hover/ben:scale-110 group-hover/ben:rotate-[-4deg] group-hover/ben:border-blue-300 group-hover/ben:shadow-md md:h-14 md:w-14">
+              {icon}
+            </span>
+            <h3 className="mt-5 font-geom-heading text-[1.2rem] font-normal leading-tight tracking-[-0.02em] text-ink md:text-[1.35rem] transition-transform duration-500 group-hover/ben:translate-x-0.5">
+              {title}
+            </h3>
+            <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/72 md:text-[15px]">{body}</p>
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+}
+
+const HIFAI_UNIQUE_STEPS = [
+  {
+    title: "Personalized Skill Development",
+    icon: Sparkles,
+    gradient: "from-blue-600 via-blue-500 to-cyan-500",
+    ring: "from-blue-400/40 to-cyan-400/35",
+  },
+  {
+    title: "Customizable Learning Paths",
+    icon: Route,
+    gradient: "from-cyan-500 via-teal-500 to-blue-600",
+    ring: "from-cyan-400/40 to-blue-400/35",
+  },
+  {
+    title: "Board-Agnostic Skill Building",
+    icon: LayoutGrid,
+    gradient: "from-indigo-600 via-blue-600 to-cyan-500",
+    ring: "from-indigo-400/35 to-cyan-400/35",
+  },
+  {
+    title: "Lifelong Skills Portfolio",
+    icon: Briefcase,
+    gradient: "from-blue-700 via-indigo-600 to-cyan-500",
+    ring: "from-blue-400/40 to-indigo-400/30",
+  },
+];
+
+export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+  const c0 = useRef(null);
+  const c1 = useRef(null);
+  const whoBlockRef = useRef(null);
+  const whoHeaderRef = useRef(null);
+  const w0 = useRef(null);
+  const w1 = useRef(null);
+  const w2 = useRef(null);
+  const uniqueBlockRef = useRef(null);
+  const uniqueHeaderRef = useRef(null);
+  const u0 = useRef(null);
+  const u1 = useRef(null);
+  const u2 = useRef(null);
+  const u3 = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || reducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (headerRef.current?.children?.length) {
+        gsap.from(headerRef.current.children, {
+          y: isMobile ? 14 : 22,
+          opacity: 0,
+          stagger: 0.08,
+          duration: 0.65,
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 84%", toggleActions: "play none none none" },
+        });
+      }
+      [c0, c1].forEach((r, i) => {
+        if (!r.current) return;
+        gsap.from(r.current, {
+          y: isMobile ? 28 : 40,
+          opacity: 0,
+          rotateX: 8,
+          duration: 0.75,
+          delay: i * 0.12,
+          ease: "power3.out",
+          scrollTrigger: { trigger: section, start: "top 78%", toggleActions: "play none none none" },
+        });
+      });
+
+      const whoEl = whoBlockRef.current;
+      if (whoEl) {
+        if (whoHeaderRef.current?.children?.length) {
+          gsap.from(whoHeaderRef.current.children, {
+            y: isMobile ? 12 : 18,
+            opacity: 0,
+            stagger: 0.07,
+            duration: 0.6,
+            ease: "power3.out",
+            scrollTrigger: { trigger: whoEl, start: "top 86%", toggleActions: "play none none none" },
+          });
+        }
+        [w0, w1, w2].forEach((r, i) => {
+          if (!r.current) return;
+          gsap.from(r.current, {
+            y: isMobile ? 24 : 32,
+            opacity: 0,
+            rotateX: 6,
+            duration: 0.68,
+            delay: i * 0.1,
+            ease: "power3.out",
+            scrollTrigger: { trigger: whoEl, start: "top 80%", toggleActions: "play none none none" },
+          });
+        });
+      }
+
+      const uniqEl = uniqueBlockRef.current;
+      if (uniqEl) {
+        if (uniqueHeaderRef.current?.children?.length) {
+          gsap.from(uniqueHeaderRef.current.children, {
+            y: isMobile ? 12 : 16,
+            opacity: 0,
+            stagger: 0.06,
+            duration: 0.58,
+            ease: "power3.out",
+            scrollTrigger: { trigger: uniqEl, start: "top 88%", toggleActions: "play none none none" },
+          });
+        }
+        [u0, u1, u2, u3].forEach((r, i) => {
+          if (!r.current) return;
+          gsap.from(r.current, {
+            scale: 0.88,
+            opacity: 0,
+            y: isMobile ? 16 : 0,
+            duration: 0.6,
+            delay: i * 0.09,
+            ease: "back.out(1.35)",
+            scrollTrigger: { trigger: uniqEl, start: "top 82%", toggleActions: "play none none none" },
+          });
+        });
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, [reducedMotion, isMobile]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden border-t border-blue-100/50 bg-gradient-to-b from-cream via-white to-cream px-4 py-16 md:px-8 md:py-24"
+      aria-labelledby="what-is-hifai-heading"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.38]"
+        aria-hidden
+        style={{
+          backgroundImage: "radial-gradient(circle, rgba(37, 99, 235, 0.1) 1px, transparent 1px)",
+          backgroundSize: "30px 30px",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute left-1/2 top-0 h-64 w-[min(100%,48rem)] -translate-x-1/2 rounded-b-[100%] bg-gradient-to-b from-blue-400/8 to-transparent blur-2xl"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl">
+        <div ref={headerRef} className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
+          <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">What is HIfAi?</p>
+          <h2
+            id="what-is-hifai-heading"
+            className="mt-3 font-geom-heading text-[clamp(1.9rem,4.5vw,2.85rem)] font-normal leading-[1.15] tracking-[-0.02em] text-ink"
+          >
+            Human intelligence,{" "}
+            <span className="text-gradient">amplified by AI</span>
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-ink/65 md:text-[17px]">
+            Two sides of one platform—who you are as a learner, and how modern digital pillars power your growth.
+          </p>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-2 md:gap-10">
+          <WhatIsHoverCard
+            reducedMotion={reducedMotion}
+            cardRef={c0}
+            gradient="from-blue-500/40 via-cyan-400/35 to-blue-600/40 group-hover/card:from-blue-600 group-hover/card:via-cyan-500 group-hover/card:to-indigo-600"
+            chip="Platform"
+            icon={<BrainCircuit className="h-7 w-7" strokeWidth={1.75} aria-hidden />}
+            title="HIfAi"
+            acronym="Human Intelligence for Artificial Intelligence"
+            body="HIfAi is a skill-centric platform focused on identifying and nurturing core human capabilities beyond academic knowledge."
+          />
+          <WhatIsHoverCard
+            reducedMotion={reducedMotion}
+            cardRef={c1}
+            gradient="from-cyan-500/40 via-blue-500/35 to-indigo-500/40 group-hover/card:from-cyan-500 group-hover/card:via-blue-600 group-hover/card:to-indigo-600"
+            chip="Digital ABCD"
+            icon={<Orbit className="h-7 w-7" strokeWidth={1.75} aria-hidden />}
+            title="AI-driven pathways"
+            acronym={null}
+            body="It utilizes AI-driven insights and the Digital ABCD model (AI, Blockchain, Cloud, Data) to enable targeted skill development and help learners apply their strengths in education and career pathways."
+            footerTags={["AI", "Blockchain", "Cloud", "Data"]}
+          />
+        </div>
+
+        <div
+          ref={whoBlockRef}
+          className="relative mt-16 border-t border-blue-100/70 pt-14 md:mt-20 md:pt-16"
+          aria-labelledby="who-benefits-heading"
+        >
+          <div ref={whoHeaderRef} className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
+            <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">Audience</p>
+            <h2
+              id="who-benefits-heading"
+              className="mt-3 font-geom-heading text-[clamp(1.65rem,3.8vw,2.35rem)] font-normal leading-tight tracking-[-0.02em] text-ink"
+            >
+              Who Benefits?
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-ink/60 md:text-base">
+              Learners, schools, and universities each get a clearer line of sight from skills to outcomes.
+            </p>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-3 md:gap-7">
+            <BeneficiaryHoverCard
+              reducedMotion={reducedMotion}
+              cardRef={w0}
+              gradient="from-blue-500/35 via-sky-400/30 to-cyan-500/35 group-hover/ben:from-blue-600 group-hover/ben:via-sky-500 group-hover/ben:to-cyan-500"
+              icon={<GraduationCap className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
+              title="Students"
+              body="Evaluate core skills, choose aligned career paths."
+            />
+            <BeneficiaryHoverCard
+              reducedMotion={reducedMotion}
+              cardRef={w1}
+              gradient="from-cyan-500/35 via-blue-500/30 to-indigo-500/35 group-hover/ben:from-cyan-500 group-hover/ben:via-blue-600 group-hover/ben:to-indigo-600"
+              icon={<School className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
+              title="Schools"
+              body="Measure outcomes, redesign skill-based assessment."
+            />
+            <BeneficiaryHoverCard
+              reducedMotion={reducedMotion}
+              cardRef={w2}
+              gradient="from-indigo-500/35 via-blue-500/30 to-blue-600/35 group-hover/ben:from-indigo-600 group-hover/ben:via-blue-600 group-hover/ben:to-blue-700"
+              icon={<Landmark className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
+              title="Universities"
+              body="Build employable skills via project-based learning."
+            />
+          </div>
+        </div>
+
+        <div
+          ref={uniqueBlockRef}
+          className="relative mt-16 border-t border-blue-100/70 pt-14 md:mt-20 md:pt-16"
+          aria-labelledby="what-makes-unique-heading"
+        >
+          <div ref={uniqueHeaderRef} className="mx-auto mb-12 max-w-2xl text-center md:mb-14">
+            <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">Differentiators</p>
+            <h2
+              id="what-makes-unique-heading"
+              className="mt-3 font-geom-heading text-[clamp(1.65rem,3.8vw,2.45rem)] font-normal leading-tight tracking-[-0.02em] text-ink"
+            >
+              What Makes HIfAi Unique?
+            </h2>
+            <p className="mt-3 text-sm leading-relaxed text-ink/60 md:text-base">
+              Four pillars that separate skill intelligence from one-size-fits-all learning.
+            </p>
+          </div>
+
+          <div className="relative mx-auto max-w-6xl">
+            <div
+              className="pointer-events-none absolute left-[calc(2.25rem-2px)] top-10 bottom-10 w-1 rounded-full bg-gradient-to-b from-blue-400 via-cyan-400 to-indigo-500 opacity-85 md:hidden"
+              aria-hidden
+            />
+            <div
+              className="pointer-events-none absolute left-[12%] right-[12%] top-[3.65rem] z-0 hidden h-1.5 rounded-full bg-gradient-to-r from-blue-200/90 via-cyan-300/90 to-indigo-200/90 shadow-sm md:block"
+              aria-hidden
+            />
+
+            <ol className="relative z-10 grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-5 lg:gap-8" role="list">
+              {HIFAI_UNIQUE_STEPS.map((step, i) => {
+                const Icon = step.icon;
+                const refs = [u0, u1, u2, u3];
+                return (
+                  <li
+                    key={step.title}
+                    ref={refs[i]}
+                    className="group/uni relative flex flex-row items-center gap-5 md:flex-col md:items-center md:text-center"
+                  >
+                    <div className="relative shrink-0 md:mb-5">
+                      <div
+                        className={`absolute inset-0 scale-110 rounded-full bg-gradient-to-br opacity-0 blur-2xl transition-all duration-500 group-hover/uni:opacity-65 ${step.gradient}`}
+                        aria-hidden
+                      />
+                      <div
+                        className={`relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-gradient-to-br p-[3px] shadow-[0_16px_40px_rgba(37,99,235,0.16)] transition-all duration-500 ease-out group-hover/uni:-translate-y-1 group-hover/uni:shadow-[0_24px_52px_rgba(37,99,235,0.24)] md:h-32 md:w-32 md:group-hover/uni:-translate-y-2 lg:h-36 lg:w-36 ${step.ring}`}
+                      >
+                        <div
+                          className={`flex h-full w-full flex-col items-center justify-center rounded-full bg-gradient-to-br ${step.gradient} text-white shadow-inner ring-4 ring-white md:ring-[6px]`}
+                        >
+                          <span className="font-display text-lg font-normal text-white/95 md:text-2xl lg:text-[1.65rem]">
+                            {i + 1}
+                          </span>
+                          <Icon
+                            className="mt-0.5 h-4 w-4 opacity-95 md:mt-1 md:h-6 md:w-6 lg:h-7 lg:w-7"
+                            strokeWidth={1.75}
+                            aria-hidden
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="min-w-0 flex-1 md:flex-none">
+                      <p className="text-[15px] font-semibold leading-snug text-ink transition-colors duration-300 group-hover/uni:text-blue-800 md:mx-auto md:max-w-[12.5rem] md:text-sm lg:text-[15px]">
+                        {step.title}
+                      </p>
+                      <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-600/80 md:mt-2">
+                        Step {i + 1} of 4
+                      </p>
+                    </div>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const SERVICE_CARDS = [
   {
     id: "s1",
@@ -235,9 +1027,11 @@ const SERVICE_CARDS = [
     description:
       "Structured pathways that build creativity, communication, and computational thinking alongside core academics-so learners stay ahead of a changing world.",
     bullets: [
-      "Competency-based milestones",
-      "Portfolio-ready outcomes",
-      "Mentor-guided checkpoints",
+      "Creative thinking",
+      "Problem Solving",
+      "Critical Analysis",
+      "Communication",
+      "Digital Use"
     ],
     icon: (
       <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -260,9 +1054,10 @@ const SERVICE_CARDS = [
     description:
       "Our ABCD framework turns messy challenges into repeatable problem-solving: analyze context, build prototypes, connect data and people, and deliver measurable impact.",
     bullets: [
-      "Design sprints & retrospectives",
-      "Data-informed decisions",
-      "Stakeholder storytelling",
+      "AI",
+      "Blockchain",
+      "Cloud",
+      "Data Analysis"
     ],
     icon: (
       <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -1214,16 +2009,16 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
             </>
           ) : (
             <>
-              <a
-                href="#cta"
+              <Link
+                to="/get-started"
                 onClick={handleClose}
                 className="group inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-cyan px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:gap-3 hover:shadow-glow"
               >
                 Join Now
                 <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">
-                  -
+                  →
                 </span>
-              </a>
+              </Link>
               <button
                 type="button"
                 onClick={handleClose}

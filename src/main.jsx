@@ -5,27 +5,29 @@ import "./index.css";
 import App from "./App.jsx";
 import BreadcrumbPage from "./components/BreadcrumbPage.jsx";
 import { RouteTransitionProvider } from "./components/RouteTransitionProvider.jsx";
-import {
-  SchoolStudentsBody,
-  CollegeStudentsBody,
-  SchoolOrganizationsBody,
-  CollegeOrganizationsBody,
-  LearningHubBody,
-  GetStartedBody,
-} from "./pages/subpageContent.jsx";
+import ScrollToTop from "./components/ScrollToTop.jsx";
+import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
+import { SchoolStudentsBody } from "./pages/SchoolStudents.jsx";
+import { CollegeStudentsBody } from "./pages/CollegeStudents.jsx";
+import { SchoolOrganizationsBody } from "./pages/SchoolOrganizations.jsx";
+import { CollegeOrganizationsBody } from "./pages/CollegeOrganizations.jsx";
+import { LearningHubBody } from "./pages/LearningHub.jsx";
+import { GetStartedBody } from "./pages/GetStarted.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <RouteTransitionProvider>
+        <ScrollToTop />
+        <FloatingWhatsApp />
         <Routes>
           <Route path="/" element={<App />} />
           <Route
             path="/students/school-students"
             element={
               <BreadcrumbPage
-                title="School Students"
-                subtitle="Foundational AI literacy, creative project studios, and responsible-use habits for secondary learners."
+                title="School Student (Grades 9–12)"
+                subtitle="This page focuses on early skill discovery and assessment."
               >
                 <SchoolStudentsBody />
               </BreadcrumbPage>
@@ -35,8 +37,8 @@ createRoot(document.getElementById("root")).render(
             path="/students/college-students"
             element={
               <BreadcrumbPage
-                title="College Students"
-                subtitle="Rigorous innovation labs, mentor feedback, and portfolio storytelling for university cohorts."
+                title="College Student (3rd & Final Year Students)"
+                subtitle="This page focuses on real-world exposure through global projects."
               >
                 <CollegeStudentsBody />
               </BreadcrumbPage>

@@ -6,10 +6,10 @@ import Preloader from "./components/Preloader.jsx";
 import Navbar from "./components/Navbar.jsx";
 import {
   Hero,
-  Services,
+  WhyHifaiSection,
+  MissingLinkSection,
+  WhatIsHifaiSection,
   TargetUsers,
-  HowItWorks,
-  ProjectsSection,
   Features,
   CTASection,
 } from "./pages/Home.jsx";
@@ -57,10 +57,10 @@ export default function App() {
       <Navbar reducedMotion={reducedMotion} />
       <main>
         <Hero reducedMotion={reducedMotion} isMobile={isMobile} />
-        <Services reducedMotion={reducedMotion} isMobile={isMobile} />
+        <WhyHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
+        <MissingLinkSection reducedMotion={reducedMotion} isMobile={isMobile} />
+        <WhatIsHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <TargetUsers reducedMotion={reducedMotion} isMobile={isMobile} />
-        <HowItWorks reducedMotion={reducedMotion} isMobile={isMobile} />
-        <ProjectsSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <Features reducedMotion={reducedMotion} isMobile={isMobile} />
         <CTASection reducedMotion={reducedMotion} isMobile={isMobile} />
       </main>

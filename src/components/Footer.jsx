@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouteTransition } from "./RouteTransitionProvider.jsx";
+import { SiInstagram, SiWhatsapp } from "react-icons/si";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,6 +17,19 @@ const FOOTER_NAV_LINKS = [
   { label: "Learning Hub", to: "/learning-hub" },
 ];
 
+const FOOTER_ADDRESS_LINE =
+  "24, Rengadevi Amman Koil Street, Main Road, Dindigul-624001";
+const FOOTER_PHONE_DISPLAY = "+91 93848 82012";
+const FOOTER_PHONE_TEL = "+919384882012";
+const FOOTER_EMAIL = "hifaidgl@gmail.com";
+const FOOTER_WHATSAPP_URL = "https://wa.me/message/PQNSXRG6VDSCI1";
+const FOOTER_INSTAGRAM_URL =
+  "https://www.instagram.com/hifai2026?igsh=MXJzODhuemU5ZHFiMQ==";
+/** Google Maps embed (query-based; no API key) */
+const FOOTER_MAP_EMBED_SRC = `https://maps.google.com/maps?q=${encodeURIComponent(
+  FOOTER_ADDRESS_LINE
+)}&hl=en&z=16&output=embed`;
+
 export default function Footer({ reducedMotion }) {
   const location = useLocation();
   const { transitionTo } = useRouteTransition();
@@ -23,6 +37,7 @@ export default function Footer({ reducedMotion }) {
   const col1Ref   = useRef(null);
   const col2Ref   = useRef(null);
   const col3Ref   = useRef(null);
+  const col4Ref   = useRef(null);
   const bottomRef = useRef(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
@@ -31,7 +46,7 @@ export default function Footer({ reducedMotion }) {
     if (!inner || reducedMotion) return;
 
     const ctx = gsap.context(() => {
-      const cols = [col1Ref, col2Ref, col3Ref].map((r) => r.current).filter(Boolean);
+      const cols = [col1Ref, col2Ref, col3Ref, col4Ref].map((r) => r.current).filter(Boolean);
 
       gsap.from(cols, {
         y: 32,
@@ -55,18 +70,15 @@ export default function Footer({ reducedMotion }) {
     return () => ctx.revert();
   }, [reducedMotion]);
 
-  // Only show after the user scrolls past the Hero section.
+  // Show after scrolling past the top hero (home + subpages use #hero).
   useEffect(() => {
     const update = () => {
       const hero = document.getElementById("hero");
       if (!hero) {
-        setShowBackToTop(false);
+        setShowBackToTop(window.scrollY > 320);
         return;
       }
-
-      // "Past the hero" => hero bottom is above the viewport.
-      const shouldShow = hero.getBoundingClientRect().bottom <= 0;
-      setShowBackToTop(shouldShow);
+      setShowBackToTop(hero.getBoundingClientRect().bottom <= 0);
     };
 
     let rafId = 0;
@@ -87,7 +99,7 @@ export default function Footer({ reducedMotion }) {
       window.removeEventListener("scroll", onScrollOrResize);
       window.removeEventListener("resize", onScrollOrResize);
     };
-  }, []);
+  }, [location.pathname]);
 
   /* ── Hover line animation on footer links ── */
   const handleLinkEnter = (e) => {
@@ -139,7 +151,7 @@ export default function Footer({ reducedMotion }) {
           {/* Top gradient line */}
           <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-accent via-accent-cyan to-accent" />
 
-          <div className="grid gap-10 p-8 md:grid-cols-[1.25fr_1fr_1fr] md:p-10">
+          <div className="grid gap-10 p-8 md:p-10 lg:grid-cols-[1.15fr_0.9fr_1.15fr_0.95fr]">
 
             {/* Col 1 — Brand */}
             <div ref={col1Ref}>
@@ -194,28 +206,62 @@ export default function Footer({ reducedMotion }) {
               </ul>
             </nav>
 
-            {/* Col 3 — Contact */}
-            <div ref={col3Ref} className="md:pl-4">
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-cyan">Contact</p>
-              <a
-                href="mailto:hello@hifai.skills"
-                className="mt-4 inline-flex text-sm font-semibold text-accent-cyan transition-colors hover:text-white"
-              >
-                hello@hifai.skills
-              </a>
-              <p className="mt-3 text-sm leading-relaxed text-white/70">
-                Open for student cohorts, school partnerships, and university innovation programs.
-              </p>
+            {/* Col 3 — Map */}
+            <div ref={col3Ref} className="min-w-0 lg:pl-2">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-cyan">Location</p>
+              <div className="mt-4 overflow-hidden rounded-2xl border border-white/15 bg-black/20 shadow-inner">
+                <iframe
+                  title="HIfAi location on Google Maps"
+                  src={FOOTER_MAP_EMBED_SRC}
+                  className="h-[200px] w-full border-0 sm:h-[220px]"
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  allowFullScreen
+                />
+              </div>
+            </div>
 
-              {/* Status badge */}
-              <div className="mt-6 rounded-2xl border border-white/15 bg-white/5 p-3">
-                <div className="flex items-center gap-2.5">
-                  <span className="inline-flex h-2.5 w-2.5 animate-pulse rounded-full bg-cyan-500" />
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75">
-                    Innovation Partner Network
-                  </p>
-                </div>
-                <p className="mt-2 text-xs text-white/65">Live mentoring, curriculum support, and outcome analytics.</p>
+            {/* Col 4 — Contact */}
+            <div ref={col4Ref} className="lg:pl-2">
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-cyan">Contact</p>
+              <address className="mt-4 space-y-4 text-sm not-italic leading-relaxed text-white/75">
+                <p>{FOOTER_ADDRESS_LINE}</p>
+                <p>
+                  <a
+                    href={`tel:${FOOTER_PHONE_TEL}`}
+                    className="text-accent-cyan transition-colors hover:text-white"
+                  >
+                    {FOOTER_PHONE_DISPLAY}
+                  </a>
+                </p>
+                <p>
+                  <a
+                    href={`mailto:${FOOTER_EMAIL}`}
+                    className="text-accent-cyan transition-colors hover:text-white"
+                  >
+                    {FOOTER_EMAIL}
+                  </a>
+                </p>
+              </address>
+              <div className="mt-5 flex items-center gap-3">
+                <a
+                  href={FOOTER_WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="HIfAi on WhatsApp"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#25D366] text-white shadow-[0_8px_24px_rgba(37,211,102,0.35)] transition-transform duration-200 hover:scale-105 hover:bg-[#20bd5a] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#25D366] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07132b]"
+                >
+                  <SiWhatsapp className="h-6 w-6" aria-hidden />
+                </a>
+                <a
+                  href={FOOTER_INSTAGRAM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="HIfAi on Instagram"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-[#f58529] via-[#dd2a7b] to-[#8134af] text-white shadow-[0_8px_24px_rgba(221,42,123,0.35)] transition-transform duration-200 hover:scale-105 focus:outline-none focus-visible:ring-2 focus-visible:ring-pink-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#07132b]"
+                >
+                  <SiInstagram className="h-6 w-6" aria-hidden />
+                </a>
               </div>
             </div>
           </div>

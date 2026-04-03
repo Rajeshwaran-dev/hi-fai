@@ -52,8 +52,11 @@ export default function BreadcrumbPage({ title, subtitle, children }) {
 
       <Navbar reducedMotion={reducedMotion} />
 
-      {/* ── Breadcrumb Hero ── */}
-      <section className="bc-wrap relative w-full overflow-hidden pt-[5.5rem] pb-12">
+      {/* ── Breadcrumb Hero (id matches Footer back-to-top anchor) ── */}
+      <section
+        id="hero"
+        className="bc-wrap relative w-full overflow-hidden pt-[5.5rem] pb-12"
+      >
 
         {/* Background gradient */}
         <div aria-hidden className="pointer-events-none absolute inset-0"
@@ -112,7 +115,7 @@ export default function BreadcrumbPage({ title, subtitle, children }) {
           <div className="bc-r2 flex flex-col items-center text-center">
 
             {/* Left: title */}
-            <div className="mx-auto max-w-3xl">
+            <div className="mx-auto max-w-4xl">
               <h1 className="text-[clamp(2.25rem,5.2vw,3.7rem)] font-extrabold leading-tight tracking-tight text-slate-900">
                 {title}
               </h1>
