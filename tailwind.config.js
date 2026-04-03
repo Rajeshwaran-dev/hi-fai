@@ -19,7 +19,7 @@ export default {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "hero-mesh":
-          "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.15), transparent), radial-gradient(ellipse 60% 40% at 100% 0%, rgba(6, 182, 212, 0.12), transparent)",
+          "radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 99, 235, 0.11), transparent), radial-gradient(ellipse 60% 40% at 100% 0%, rgba(37, 99, 235, 0.07), transparent)",
       },
       boxShadow: {
         glass: "0 8px 32px rgba(37, 99, 235, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04)",

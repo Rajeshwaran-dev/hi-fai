@@ -228,8 +228,8 @@ export function GetStartedBody() {
 
       <p className="mx-auto mt-8 max-w-xl text-center text-sm text-slate-500">
         Prefer email? Reach us directly at{" "}
-        <a href="mailto:hello@hifai.skills" className="font-semibold text-blue-600 hover:underline">
-          hello@hifai.skills
+        <a href="mailto:hifaidgl@gmail.com" className="font-semibold text-blue-600 hover:underline">
+          hifaidgl@gmail.com
         </a>
         .
       </p>

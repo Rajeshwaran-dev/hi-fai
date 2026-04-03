@@ -46,8 +46,8 @@ export function Hero({ reducedMotion, isMobile }) {
       scale: isMobile ? 0.92 : 1,
       scaleMobile: 0.9,
       color: 0x2f63ff,
-      color2: 0x35d4ff,
-      backgroundColor: 0xfbf8f8,
+      color2: 0x4a7dff,
+      backgroundColor: 0xffffff,
       size: isMobile ? 0.62 : 0.72,
     };
 
@@ -171,7 +171,7 @@ export function Hero({ reducedMotion, isMobile }) {
     <section
       id="hero"
       ref={rootRef}
-      className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden px-4 pt-32 pb-20 md:pb-16"
+      className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden bg-white px-4 pt-32 pb-20 md:pb-16"
     >
       <div ref={vantaRef} className="absolute inset-0 z-0" aria-hidden />
       <div className="pointer-events-none absolute inset-0 z-[1] bg-hero-mesh" aria-hidden />
@@ -181,7 +181,7 @@ export function Hero({ reducedMotion, isMobile }) {
         className="relative z-10 mx-auto flex max-w-6xl flex-col items-center text-center"
       >
         <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-white/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700 shadow-sm backdrop-blur-md md:text-sm">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cyan-500" />
+          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600" />
           Digital innovation services
         </p>
 
@@ -211,18 +211,18 @@ export function Hero({ reducedMotion, isMobile }) {
           <Link
             to="/learning-hub#services"
             data-magnetic
-            className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-r from-blue-600 to-cyan-500 px-8 py-3.5 text-center text-sm font-semibold text-white shadow-lg transition-[transform,box-shadow] duration-300 hover:scale-[1.04] hover:shadow-glow md:text-base"
+            className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 px-8 py-3.5 text-center text-sm font-semibold text-white shadow-md transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg md:text-base"
           >
             <span className="relative z-10">Explore Services</span>
             <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
           </Link>
-          <a
-            href="#cta"
+          <Link
+            to="/get-started"
             data-magnetic
             className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-full border-2 border-ink/10 bg-white/70 px-8 py-3.5 text-center text-sm font-semibold text-ink backdrop-blur-md transition-all duration-300 hover:border-blue-500/40 hover:bg-white hover:shadow-md md:text-base"
           >
             Get Started
-          </a>
+          </Link>
         </div>
       </div>
 
@@ -285,23 +285,19 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-blue-100/60 bg-cream px-4 py-16 md:px-8 md:py-24"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-16 md:px-8 md:py-24"
       aria-labelledby="why-hifai-heading"
     >
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.4]"
+        className="pointer-events-none absolute inset-0 opacity-[0.22]"
         aria-hidden
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(37, 99, 235, 0.12) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, rgba(100, 116, 139, 0.14) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
       <div
-        className="pointer-events-none absolute -left-32 top-1/2 h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-blue-400/10 blur-3xl"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-cyan-300/15 blur-3xl"
+        className="pointer-events-none absolute -left-32 top-1/2 h-[28rem] w-[28rem] -translate-y-1/2 rounded-full bg-blue-600/[0.06] blur-3xl"
         aria-hidden
       />
 
@@ -316,7 +312,7 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
             <span className="relative inline-block">
               <span className="relative z-10">made visible</span>
               <span
-                className="absolute -bottom-0.5 left-0 h-2.5 w-full rounded-md bg-gradient-to-r from-cyan-400/45 to-blue-500/40"
+                className="absolute -bottom-0.5 left-0 h-2.5 w-full rounded-md bg-blue-600/20"
                 aria-hidden
               />
             </span>
@@ -338,7 +334,7 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
                   className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${
                     kind === "gap"
                       ? "bg-slate-300 ring-2 ring-slate-200/80"
-                      : "bg-gradient-to-br from-blue-600 to-cyan-500 shadow-[0_0_0_3px_rgba(37,99,235,0.15)]"
+                      : "bg-blue-600 shadow-[0_0_0_3px_rgba(37,99,235,0.12)]"
                   }`}
                   aria-hidden
                 />
@@ -356,7 +352,7 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
 
         <div ref={rightRef} className="relative mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none">
           <div
-            className="absolute -inset-3 rounded-[1.75rem] bg-gradient-to-br from-blue-500/20 via-cyan-400/15 to-blue-600/10 blur-xl md:-inset-4"
+            className="absolute -inset-3 rounded-[1.75rem] bg-blue-600/[0.07] blur-xl md:-inset-4"
             aria-hidden
           />
           <figure className="relative overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_24px_64px_rgba(15,23,42,0.12)] ring-1 ring-ink/5">
@@ -427,26 +423,22 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
       aria-labelledby="missing-link-heading"
     >
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.35]"
+        className="pointer-events-none absolute inset-0 opacity-[0.2]"
         aria-hidden
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(6, 182, 212, 0.11) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, rgba(100, 116, 139, 0.12) 1px, transparent 1px)",
           backgroundSize: "26px 26px",
         }}
       />
       <div
-        className="pointer-events-none absolute right-0 top-1/2 h-[26rem] w-[26rem] -translate-y-1/2 translate-x-1/4 rounded-full bg-cyan-400/10 blur-3xl"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-blue-500/8 blur-3xl"
+        className="pointer-events-none absolute -left-20 bottom-0 h-64 w-64 rounded-full bg-blue-600/[0.05] blur-3xl"
         aria-hidden
       />
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div ref={imageRef} className="relative mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none">
           <div
-            className="absolute -inset-3 rounded-[1.75rem] bg-gradient-to-tr from-cyan-400/25 via-blue-500/12 to-indigo-500/15 blur-xl md:-inset-4"
+            className="absolute -inset-3 rounded-[1.75rem] bg-blue-600/[0.06] blur-xl md:-inset-4"
             aria-hidden
           />
           <figure className="relative overflow-hidden rounded-[1.5rem] border border-slate-200/80 bg-slate-100 shadow-[0_24px_64px_rgba(15,23,42,0.1)] ring-1 ring-ink/5">
@@ -464,7 +456,7 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
         </div>
 
         <div ref={contentRef} className="flex flex-col">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-cyan-700">Education today</p>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">Education today</p>
           <h2
             id="missing-link-heading"
             className="mt-3 font-geom-heading text-[clamp(1.85rem,4.2vw,2.75rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
@@ -473,7 +465,7 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
             <span className="relative inline-block">
               <span className="relative z-10">in Education</span>
               <span
-                className="absolute -bottom-0.5 left-0 h-2.5 w-full rounded-md bg-gradient-to-r from-blue-500/40 to-cyan-400/45"
+                className="absolute -bottom-0.5 left-0 h-2.5 w-full rounded-md bg-blue-600/20"
                 aria-hidden
               />
             </span>
@@ -496,9 +488,9 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
                 <span className="text-[15px] leading-relaxed text-ink/75 md:text-base">{text}</span>
               </li>
             ))}
-            <li className="mt-2 flex gap-4 rounded-2xl border border-blue-200/70 bg-gradient-to-r from-blue-50/95 to-cyan-50/50 p-5 md:gap-5 md:p-6">
+            <li className="mt-2 flex gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:gap-5 md:p-6">
               <span
-                className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white shadow-md"
+                className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-xs font-bold text-white shadow-sm"
                 aria-hidden
               >
                 !
@@ -514,7 +506,7 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
   );
 }
 
-function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, body, footerTags, gradient }) {
+function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, body, footerTags }) {
   const innerRef = useRef(null);
   const glowRef = useRef(null);
 
@@ -563,35 +555,29 @@ function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, b
 
   return (
     <article ref={cardRef} className="group/card h-full perspective-[1400px]">
-      <div
-        className={`relative h-full rounded-[1.65rem] bg-gradient-to-br p-[1.5px] shadow-[0_18px_48px_rgba(15,23,42,0.08)] transition-all duration-500 ease-out ${gradient} group-hover/card:shadow-[0_32px_72px_rgba(37,99,235,0.22)] group-hover/card:p-[2px]`}
-      >
+      <div className="relative h-full rounded-[1.65rem] border border-slate-200/90 bg-white shadow-[0_12px_40px_rgba(15,23,42,0.06)] transition-all duration-500 ease-out group-hover/card:border-blue-200/90 group-hover/card:shadow-[0_20px_48px_rgba(15,23,42,0.1)]">
         <div
           ref={innerRef}
-          className="what-is-card-inner relative h-full overflow-hidden rounded-[1.58rem] border border-white/90 bg-gradient-to-b from-white/98 to-cream/90 shadow-inner backdrop-blur-md transition-[box-shadow] duration-500 group-hover/card:border-blue-200/60 group-hover/card:shadow-[inset_0_1px_0_rgba(255,255,255,0.85)]"
+          className="what-is-card-inner relative h-full overflow-hidden rounded-[1.58rem] border border-slate-100 bg-white transition-[box-shadow] duration-500 group-hover/card:border-slate-200"
           style={{ transformStyle: "preserve-3d" }}
         >
           <div
             ref={glowRef}
-            className="pointer-events-none absolute h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-cyan-300/35 via-blue-400/30 to-indigo-400/25 blur-3xl opacity-0 transition-opacity duration-300"
+            className="pointer-events-none absolute h-52 w-52 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/18 blur-3xl opacity-0 transition-opacity duration-300"
             style={{ left: "50%", top: "50%" }}
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-blue-500/10 blur-3xl transition-all duration-700 group-hover/card:scale-125 group-hover/card:bg-cyan-400/15"
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -bottom-20 -left-12 h-44 w-44 rounded-full bg-cyan-400/10 blur-3xl transition-all duration-700 group-hover/card:translate-y-[-10px]"
+            className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-blue-600/[0.06] blur-3xl transition-all duration-700 group-hover/card:scale-110"
             aria-hidden
           />
 
           <div className="relative z-10 flex h-full flex-col p-8 md:p-10">
             <div className="flex items-start justify-between gap-4">
-              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-blue-200/80 bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-700 shadow-sm transition-all duration-500 group-hover/card:scale-110 group-hover/card:border-blue-300 group-hover/card:shadow-md">
+              <span className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-blue-700 shadow-sm transition-all duration-500 group-hover/card:scale-[1.03] group-hover/card:border-blue-200 group-hover/card:bg-blue-50/80">
                 {icon}
               </span>
-              <span className="rounded-full border border-blue-200/70 bg-blue-50/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-blue-700 transition-colors duration-300 group-hover/card:border-cyan-300/80 group-hover/card:bg-cyan-50/90">
+              <span className="rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-slate-700 transition-colors duration-300 group-hover/card:border-blue-200 group-hover/card:bg-blue-50 group-hover/card:text-blue-800">
                 {chip}
               </span>
             </div>
@@ -606,11 +592,11 @@ function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, b
             <p className="mt-5 flex-1 text-[15px] leading-relaxed text-ink/72 md:text-base">{body}</p>
 
             {footerTags?.length ? (
-              <div className="mt-8 flex flex-wrap gap-2 border-t border-blue-100/80 pt-6">
+              <div className="mt-8 flex flex-wrap gap-2 border-t border-slate-100 pt-6">
                 {footerTags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-lg border border-slate-200/90 bg-white/80 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm transition-all duration-300 group-hover/card:border-blue-200 group-hover/card:bg-gradient-to-r group-hover/card:from-blue-50 group-hover/card:to-cyan-50/80 group-hover/card:text-blue-900"
+                    className="rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-600 transition-all duration-300 group-hover/card:border-blue-200 group-hover/card:bg-blue-50 group-hover/card:text-blue-900"
                   >
                     {tag}
                   </span>
@@ -624,7 +610,7 @@ function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, b
   );
 }
 
-function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body, gradient }) {
+function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body }) {
   const innerRef = useRef(null);
   const glowRef = useRef(null);
 
@@ -673,27 +659,25 @@ function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body, gradi
 
   return (
     <article ref={cardRef} className="group/ben h-full perspective-[1300px]">
-      <div
-        className={`relative h-full rounded-[1.4rem] bg-gradient-to-br p-[1.5px] shadow-[0_14px_40px_rgba(15,23,42,0.07)] transition-all duration-500 ease-out ${gradient} group-hover/ben:shadow-[0_26px_64px_rgba(37,99,235,0.18)] group-hover/ben:p-[2px]`}
-      >
+      <div className="relative h-full rounded-[1.4rem] border border-slate-200/90 bg-white shadow-[0_10px_36px_rgba(15,23,42,0.06)] transition-all duration-500 ease-out group-hover/ben:border-blue-200/90 group-hover/ben:shadow-[0_18px_44px_rgba(15,23,42,0.09)]">
         <div
           ref={innerRef}
-          className="relative h-full overflow-hidden rounded-[1.33rem] border border-white/90 bg-gradient-to-b from-white/98 to-cream/95 backdrop-blur-sm transition-[box-shadow] duration-500 group-hover/ben:border-blue-200/55"
+          className="relative h-full overflow-hidden rounded-[1.33rem] border border-slate-100 bg-white transition-[box-shadow] duration-500 group-hover/ben:border-slate-200"
           style={{ transformStyle: "preserve-3d" }}
         >
           <div
             ref={glowRef}
-            className="pointer-events-none absolute h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-blue-300/30 via-cyan-300/25 to-indigo-300/20 blur-3xl opacity-0"
+            className="pointer-events-none absolute h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/15 blur-3xl opacity-0"
             style={{ left: "50%", top: "50%" }}
             aria-hidden
           />
           <div
-            className="pointer-events-none absolute -right-12 -top-12 h-36 w-36 rounded-full bg-blue-500/10 blur-2xl transition-all duration-500 group-hover/ben:scale-110 group-hover/ben:bg-cyan-400/12"
+            className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-blue-600/[0.05] blur-2xl transition-all duration-500 group-hover/ben:scale-110"
             aria-hidden
           />
 
           <div className="relative z-10 flex h-full flex-col p-6 md:p-8">
-            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-blue-200/75 bg-gradient-to-br from-blue-50 to-cyan-50 text-blue-700 shadow-sm transition-all duration-500 group-hover/ben:scale-110 group-hover/ben:rotate-[-4deg] group-hover/ben:border-blue-300 group-hover/ben:shadow-md md:h-14 md:w-14">
+            <span className="inline-flex h-12 w-12 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-blue-700 shadow-sm transition-all duration-500 group-hover/ben:scale-[1.04] group-hover/ben:rotate-[-3deg] group-hover/ben:border-blue-200 group-hover/ben:bg-blue-50/80 md:h-14 md:w-14">
               {icon}
             </span>
             <h3 className="mt-5 font-geom-heading text-[1.2rem] font-normal leading-tight tracking-[-0.02em] text-ink md:text-[1.35rem] transition-transform duration-500 group-hover/ben:translate-x-0.5">
@@ -708,30 +692,10 @@ function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body, gradi
 }
 
 const HIFAI_UNIQUE_STEPS = [
-  {
-    title: "Personalized Skill Development",
-    icon: Sparkles,
-    gradient: "from-blue-600 via-blue-500 to-cyan-500",
-    ring: "from-blue-400/40 to-cyan-400/35",
-  },
-  {
-    title: "Customizable Learning Paths",
-    icon: Route,
-    gradient: "from-cyan-500 via-teal-500 to-blue-600",
-    ring: "from-cyan-400/40 to-blue-400/35",
-  },
-  {
-    title: "Board-Agnostic Skill Building",
-    icon: LayoutGrid,
-    gradient: "from-indigo-600 via-blue-600 to-cyan-500",
-    ring: "from-indigo-400/35 to-cyan-400/35",
-  },
-  {
-    title: "Lifelong Skills Portfolio",
-    icon: Briefcase,
-    gradient: "from-blue-700 via-indigo-600 to-cyan-500",
-    ring: "from-blue-400/40 to-indigo-400/30",
-  },
+  { title: "Personalized Skill Development", icon: Sparkles },
+  { title: "Customizable Learning Paths", icon: Route },
+  { title: "Board-Agnostic Skill Building", icon: LayoutGrid },
+  { title: "Lifelong Skills Portfolio", icon: Briefcase },
 ];
 
 export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
@@ -838,20 +802,16 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-blue-100/50 bg-gradient-to-b from-cream via-white to-cream px-4 py-16 md:px-8 md:py-24"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-16 md:px-8 md:py-24"
       aria-labelledby="what-is-hifai-heading"
     >
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.38]"
+        className="pointer-events-none absolute inset-0 opacity-[0.2]"
         aria-hidden
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(37, 99, 235, 0.1) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, rgba(100, 116, 139, 0.12) 1px, transparent 1px)",
           backgroundSize: "30px 30px",
         }}
-      />
-      <div
-        className="pointer-events-none absolute left-1/2 top-0 h-64 w-[min(100%,48rem)] -translate-x-1/2 rounded-b-[100%] bg-gradient-to-b from-blue-400/8 to-transparent blur-2xl"
-        aria-hidden
       />
 
       <div className="relative mx-auto max-w-7xl">
@@ -862,7 +822,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             className="mt-3 font-geom-heading text-[clamp(1.9rem,4.5vw,2.85rem)] font-normal leading-[1.15] tracking-[-0.02em] text-ink"
           >
             Human intelligence,{" "}
-            <span className="text-gradient">amplified by AI</span>
+            <span className="text-blue-700">amplified by AI</span>
           </h2>
           <p className="mt-4 text-base leading-relaxed text-ink/65 md:text-[17px]">
             Two sides of one platform—who you are as a learner, and how modern digital pillars power your growth.
@@ -873,7 +833,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           <WhatIsHoverCard
             reducedMotion={reducedMotion}
             cardRef={c0}
-            gradient="from-blue-500/40 via-cyan-400/35 to-blue-600/40 group-hover/card:from-blue-600 group-hover/card:via-cyan-500 group-hover/card:to-indigo-600"
             chip="Platform"
             icon={<BrainCircuit className="h-7 w-7" strokeWidth={1.75} aria-hidden />}
             title="HIfAi"
@@ -883,7 +842,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           <WhatIsHoverCard
             reducedMotion={reducedMotion}
             cardRef={c1}
-            gradient="from-cyan-500/40 via-blue-500/35 to-indigo-500/40 group-hover/card:from-cyan-500 group-hover/card:via-blue-600 group-hover/card:to-indigo-600"
             chip="Digital ABCD"
             icon={<Orbit className="h-7 w-7" strokeWidth={1.75} aria-hidden />}
             title="AI-driven pathways"
@@ -895,7 +853,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
 
         <div
           ref={whoBlockRef}
-          className="relative mt-16 border-t border-blue-100/70 pt-14 md:mt-20 md:pt-16"
+          className="relative mt-16 border-t border-slate-200/80 pt-14 md:mt-20 md:pt-16"
           aria-labelledby="who-benefits-heading"
         >
           <div ref={whoHeaderRef} className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
@@ -915,7 +873,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             <BeneficiaryHoverCard
               reducedMotion={reducedMotion}
               cardRef={w0}
-              gradient="from-blue-500/35 via-sky-400/30 to-cyan-500/35 group-hover/ben:from-blue-600 group-hover/ben:via-sky-500 group-hover/ben:to-cyan-500"
               icon={<GraduationCap className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
               title="Students"
               body="Evaluate core skills, choose aligned career paths."
@@ -923,7 +880,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             <BeneficiaryHoverCard
               reducedMotion={reducedMotion}
               cardRef={w1}
-              gradient="from-cyan-500/35 via-blue-500/30 to-indigo-500/35 group-hover/ben:from-cyan-500 group-hover/ben:via-blue-600 group-hover/ben:to-indigo-600"
               icon={<School className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
               title="Schools"
               body="Measure outcomes, redesign skill-based assessment."
@@ -931,7 +887,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             <BeneficiaryHoverCard
               reducedMotion={reducedMotion}
               cardRef={w2}
-              gradient="from-indigo-500/35 via-blue-500/30 to-blue-600/35 group-hover/ben:from-indigo-600 group-hover/ben:via-blue-600 group-hover/ben:to-blue-700"
               icon={<Landmark className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
               title="Universities"
               body="Build employable skills via project-based learning."
@@ -941,7 +896,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
 
         <div
           ref={uniqueBlockRef}
-          className="relative mt-16 border-t border-blue-100/70 pt-14 md:mt-20 md:pt-16"
+          className="relative mt-16 border-t border-slate-200/80 pt-14 md:mt-20 md:pt-16"
           aria-labelledby="what-makes-unique-heading"
         >
           <div ref={uniqueHeaderRef} className="mx-auto mb-12 max-w-2xl text-center md:mb-14">
@@ -959,11 +914,11 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
 
           <div className="relative mx-auto max-w-6xl">
             <div
-              className="pointer-events-none absolute left-[calc(2.25rem-2px)] top-10 bottom-10 w-1 rounded-full bg-gradient-to-b from-blue-400 via-cyan-400 to-indigo-500 opacity-85 md:hidden"
+              className="pointer-events-none absolute left-[calc(2.25rem-2px)] top-10 bottom-10 w-1 rounded-full bg-slate-200 md:hidden"
               aria-hidden
             />
             <div
-              className="pointer-events-none absolute left-[12%] right-[12%] top-[3.65rem] z-0 hidden h-1.5 rounded-full bg-gradient-to-r from-blue-200/90 via-cyan-300/90 to-indigo-200/90 shadow-sm md:block"
+              className="pointer-events-none absolute left-[12%] right-[12%] top-[3.65rem] z-0 hidden h-1 rounded-full bg-slate-200 md:block"
               aria-hidden
             />
 
@@ -979,20 +934,16 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
                   >
                     <div className="relative shrink-0 md:mb-5">
                       <div
-                        className={`absolute inset-0 scale-110 rounded-full bg-gradient-to-br opacity-0 blur-2xl transition-all duration-500 group-hover/uni:opacity-65 ${step.gradient}`}
+                        className="pointer-events-none absolute inset-0 scale-110 rounded-full bg-blue-600/10 opacity-0 blur-2xl transition-all duration-500 group-hover/uni:opacity-100"
                         aria-hidden
                       />
-                      <div
-                        className={`relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-gradient-to-br p-[3px] shadow-[0_16px_40px_rgba(37,99,235,0.16)] transition-all duration-500 ease-out group-hover/uni:-translate-y-1 group-hover/uni:shadow-[0_24px_52px_rgba(37,99,235,0.24)] md:h-32 md:w-32 md:group-hover/uni:-translate-y-2 lg:h-36 lg:w-36 ${step.ring}`}
-                      >
-                        <div
-                          className={`flex h-full w-full flex-col items-center justify-center rounded-full bg-gradient-to-br ${step.gradient} text-white shadow-inner ring-4 ring-white md:ring-[6px]`}
-                        >
-                          <span className="font-display text-lg font-normal text-white/95 md:text-2xl lg:text-[1.65rem]">
+                      <div className="relative flex h-[4.5rem] w-[4.5rem] items-center justify-center rounded-full bg-slate-200 p-[3px] shadow-sm transition-all duration-500 ease-out group-hover/uni:-translate-y-1 group-hover/uni:bg-blue-200 md:h-32 md:w-32 md:group-hover/uni:-translate-y-2 lg:h-36 lg:w-36">
+                        <div className="flex h-full w-full flex-col items-center justify-center rounded-full border border-slate-100 bg-white text-blue-700 shadow-inner ring-4 ring-white md:ring-[6px]">
+                          <span className="font-display text-lg font-normal md:text-2xl lg:text-[1.65rem]">
                             {i + 1}
                           </span>
                           <Icon
-                            className="mt-0.5 h-4 w-4 opacity-95 md:mt-1 md:h-6 md:w-6 lg:h-7 lg:w-7"
+                            className="mt-0.5 h-4 w-4 md:mt-1 md:h-6 md:w-6 lg:h-7 lg:w-7"
                             strokeWidth={1.75}
                             aria-hidden
                           />
@@ -1002,9 +953,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
                     <div className="min-w-0 flex-1 md:flex-none">
                       <p className="text-[15px] font-semibold leading-snug text-ink transition-colors duration-300 group-hover/uni:text-blue-800 md:mx-auto md:max-w-[12.5rem] md:text-sm lg:text-[15px]">
                         {step.title}
-                      </p>
-                      <p className="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-600/80 md:mt-2">
-                        Step {i + 1} of 4
                       </p>
                     </div>
                   </li>
@@ -1043,8 +991,8 @@ const SERVICE_CARDS = [
         />
       </svg>
     ),
-    accentFrom: "from-blue-500/20",
-    accentTo: "to-cyan-400/10",
+    accentFrom: "from-blue-600/15",
+    accentTo: "to-slate-200/20",
   },
   {
     id: "s2",
@@ -1069,8 +1017,8 @@ const SERVICE_CARDS = [
         />
       </svg>
     ),
-    accentFrom: "from-cyan-500/20",
-    accentTo: "to-blue-400/10",
+    accentFrom: "from-blue-500/14",
+    accentTo: "to-slate-300/12",
   },
   {
     id: "s3",
@@ -1095,8 +1043,8 @@ const SERVICE_CARDS = [
         />
       </svg>
     ),
-    accentFrom: "from-indigo-500/20",
-    accentTo: "to-blue-400/10",
+    accentFrom: "from-slate-400/14",
+    accentTo: "to-blue-500/10",
   },
   {
     id: "s4",
@@ -1121,8 +1069,8 @@ const SERVICE_CARDS = [
         />
       </svg>
     ),
-    accentFrom: "from-sky-500/20",
-    accentTo: "to-cyan-400/10",
+    accentFrom: "from-blue-700/12",
+    accentTo: "to-slate-300/12",
   },
 ];
 
@@ -2034,162 +1982,6 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
   );
 }
 
-function JoinNowModal({ open, onClose, reducedMotion }) {
-  const overlayRef = useRef(null);
-  const panelRef = useRef(null);
-  const [activeTab, setActiveTab] = useState("highSchool"); // highSchool | university
-
-  useEffect(() => {
-    if (!open || !overlayRef.current || !panelRef.current) return;
-
-    const overlay = overlayRef.current;
-    const panel = panelRef.current;
-
-    if (reducedMotion) {
-      gsap.set([overlay, panel], { opacity: 1, scale: 1, y: 0 });
-      return;
-    }
-
-    gsap.set(overlay, { opacity: 0 });
-    gsap.set(panel, { opacity: 0, scale: 0.92, y: 24 });
-
-    const tl = gsap.timeline();
-    tl.to(overlay, { opacity: 1, duration: 0.3, ease: "power2.out" }).to(
-      panel,
-      {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration: 0.5,
-        ease: "back.out(1.2)",
-      },
-      "-=0.15"
-    );
-
-    return () => tl.kill();
-  }, [open, reducedMotion]);
-
-  useEffect(() => {
-    const onKey = (e) => e.key === "Escape" && onClose();
-    if (open) window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [open, onClose]);
-
-  const handleClose = () => {
-    if (reducedMotion || !panelRef.current) {
-      onClose();
-      return;
-    }
-    const tl = gsap.timeline({ onComplete: onClose });
-    tl.to(panelRef.current, {
-      opacity: 0,
-      scale: 0.95,
-      y: 16,
-      duration: 0.3,
-      ease: "power2.in",
-    }).to(overlayRef.current, { opacity: 0, duration: 0.2 }, "-=0.2");
-  };
-
-  const formId = activeTab === "highSchool" ? "school-inquiry-join" : "university-inquiry-join";
-
-  if (!open) return null;
-
-  const target = typeof document !== "undefined" ? document.body : null;
-  if (!target) return null;
-
-  const modal = (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <button
-        type="button"
-        ref={overlayRef}
-        className="absolute inset-0 bg-ink/45 backdrop-blur-md"
-        onClick={handleClose}
-        aria-label="Close dialog"
-      />
-
-      <div
-        ref={panelRef}
-        className="relative z-10 flex h-[min(94vh,800px)] w-[min(92vw,740px)] flex-col overflow-hidden rounded-[1.8rem] border border-white/60 bg-white/95 shadow-[0_32px_96px_rgba(0,0,0,0.22)] backdrop-blur-2xl"
-      >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-accent via-accent-cyan to-accent" aria-hidden />
-        <button
-          type="button"
-          onClick={handleClose}
-          className="absolute right-5 top-5 z-20 flex h-9 w-9 items-center justify-center rounded-full border border-ink/10 bg-white/80 text-xl text-ink/50 shadow-sm transition-all hover:bg-white hover:text-ink hover:rotate-90"
-        >
-          &times;
-        </button>
-
-        <div className="p-7 pb-4 text-center">
-          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-accent">Join Now</p>
-          <h2 className="mt-2 font-geom-heading text-[1.6rem] font-normal leading-tight text-ink md:text-[2.2rem]">
-            Ready to Start Your Journey?
-          </h2>
-          <p className="mt-2 text-sm text-ink/60">Choose your pathway and tell us more about you.</p>
-
-          <div className="mx-auto mt-7 flex max-w-sm rounded-[1rem] bg-slate-100 p-1.5 shadow-inner">
-            <button
-              onClick={() => setActiveTab("highSchool")}
-              className={`flex-1 rounded-[0.7rem] py-2.5 text-sm font-semibold transition-all ${
-                activeTab === "highSchool"
-                  ? "bg-white text-accent shadow-sm ring-1 ring-black/5"
-                  : "text-slate-500 hover:text-ink"
-              }`}
-            >
-              High School
-            </button>
-            <button
-              onClick={() => setActiveTab("university")}
-              className={`flex-1 rounded-[0.7rem] py-2.5 text-sm font-semibold transition-all ${
-                activeTab === "university"
-                  ? "bg-white text-accent shadow-sm ring-1 ring-black/5"
-                  : "text-slate-500 hover:text-ink"
-              }`}
-            >
-              University
-            </button>
-          </div>
-        </div>
-
-        <div
-          className="flex-1 overflow-y-auto px-7 pb-8 service-modal-scroll"
-          onWheelCapture={(e) => e.stopPropagation()}
-          onTouchMoveCapture={(e) => e.stopPropagation()}
-        >
-          <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-[0_4px_32px_rgba(15,23,42,0.06)] md:p-8">
-            {activeTab === "highSchool" ? (
-              <SchoolInquiryForm key="join-hs" variant="surface" formId={formId} hideSubmit />
-            ) : (
-              <UniversityInquiryForm key="join-uni" variant="surface" formId={formId} hideSubmit />
-            )}
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-3 border-t border-slate-200 bg-slate-50/50 p-6 md:flex-row md:items-center md:justify-between">
-          <button
-            type="submit"
-            form={formId}
-            className="group flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-cyan px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:shadow-glow-cyan md:w-auto"
-          >
-            Submit Application
-            <span className="inline-block transition-transform group-hover:translate-x-1">→</span>
-          </button>
-          <button
-            type="button"
-            onClick={handleClose}
-            className="flex min-h-[48px] items-center justify-center rounded-full border border-slate-200 bg-white px-8 py-3 text-sm font-semibold text-slate-600 shadow-sm transition-all hover:bg-slate-50"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-
-  return createPortal(modal, target);
-}
-
-
 function TiltCard({ card, index, reducedMotion, onClick }) {
   const cardRef = useRef(null);
   const glowRef = useRef(null);
@@ -2286,11 +2078,11 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-[#020817]/90 via-[#091a36]/62 to-transparent"
         aria-hidden
       />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-500 opacity-95" aria-hidden />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-blue-500/90" aria-hidden />
 
       <div
         ref={glowRef}
-        className="pointer-events-none absolute h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-blue-300/35 to-cyan-200/30 blur-2xl opacity-0"
+        className="pointer-events-none absolute h-44 w-44 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-400/25 blur-2xl opacity-0"
         aria-hidden
         style={{ position: "absolute" }}
       />
@@ -2318,7 +2110,7 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
         <p className="text-sm leading-relaxed text-white/85 md:text-base">{card.short}</p>
 
         <div className="mt-auto flex items-center justify-between border-t border-white/25 pt-4">
-          <span className="inline-flex items-center gap-2 text-sm font-semibold text-cyan-100 transition-all duration-300 group-hover:gap-3">
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 transition-all duration-300 group-hover:gap-3">
             {card.inquiry ? "Open inquiry form" : "View More"}
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-1.5">
               →
@@ -2629,12 +2421,12 @@ export function Services({ reducedMotion, isMobile }) {
       />
       <div
         ref={decorARef}
-        className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-blue-400/10 blur-3xl"
+        className="pointer-events-none absolute -left-24 top-24 h-72 w-72 rounded-full bg-blue-600/[0.06] blur-3xl"
         aria-hidden
       />
       <div
         ref={decorBRef}
-        className="pointer-events-none absolute -right-20 bottom-14 h-80 w-80 rounded-full bg-cyan-300/10 blur-3xl"
+        className="pointer-events-none absolute -right-20 bottom-14 h-80 w-80 rounded-full bg-slate-300/20 blur-3xl"
         aria-hidden
       />
 
@@ -2647,7 +2439,7 @@ export function Services({ reducedMotion, isMobile }) {
             <span className="relative inline-block">
               <span className="relative z-10">real outcomes</span>
               <span
-                className="absolute -bottom-1 left-0 h-3 w-full rounded-md bg-gradient-to-r from-cyan-400/40 to-blue-500/40"
+                className="absolute -bottom-1 left-0 h-3 w-full rounded-md bg-blue-600/18"
                 aria-hidden
               />
             </span>
@@ -2725,7 +2517,7 @@ export function Services({ reducedMotion, isMobile }) {
                 onClick={() => navigateTo(i)}
                 className={`h-2 rounded-full transition-all duration-350 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
                   i === currentIndex
-                    ? "w-7 bg-gradient-to-r from-blue-600 to-cyan-500 shadow-sm"
+                    ? "w-7 bg-blue-600 shadow-sm"
                     : "w-2 bg-blue-300/60 hover:bg-blue-400/80"
                 }`}
               />
@@ -2865,7 +2657,7 @@ export function HowItWorks({ reducedMotion, isMobile }) {
   }, [reducedMotion, isMobile]);
 
   return (
-    <section id="how" ref={sectionRef} className="relative px-4 py-20 md:px-8 md:py-24">
+    <section id="how" ref={sectionRef} className="relative bg-white px-4 py-20 md:px-8 md:py-24">
       <div className="mx-auto max-w-7xl">
         <div ref={headingRef} className="mb-12 md:mb-16">
           <p className="text-sm font-bold uppercase tracking-widest text-blue-600">How it works</p>
@@ -2877,7 +2669,7 @@ export function HowItWorks({ reducedMotion, isMobile }) {
         <div className="relative md:hidden">
           <div
             ref={lineMobileRef}
-            className="absolute left-[1.125rem] top-2 bottom-2 w-0.5 rounded-full bg-gradient-to-b from-blue-500 via-cyan-500 to-blue-600"
+            className="absolute left-[1.125rem] top-2 bottom-2 w-0.5 rounded-full bg-slate-200"
             aria-hidden
           />
           <ul className="relative space-y-10 pl-12">
@@ -2889,7 +2681,7 @@ export function HowItWorks({ reducedMotion, isMobile }) {
                 }}
                 className="relative"
               >
-                <span className="absolute -left-[1.875rem] top-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-xs font-bold text-white shadow-md">
+                <span className="absolute -left-[1.875rem] top-0.5 flex h-8 w-8 items-center justify-center rounded-full border border-blue-200 bg-white text-xs font-bold text-blue-700 shadow-sm ring-2 ring-slate-100">
                   {i + 1}
                 </span>
                 <h3 className="font-geom-heading text-[1.05rem] font-normal leading-[1.2] tracking-[-0.006em] text-ink">
@@ -2904,7 +2696,7 @@ export function HowItWorks({ reducedMotion, isMobile }) {
         <div className="relative hidden md:block">
           <div
             ref={lineDesktopRef}
-            className="absolute left-8 right-8 top-[2.25rem] h-0.5 rounded-full bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600"
+            className="absolute left-8 right-8 top-[2.25rem] h-0.5 rounded-full bg-slate-200"
             aria-hidden
           />
 
@@ -2917,7 +2709,7 @@ export function HowItWorks({ reducedMotion, isMobile }) {
                 }}
                 className="flex flex-col items-center text-center"
               >
-                <div className="step-circle relative z-[1] mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-blue-400/20 bg-cream shadow-glass backdrop-blur-md">
+                <div className="step-circle relative z-[1] mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-blue-400/20 bg-white shadow-glass backdrop-blur-md">
                   {i === 0 && !reducedMotion && (
                     <span className="absolute inset-0 animate-ping rounded-2xl bg-blue-400/20" aria-hidden />
                   )}
@@ -2951,7 +2743,7 @@ const PROJECTS = [
     summary:
       "Learners build practical AI workflows and present evidence-based outcomes across weekly sprint checkpoints.",
     meta: ["12 Modules", "Beginner to Advanced", "Portfolio-ready"],
-    accent: "from-blue-600/20 to-cyan-400/10",
+    accent: "from-blue-600/15 to-blue-400/8",
   },
   {
     id: "p2",
@@ -2959,7 +2751,7 @@ const PROJECTS = [
     summary:
       "Teams apply the ABCD method to real scenarios, test solutions, and refine delivery through mentor feedback.",
     meta: ["48+ Project Briefs", "Team-based", "Industry-style"],
-    accent: "from-cyan-500/20 to-blue-500/10",
+    accent: "from-slate-400/12 to-blue-500/10",
   },
   {
     id: "p3",
@@ -2967,7 +2759,7 @@ const PROJECTS = [
     summary:
       "Schools and universities launch guided project tracks aligned with future-of-work outcomes and measurable impact.",
     meta: ["School + University", "Implementation Support", "Outcome Analytics"],
-    accent: "from-indigo-500/20 to-sky-400/10",
+    accent: "from-blue-700/12 to-slate-300/10",
   },
 ];
 
@@ -3053,7 +2845,7 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
               }}
               className="group relative overflow-hidden rounded-[1.6rem] border border-white/75 bg-white/75 p-6 shadow-[0_16px_40px_rgba(9,15,26,0.08)] backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-blue-300/50 hover:shadow-[0_22px_56px_rgba(37,99,235,0.18)] md:p-7"
             >
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-600 via-cyan-400 to-blue-500" aria-hidden />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-blue-600/90" aria-hidden />
               <div
                 className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${project.accent} blur-2xl`}
                 aria-hidden
@@ -3071,7 +2863,7 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
                 <ul className="mt-5 space-y-2 border-t border-blue-100/90 pt-4 text-sm text-ink/75">
                   {project.meta.map((item) => (
                     <li key={item} className="flex items-center gap-2.5">
-                      <span className="h-1.5 w-1.5 rounded-full bg-gradient-to-r from-blue-600 to-cyan-500" />
+                      <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
                       {item}
                     </li>
                   ))}
@@ -3081,466 +2873,6 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
           ))}
         </div>
       </div>
-    </section>
-  );
-}
-
-const FEATURE_ITEMS = [
-  {
-    title: "Agile Learning",
-    desc: "Short cycles, fast feedback, and continuous improvement baked in.",
-    stat: { end: 12, suffix: "+", label: "skill modules" },
-    progress: 82,
-    icon: (
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M13 10V3L4 14h7v7l9-11h-7z"
-      />
-    ),
-  },
-  {
-    title: "Real-world Projects",
-    desc: "Ship artifacts you can show-portfolios employers actually read.",
-    stat: { end: 48, suffix: "+", label: "project briefs" },
-    progress: 91,
-    icon: (
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M4 5a1 1 0 011-1h14a1 1 0 011 1v14a1 1 0 01-1 1H5a1 1 0 01-1-1V5z M8 12h8M8 8h8"
-      />
-    ),
-  },
-  {
-    title: "AI + Blockchain + Data",
-    desc: "Future-facing stacks with ethics, safety, and clarity first.",
-    stat: { end: 3, suffix: "", label: "pillar tracks" },
-    progress: 100,
-    icon: (
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
-      />
-    ),
-  },
-  {
-    title: "Subscription-based access",
-    desc: "Predictable pricing for individuals, cohorts, and institutions.",
-    stat: { end: 98, suffix: "%", label: "renewal intent*" },
-    progress: 98,
-    icon: (
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={1.5}
-        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    ),
-  },
-];
-
-function StatNumber({ end, suffix, label, reducedMotion, isMobile, triggerEl }) {
-  const numRef = useRef(null);
-  const barRef = useRef(null);
-  const pct = FEATURE_ITEMS.find((i) => i.stat.end === end)?.progress ?? 80;
-
-  useEffect(() => {
-    const el = numRef.current;
-    if (!el) return;
-
-    if (reducedMotion) {
-      el.textContent = `${end}${suffix}`;
-      if (barRef.current) barRef.current.style.width = `${pct}%`;
-      return;
-    }
-
-    const proxy = { v: 0 };
-    gsap.to(proxy, {
-      v: end,
-      duration: isMobile ? 1.3 : 2,
-      ease: "power2.out",
-      onUpdate: () => {
-        el.textContent = `${Math.round(proxy.v)}${suffix}`;
-      },
-      scrollTrigger: {
-        trigger: triggerEl || el,
-        start: "top 88%",
-        toggleActions: "play none none none",
-      },
-    });
-
-    if (barRef.current) {
-      gsap.fromTo(
-        barRef.current,
-        { width: "0%" },
-        {
-          width: `${pct}%`,
-          duration: isMobile ? 1 : 1.6,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: triggerEl || el,
-            start: "top 88%",
-            toggleActions: "play none none none",
-          },
-        }
-      );
-    }
-  }, [end, suffix, reducedMotion, isMobile, triggerEl, pct]);
-
-  return (
-    <div className="mt-5">
-      <p
-        ref={numRef}
-        className="font-display text-[2.2rem] font-normal leading-[2] tracking-[-0.01em] text-gradient md:text-[2.8rem]"
-      >
-        0{suffix}
-      </p>
-      <p className="mt-1 text-xs text-ink/50 md:text-sm">{label}</p>
-      <div className="mt-3 h-1 w-full overflow-hidden rounded-full bg-blue-100">
-        <div
-          ref={barRef}
-          className="h-full rounded-full bg-gradient-to-r from-blue-600 to-cyan-500"
-          style={{ width: reducedMotion ? `${pct}%` : "0%" }}
-        />
-      </div>
-    </div>
-  );
-}
-
-function FeatureCard({ item, index, reducedMotion, isMobile }) {
-  const cardRef = useRef(null);
-  const iconRef = useRef(null);
-
-  useEffect(() => {
-    const card = cardRef.current;
-    const icon = iconRef.current;
-    if (!card || reducedMotion) return;
-
-    const onEnter = () => {
-      gsap.to(card, {
-        y: -8,
-        boxShadow: "0 24px 48px rgba(37,99,235,0.18)",
-        duration: 0.35,
-        ease: "power2.out",
-      });
-      if (icon) gsap.to(icon, { rotate: -8, scale: 1.12, duration: 0.3, ease: "back.out(2)" });
-    };
-    const onLeave = () => {
-      gsap.to(card, {
-        y: 0,
-        boxShadow: "0 4px 20px rgba(0,0,0,0.06)",
-        duration: 0.45,
-        ease: "power2.inOut",
-      });
-      if (icon) gsap.to(icon, { rotate: 0, scale: 1, duration: 0.45, ease: "elastic.out(1, 0.5)" });
-    };
-
-    card.addEventListener("mouseenter", onEnter);
-    card.addEventListener("mouseleave", onLeave);
-    return () => {
-      card.removeEventListener("mouseenter", onEnter);
-      card.removeEventListener("mouseleave", onLeave);
-    };
-  }, [reducedMotion]);
-
-  return (
-    <article
-      ref={cardRef}
-      data-feature-card
-      className="relative rounded-3xl border border-white/70 bg-white/50 p-6 shadow-glass backdrop-blur-xl md:p-8"
-    >
-      <span className="pointer-events-none absolute right-4 top-2 select-none font-display text-[4rem] font-bold leading-none text-blue-500/5">
-        {index + 1}
-      </span>
-
-      <div
-        ref={iconRef}
-        className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600/15 to-cyan-500/10 text-blue-600"
-      >
-        <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          {item.icon}
-        </svg>
-      </div>
-
-      <h3 className="mt-4 font-geom-heading text-[1.03rem] font-normal leading-[1.2] tracking-[-0.006em] text-ink">
-        {item.title}
-      </h3>
-      <p className="mt-2 text-sm text-ink/65">{item.desc}</p>
-
-      <StatNumber
-        end={item.stat.end}
-        suffix={item.stat.suffix}
-        label={item.stat.label}
-        reducedMotion={reducedMotion}
-        isMobile={isMobile}
-        triggerEl={cardRef.current}
-      />
-    </article>
-  );
-}
-
-export function Features({ reducedMotion, isMobile }) {
-  const sectionRef = useRef(null);
-  const introRef = useRef(null);
-  const decorRef = useRef(null);
-  const cardsRef = useRef([]);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const cards = cardsRef.current.filter(Boolean);
-    if (reducedMotion) {
-      gsap.set(cards, { clearProps: "all" });
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      if (introRef.current) {
-        gsap.from(introRef.current.children, {
-          y: isMobile ? 18 : 26,
-          opacity: 0,
-          stagger: 0.1,
-          duration: 0.65,
-          ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 82%", toggleActions: "play none none none" },
-        });
-      }
-
-      gsap.set(cards, { clipPath: "inset(0 0 100% 0 round 24px)" });
-      gsap.to(cards, {
-        clipPath: "inset(0 0 0% 0 round 24px)",
-        duration: isMobile ? 0.55 : 0.75,
-        stagger: isMobile ? 0.07 : 0.12,
-        ease: "power4.inOut",
-        scrollTrigger: { trigger: section, start: "top 74%", toggleActions: "play none none none" },
-      });
-
-      if (!isMobile) {
-        cards.forEach((card, i) => {
-          gsap.to(card, {
-            y: i % 2 ? -8 : -5,
-            ease: "none",
-            scrollTrigger: { trigger: card, start: "top bottom", end: "bottom top", scrub: 0.45 },
-          });
-        });
-      }
-
-      if (decorRef.current) {
-        gsap.to(decorRef.current, {
-          yPercent: -14,
-          xPercent: 8,
-          ease: "none",
-          scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1 },
-        });
-      }
-    }, section);
-
-    return () => ctx.revert();
-  }, [reducedMotion, isMobile]);
-
-}
-
-export function CTASection({ reducedMotion, isMobile }) {
-  const [showModal, setShowModal] = useState(false);
-  const sectionRef = useRef(null);
-  const panelRef = useRef(null);
-  const glowRef = useRef(null);
-  const glow2Ref = useRef(null);
-  const contentRef = useRef(null);
-  const btnRef = useRef(null);
-  const shimmerRef = useRef(null);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section || reducedMotion) return;
-
-    const ctx = gsap.context(() => {
-      if (panelRef.current) {
-        gsap.fromTo(
-          panelRef.current,
-          { clipPath: "inset(8% 4% 8% 4% round 2rem)", opacity: 0.6, y: 40 },
-          {
-            clipPath: "inset(0% 0% 0% 0% round 2rem)",
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            ease: "expo.out",
-            scrollTrigger: { trigger: section, start: "top 82%", toggleActions: "play none none none" },
-          }
-        );
-      }
-
-      if (contentRef.current) {
-        gsap.from(contentRef.current.children, {
-          y: isMobile ? 18 : 30,
-          opacity: 0,
-          stagger: 0.14,
-          duration: 0.7,
-          ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 76%", toggleActions: "play none none none" },
-        });
-      }
-
-      if (glowRef.current) {
-        gsap.to(glowRef.current, {
-          scale: isMobile ? 1.06 : 1.14,
-          opacity: isMobile ? 0.55 : 0.7,
-          duration: isMobile ? 2.8 : 3.8,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        });
-      }
-
-      if (glow2Ref.current) {
-        gsap.to(glow2Ref.current, {
-          scale: 1.1,
-          opacity: 0.45,
-          duration: 4.2,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-          delay: 1.5,
-        });
-      }
-
-      gsap.to(section, {
-        y: isMobile ? 0 : -12,
-        ease: "none",
-        scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1 },
-      });
-    }, section);
-
-    return () => ctx.revert();
-  }, [reducedMotion, isMobile]);
-
-  useEffect(() => {
-    const btn = btnRef.current;
-    if (!btn || reducedMotion) return;
-
-    const STRENGTH = 0.3;
-    const onMove = (e) => {
-      const rect = btn.getBoundingClientRect();
-      const cx = rect.left + rect.width / 2;
-      const cy = rect.top + rect.height / 2;
-      gsap.to(btn, {
-        x: (e.clientX - cx) * STRENGTH,
-        y: (e.clientY - cy) * STRENGTH,
-        duration: 0.5,
-        ease: "power2.out",
-      });
-    };
-    const onLeave = () => gsap.to(btn, { x: 0, y: 0, duration: 0.7, ease: "elastic.out(1, 0.4)" });
-
-    const onEnter = () => {
-      gsap.to(btn, { scale: 1.07, duration: 0.3, ease: "back.out(2)" });
-      if (shimmerRef.current) {
-        gsap.fromTo(
-          shimmerRef.current,
-          { x: "-120%", skewX: -12 },
-          { x: "140%", skewX: -12, duration: 0.55, ease: "power2.inOut" }
-        );
-      }
-    };
-    const onOut = () => gsap.to(btn, { scale: 1, duration: 0.4, ease: "power2.out" });
-
-    btn.addEventListener("mousemove", onMove);
-    btn.addEventListener("mouseleave", onLeave);
-    btn.addEventListener("mouseenter", onEnter);
-    btn.addEventListener("mouseleave", onOut);
-
-    return () => {
-      btn.removeEventListener("mousemove", onMove);
-      btn.removeEventListener("mouseleave", onLeave);
-      btn.removeEventListener("mouseenter", onEnter);
-      btn.removeEventListener("mouseleave", onOut);
-    };
-  }, [reducedMotion]);
-
-  return (
-    <section id="cta" ref={sectionRef} className="relative px-4 py-20 md:px-8 md:py-24">
-      <div
-        ref={panelRef}
-        className="relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] border border-white/20 bg-gradient-to-br from-ink via-accent to-accent-cyan px-8 py-16 text-center shadow-2xl md:px-16 md:py-20"
-      >
-        <div
-          ref={glowRef}
-          className="pointer-events-none absolute -left-1/4 -top-1/2 h-[120%] w-[80%] rounded-full bg-accent-cyan/30 blur-3xl"
-          aria-hidden
-        />
-        <div
-          ref={glow2Ref}
-          className="pointer-events-none absolute -right-1/4 bottom-0 h-2/3 w-2/3 rounded-full bg-accent/25 blur-3xl"
-          aria-hidden
-        />
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E\")",
-          }}
-          aria-hidden
-        />
-
-        <div ref={contentRef} className="relative z-10 flex flex-col items-center">
-          <h2 className="font-geom-heading text-[clamp(1.9rem,4.8vw,3.2rem)] font-normal leading-[1.4] tracking-[-0.012em] text-white">
-            Start Your Future with HIFAI
-          </h2>
-          <p className="mx-auto mt-4 max-w-xl text-sm text-white/85 md:text-lg">
-            Join a platform where human insight and AI literacy move together-built for ambitious
-            learners and forward-looking institutions.
-          </p>
-
-          <div className="mt-6 flex flex-wrap justify-center gap-3">
-            {["12+ Modules", "48+ Projects", "98% Renewal"].map((badge) => (
-              <span
-                key={badge}
-                className="rounded-full border border-white/25 bg-white/10 px-3 py-1 text-xs font-semibold text-white/90 backdrop-blur-sm"
-              >
-                {badge}
-              </span>
-            ))}
-          </div>
-
-          <button
-            ref={btnRef}
-            onClick={() => setShowModal(true)}
-            className="relative mt-10 inline-flex overflow-hidden rounded-full bg-white px-10 py-4 text-base font-bold text-ink shadow-lg md:text-lg"
-          >
-            <span
-              ref={shimmerRef}
-              className="absolute inset-y-0 w-1/3 bg-gradient-to-r from-transparent via-accent/20 to-transparent"
-              style={{ left: "-50%" }}
-              aria-hidden
-            />
-            <span className="relative z-10 flex items-center gap-2">
-              Join Now
-              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M17 8l4 4m0 0l-4 4m4-4H3"
-                />
-              </svg>
-            </span>
-          </button>
-
-          <p className="mt-4 text-xs text-white/50">No account needed - Free to explore</p>
-        </div>
-      </div>
-
-      <JoinNowModal
-        open={showModal}
-        onClose={() => setShowModal(false)}
-        reducedMotion={reducedMotion}
-      />
     </section>
   );
 }

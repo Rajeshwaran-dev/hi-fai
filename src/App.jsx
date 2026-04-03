@@ -10,8 +10,6 @@ import {
   MissingLinkSection,
   WhatIsHifaiSection,
   TargetUsers,
-  Features,
-  CTASection,
 } from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
@@ -46,7 +44,7 @@ export default function App() {
   }, []);
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
+    <div className="relative min-h-screen overflow-x-hidden bg-white">
       {showPreloader && (
         <Preloader
           reducedMotion={reducedMotion}
@@ -61,8 +59,6 @@ export default function App() {
         <MissingLinkSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <WhatIsHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <TargetUsers reducedMotion={reducedMotion} isMobile={isMobile} />
-        <Features reducedMotion={reducedMotion} isMobile={isMobile} />
-        <CTASection reducedMotion={reducedMotion} isMobile={isMobile} />
       </main>
       <Footer reducedMotion={reducedMotion} />
     </div>

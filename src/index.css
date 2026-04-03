@@ -35,7 +35,7 @@
 
 @layer utilities {
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent via-accent-cyan to-accent;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-800 to-blue-600;
   }
   .glass {
     @apply bg-white/40 backdrop-blur-xl border border-white/60 shadow-glass;
@@ -45,7 +45,7 @@
   }
 
   .hero-trail-dot {
-    @apply absolute rounded-full bg-gradient-to-br from-accent/60 to-accent-cyan/50 blur-[1px];
+    @apply absolute rounded-full bg-blue-500/55 blur-[1px];
     transform: translate(-50%, -50%);
   }
 }
@@ -94,7 +94,8 @@
 .preloader-root {
   position: fixed;
   inset: 0;
-  z-index: 120;
+  /* Above floating UI (WhatsApp ~134, back-to-top ~135) and custom cursor (~220) */
+  z-index: 400;
   display: flex;
   align-items: center;
   justify-content: center;
