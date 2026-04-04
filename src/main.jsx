@@ -48,7 +48,7 @@ createRoot(document.getElementById("root")).render(
             path="/school-organizations"
             element={
               <BreadcrumbPage
-                title="School Organizations"
+                title="Schools"
                 subtitle="Partner with HIfAi to roll out age-right programs, teacher enablement, and outcome analytics."
               >
                 <SchoolOrganizationsBody />
@@ -59,7 +59,7 @@ createRoot(document.getElementById("root")).render(
             path="/college-organizations"
             element={
               <BreadcrumbPage
-                title="College Organizations"
+                title="Universities"
                 subtitle="Scale interdisciplinary studios, credit-bearing paths, and employer-backed challenges with shared rubrics."
               >
                 <CollegeOrganizationsBody />

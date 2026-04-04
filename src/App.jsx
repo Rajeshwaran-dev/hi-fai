@@ -7,8 +7,7 @@ import Navbar from "./components/Navbar.jsx";
 import {
   Hero,
   KanavooglePartnershipSection,
-  WhyHifaiSection,
-  MissingLinkSection,
+  WhyHifaiMissingLinkSection,
   WhatIsHifaiSection,
   TargetUsers,
 } from "./pages/Home.jsx";
@@ -56,11 +55,13 @@ export default function App() {
       <Navbar reducedMotion={reducedMotion} />
       <main>
         <Hero reducedMotion={reducedMotion} isMobile={isMobile} />
-        <KanavooglePartnershipSection reducedMotion={reducedMotion} isMobile={isMobile} />
-        <WhyHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
-        <MissingLinkSection reducedMotion={reducedMotion} isMobile={isMobile} />
+        <WhyHifaiMissingLinkSection
+          reducedMotion={reducedMotion}
+          isMobile={isMobile}
+        />
         <WhatIsHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <TargetUsers reducedMotion={reducedMotion} isMobile={isMobile} />
+        <KanavooglePartnershipSection reducedMotion={reducedMotion} isMobile={isMobile} />
       </main>
       <Footer reducedMotion={reducedMotion} />
     </div>

@@ -21,8 +21,8 @@ const navItems = [
       },
     ],
   },
-  { label: "School Organizations", to: "/school-organizations" },
-  { label: "College Organizations", to: "/college-organizations" },
+  { label: "Schools", to: "/school-organizations" },
+  { label: "Universities", to: "/college-organizations" },
   { label: "Learning Hub", to: "/learning-hub" },
 ];
 
