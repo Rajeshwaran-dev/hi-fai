@@ -150,7 +150,7 @@ export default function BreadcrumbPage({ title, subtitle, children }) {
               background: "linear-gradient(180deg, rgba(240,247,255,0.5) 0%, transparent 22%, transparent 100%)",
             }}
           />
-          <div className="relative z-10 mx-auto max-w-8xl px-6">
+          <div className="relative z-10 mx-auto max-w-7xl px-6">
             <div className="bc-r3">{children}</div>
           </div>
         </section>

@@ -13,17 +13,17 @@ export function GetStartedBody() {
   ];
 
   return (
-    <>
-      <div className="mb-10">
+    <div className="mx-auto w-full max-w-6xl">
+      <div className="mb-10 text-center">
         <SectionLabel>Join a cohort</SectionLabel>
         <SectionHeading>Tell us who you are—we will route your request to the right team</SectionHeading>
-        <Lead>
+        <Lead className="mx-auto">
           Applications are reviewed weekly. Schools and universities can share procurement details in the notes
           field; students should use a supervised email where possible.
         </Lead>
       </div>
 
-      <div className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_4px_32px_rgba(15,23,42,0.06)] md:p-8">
+      <div className="w-full rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_4px_32px_rgba(15,23,42,0.06)] md:p-8">
         <div className="mx-auto grid w-full max-w-3xl grid-cols-2 gap-1.5 rounded-[1rem] bg-slate-100 p-1.5 shadow-inner md:grid-cols-4">
           {tabOptions.map((item) => (
             <button
@@ -209,7 +209,7 @@ export function GetStartedBody() {
             </label>
           </div>
 
-          <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+          <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-center sm:gap-4">
             <InnerPageLink
               to="/"
               className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-600 shadow-sm transition hover:bg-slate-50"
@@ -233,6 +233,6 @@ export function GetStartedBody() {
         </a>
         .
       </p>
-    </>
+    </div>
   );
 }
