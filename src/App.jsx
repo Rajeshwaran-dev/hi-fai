@@ -6,6 +6,7 @@ import Preloader from "./components/Preloader.jsx";
 import Navbar from "./components/Navbar.jsx";
 import {
   Hero,
+  KanavooglePartnershipSection,
   WhyHifaiSection,
   MissingLinkSection,
   WhatIsHifaiSection,
@@ -55,6 +56,7 @@ export default function App() {
       <Navbar reducedMotion={reducedMotion} />
       <main>
         <Hero reducedMotion={reducedMotion} isMobile={isMobile} />
+        <KanavooglePartnershipSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <WhyHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <MissingLinkSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <WhatIsHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />

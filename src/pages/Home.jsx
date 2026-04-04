@@ -1,7 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Link } from "react-router-dom";
 import {
+  Award,
   BrainCircuit,
   Briefcase,
   GraduationCap,
@@ -70,7 +72,8 @@ export function Hero({ reducedMotion, isMobile }) {
     if (!root) return;
 
     const clearIntroTargets = () => {
-      const wordSpans = headlineRef.current?.querySelectorAll(".hero-word") ?? [];
+      const wordSpans =
+        headlineRef.current?.querySelectorAll(".hero-word") ?? [];
       const sub = subRef.current;
       const cta = ctaRef.current;
       gsap.set([...wordSpans, sub, cta].filter(Boolean), { clearProps: "all" });
@@ -82,7 +85,8 @@ export function Hero({ reducedMotion, isMobile }) {
     }
 
     const ctx = gsap.context(() => {
-      const wordSpans = headlineRef.current?.querySelectorAll(".hero-word") ?? [];
+      const wordSpans =
+        headlineRef.current?.querySelectorAll(".hero-word") ?? [];
       const sub = subRef.current;
       const cta = ctaRef.current;
       if (!wordSpans.length) return;
@@ -174,8 +178,15 @@ export function Hero({ reducedMotion, isMobile }) {
       className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden bg-white px-4 pt-32 pb-20 md:pb-16"
     >
       <div ref={vantaRef} className="absolute inset-0 z-0" aria-hidden />
-      <div className="pointer-events-none absolute inset-0 z-[1] bg-hero-mesh" aria-hidden />
-      <div ref={trailLayerRef} className="pointer-events-none absolute inset-0 z-[11]" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] bg-hero-mesh"
+        aria-hidden
+      />
+      <div
+        ref={trailLayerRef}
+        className="pointer-events-none absolute inset-0 z-[11]"
+        aria-hidden
+      />
       <div
         ref={parallaxRef}
         className="relative z-10 mx-auto flex max-w-6xl flex-col items-center text-center"
@@ -191,7 +202,10 @@ export function Hero({ reducedMotion, isMobile }) {
           className="font-display text-[clamp(2.2rem,8vw,4.6rem)] font-normal leading-[1.5] tracking-[-0.015em] text-ink"
         >
           {WORDS.map((w, i) => (
-            <span key={i} className="hero-word inline-block mr-[0.2em] last:mr-0">
+            <span
+              key={i}
+              className="hero-word inline-block mr-[0.2em] last:mr-0"
+            >
               {w}
             </span>
           ))}
@@ -238,6 +252,236 @@ export function Hero({ reducedMotion, isMobile }) {
   );
 }
 
+const PARTNER_SITE_URL = "https://kanavoogle.com/";
+
+/** Award-style Lottie for the Kanavoogle consultant card (lottie.host). */
+const CONSULTANT_AWARD_LOTTIE_SRC =
+  "https://lottie.host/1a3c4202-23fe-487d-9f33-29d81b472a6d/hNqk3E74Uj.lottie";
+
+const kanavoogleLinkClass =
+  "font-medium text-blue-800 no-underline rounded-md px-1.5 py-0.5 transition-colors hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
+
+const PARTNERSHIP_AWARD_HIGHLIGHTS = [
+  {
+    title: "Innovation & concept design",
+    text: "The HIfAi model has been recognised in forums that reward fresh thinking at the intersection of human capability, assessment, and AI.",
+  },
+  {
+    title: "Education & future skills",
+    text: "Highlighted for addressing how learners and institutions move from grades to visible, actionable skill intelligence.",
+  },
+  {
+    title: "Responsible, scalable vision",
+    text: "Commended for keeping human insight central while building pathways institutions can adopt with confidence.",
+  },
+];
+
+export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
+  const sectionRef = useRef(null);
+  const headerRef = useRef(null);
+  const mainRef = useRef(null);
+  const awardsRef = useRef(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section || reducedMotion) return;
+
+    const ctx = gsap.context(() => {
+      if (headerRef.current?.children?.length) {
+        gsap.from(headerRef.current.children, {
+          y: isMobile ? 14 : 22,
+          opacity: 0,
+          stagger: 0.08,
+          duration: 0.6,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 88%",
+            toggleActions: "play none none none",
+          },
+        });
+      }
+      if (mainRef.current?.children?.length) {
+        gsap.from(mainRef.current.children, {
+          y: isMobile ? 18 : 26,
+          opacity: 0,
+          stagger: 0.1,
+          duration: 0.65,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 82%",
+            toggleActions: "play none none none",
+          },
+        });
+      }
+      if (awardsRef.current?.children?.length) {
+        gsap.from(awardsRef.current.children, {
+          y: isMobile ? 16 : 20,
+          opacity: 0,
+          stagger: 0.09,
+          duration: 0.55,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: awardsRef.current,
+            start: "top 90%",
+            toggleActions: "play none none none",
+          },
+        });
+      }
+    }, section);
+
+    return () => ctx.revert();
+  }, [reducedMotion, isMobile]);
+
+  return (
+    <section
+      ref={sectionRef}
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-14 md:px-8 md:py-15"
+      aria-labelledby="kanavoogle-partnership-heading"
+    >
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.18]"
+        aria-hidden
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(100, 116, 139, 0.12) 1px, transparent 1px)",
+          backgroundSize: "26px 26px",
+        }}
+      />
+      <div
+        className="pointer-events-none absolute right-0 top-1/2 h-[22rem] w-[22rem] -translate-y-1/3 translate-x-1/4 rounded-full bg-blue-600/[0.05] blur-3xl"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto max-w-7xl">
+        <div ref={headerRef} className="mx-auto max-w-3xl text-center">
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+            Partnership
+          </p>
+          <h2
+            id="kanavoogle-partnership-heading"
+            className="mt-3 font-geom-heading text-[clamp(1.75rem,3.8vw,2.5rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
+          >
+            Proud partner of{" "}
+            <a
+              href={PARTNER_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={kanavoogleLinkClass}
+            >
+              Kanavoogle
+            </a>
+            <span className="text-ink/80">, Australia</span>
+          </h2>
+          <p className="mt-4 text-base leading-relaxed text-ink/65 md:text-[17px]">
+            HIfAi is shaped through an active partnership with{" "}
+            <a
+              href={PARTNER_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={kanavoogleLinkClass}
+            >
+              Kanavoogle
+            </a>
+            connecting Australian innovation networks with our mission to make
+            human intelligence visible, measurable, and actionable in a world
+            shaped by AI.
+          </p>
+        </div>
+
+        <div
+          ref={mainRef}
+          className="mt-12 grid gap-8 lg:mt-14 lg:grid-cols-12 lg:items-stretch lg:gap-10"
+        >
+          <div className="flex flex-col justify-center rounded-2xl border border-slate-200/90 bg-slate-50/60 p-8 shadow-sm lg:col-span-7 lg:p-10">
+            <div className="flex items-center gap-2 text-sm font-semibold text-slate-600">
+              <span
+                className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-white text-blue-700 shadow-sm"
+                aria-hidden
+              >
+                <svg
+                  className="h-4 w-4"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  />
+                </svg>
+              </span>
+              Global alignment
+            </div>
+            <p className="mt-4 text-[15px] leading-relaxed text-ink/75 md:text-base">
+              <a
+                href={PARTNER_SITE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={kanavoogleLinkClass}
+              >
+                Kanavoogle
+              </a>{" "}
+              helps us stress-test product direction, research rigour, and
+              go-to-market clarity—so schools, universities, and learners
+              receive a platform built for real institutions, not slide decks
+              alone.
+            </p>
+            <p className="mt-4 text-[15px] leading-relaxed text-ink/75 md:text-base">
+              Together we focus on ethical AI literacy, evidence-led skill
+              signals, and pathways that respect both local context and
+              international expectations for work and study.
+            </p>
+          </div>
+
+          <aside className="flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-8 shadow-[0_12px_40px_rgba(15,23,42,0.06)] lg:col-span-5 lg:p-9">
+            <div>
+              <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
+                    Kanavoogle consultant
+                  </p>
+                  <p className="mt-4 font-geom-heading text-xl font-normal leading-snug tracking-[-0.02em] text-ink md:text-[1.35rem]">
+                    Dr. N. Venkatachalam
+                  </p>
+                  <p className="mt-2 text-sm font-medium text-ink/55">
+                    BE (Hons), MBA, PhD
+                  </p>
+                </div>
+                <div
+                  className="mx-auto flex shrink-0 items-center justify-center sm:mx-0 sm:pt-0.5"
+                  aria-hidden
+                >
+                  <DotLottieReact
+                    src={CONSULTANT_AWARD_LOTTIE_SRC}
+                    loop
+                    autoplay={!reducedMotion}
+                    className="h-[7.25rem] w-[7.25rem] sm:h-[8.25rem] sm:w-[8.25rem]"
+                  />
+                </div>
+              </div>
+              <p className="mt-5 text-sm leading-relaxed text-ink/70">
+                Strategic guidance on validating the HIfAi concept,
+                strengthening institutional narratives, and aligning the
+                platform with global standards for skills, assessment, and
+                responsible AI adoption.
+              </p>
+            </div>
+            <p className="mt-8 border-t border-slate-100 pt-6 text-xs leading-relaxed text-ink/50">
+              Credentials listed reflect academic and professional preparation;
+              role with HIfAi is advisory in support of the Kanavoogle
+              partnership.
+            </p>
+          </aside>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const WHY_HIFAI_POINTS = [
   { text: "Education measures knowledge, not skills.", kind: "gap" },
   { text: "Core human abilities remain unidentified.", kind: "gap" },
@@ -264,7 +508,11 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
           stagger: 0.07,
           duration: 0.65,
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 82%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 82%",
+            toggleActions: "play none none none",
+          },
         });
       }
       if (rightRef.current) {
@@ -274,7 +522,11 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
           opacity: 0,
           duration: 0.75,
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 78%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 78%",
+            toggleActions: "play none none none",
+          },
         });
       }
     }, section);
@@ -285,14 +537,15 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-16 md:px-8 md:py-24"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-16 md:px-8 md:py-15"
       aria-labelledby="why-hifai-heading"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.22]"
         aria-hidden
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(100, 116, 139, 0.14) 1px, transparent 1px)",
+          backgroundImage:
+            "radial-gradient(circle, rgba(100, 116, 139, 0.14) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />
@@ -303,7 +556,9 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
         <div ref={leftRef} className="flex flex-col">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">Why HIfAi?</p>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+            Why HIfAi?
+          </p>
           <h2
             id="why-hifai-heading"
             className="mt-3 font-geom-heading text-[clamp(1.85rem,4.2vw,2.75rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
@@ -318,8 +573,8 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
             </span>
           </h2>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-ink/65 md:text-[17px]">
-            Traditional systems stop at grades. HIfAi closes the loop between what people know, what they can do,
-            and where they are headed next.
+            Traditional systems stop at grades. HIfAi closes the loop between
+            what people know, what they can do, and where they are headed next.
           </p>
 
           <ul className="mt-8 space-y-0" role="list">
@@ -350,14 +605,17 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
           </ul>
         </div>
 
-        <div ref={rightRef} className="relative mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none">
+        <div
+          ref={rightRef}
+          className="relative mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none"
+        >
           <div
             className="absolute -inset-3 rounded-[1.75rem] bg-blue-600/[0.07] blur-xl md:-inset-4"
             aria-hidden
           />
           <figure className="relative overflow-hidden rounded-[1.5rem] border border-white/80 bg-white shadow-[0_24px_64px_rgba(15,23,42,0.12)] ring-1 ring-ink/5">
             <img
-              src="/skill-developement.jpg.jpeg"
+              src="/why-hifai.jpg"
               alt="Learners building future-ready skills through guided practice and collaboration"
               className="aspect-[4/3] h-full w-full object-cover md:aspect-[5/4]"
               width={800}
@@ -365,7 +623,9 @@ export function WhyHifaiSection({ reducedMotion, isMobile }) {
               loading="lazy"
               decoding="async"
             />
-            <figcaption className="sr-only">Skill development and collaborative learning</figcaption>
+            <figcaption className="sr-only">
+              Skill development and collaborative learning
+            </figcaption>
           </figure>
         </div>
       </div>
@@ -398,7 +658,11 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
           opacity: 0,
           duration: 0.75,
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 80%",
+            toggleActions: "play none none none",
+          },
         });
       }
       if (contentRef.current?.children?.length) {
@@ -408,7 +672,11 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
           stagger: 0.07,
           duration: 0.65,
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 78%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 78%",
+            toggleActions: "play none none none",
+          },
         });
       }
     }, section);
@@ -419,14 +687,15 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-slate-200/70 bg-white px-4 py-16 md:px-8 md:py-24"
+      className="relative overflow-hidden border-t border-slate-200/70 bg-white px-4 py-16 md:px-8 md:py-15"
       aria-labelledby="missing-link-heading"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.2]"
         aria-hidden
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(100, 116, 139, 0.12) 1px, transparent 1px)",
+          backgroundImage:
+            "radial-gradient(circle, rgba(100, 116, 139, 0.12) 1px, transparent 1px)",
           backgroundSize: "26px 26px",
         }}
       />
@@ -436,7 +705,10 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
       />
 
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2 lg:gap-16">
-        <div ref={imageRef} className="relative mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none">
+        <div
+          ref={imageRef}
+          className="relative mx-auto w-full max-w-xl lg:mx-0 lg:max-w-none"
+        >
           <div
             className="absolute -inset-3 rounded-[1.75rem] bg-blue-600/[0.06] blur-xl md:-inset-4"
             aria-hidden
@@ -451,12 +723,16 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
               loading="lazy"
               decoding="async"
             />
-            <figcaption className="sr-only">School and organizational learning context</figcaption>
+            <figcaption className="sr-only">
+              School and organizational learning context
+            </figcaption>
           </figure>
         </div>
 
         <div ref={contentRef} className="flex flex-col">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">Education today</p>
+          <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
+            Education today
+          </p>
           <h2
             id="missing-link-heading"
             className="mt-3 font-geom-heading text-[clamp(1.85rem,4.2vw,2.75rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
@@ -471,8 +747,9 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
             </span>
           </h2>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-ink/65 md:text-[17px]">
-            When measurement ends at marks, both learners and teachers lose the signal they need for the next best
-            step—skills stay invisible and decisions stay guesswork.
+            When measurement ends at marks, both learners and teachers lose the
+            signal they need for the next best step—skills stay invisible and
+            decisions stay guesswork.
           </p>
 
           <ul className="mt-8 space-y-0" role="list">
@@ -485,7 +762,9 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
                   className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-br from-slate-400 to-slate-500 ring-2 ring-slate-200/90"
                   aria-hidden
                 />
-                <span className="text-[15px] leading-relaxed text-ink/75 md:text-base">{text}</span>
+                <span className="text-[15px] leading-relaxed text-ink/75 md:text-base">
+                  {text}
+                </span>
               </li>
             ))}
             <li className="mt-2 flex gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-5 md:gap-5 md:p-6">
@@ -506,7 +785,16 @@ export function MissingLinkSection({ reducedMotion, isMobile }) {
   );
 }
 
-function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, body, footerTags }) {
+function WhatIsHoverCard({
+  reducedMotion,
+  cardRef,
+  icon,
+  chip,
+  title,
+  acronym,
+  body,
+  footerTags,
+}) {
   const innerRef = useRef(null);
   const glowRef = useRef(null);
 
@@ -517,8 +805,14 @@ function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, b
     gsap.set(el, { transformOrigin: "50% 50%", transformPerspective: 1000 });
 
     const maxTilt = 9;
-    const setRX = gsap.quickTo(el, "rotateX", { duration: 0.35, ease: "power3.out" });
-    const setRY = gsap.quickTo(el, "rotateY", { duration: 0.35, ease: "power3.out" });
+    const setRX = gsap.quickTo(el, "rotateX", {
+      duration: 0.35,
+      ease: "power3.out",
+    });
+    const setRY = gsap.quickTo(el, "rotateY", {
+      duration: 0.35,
+      ease: "power3.out",
+    });
     const setY = gsap.quickTo(el, "y", { duration: 0.35, ease: "power3.out" });
 
     const onMove = (e) => {
@@ -542,7 +836,8 @@ function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, b
       setRX(0);
       setRY(0);
       setY(0);
-      if (glowRef.current) gsap.to(glowRef.current, { opacity: 0, duration: 0.45 });
+      if (glowRef.current)
+        gsap.to(glowRef.current, { opacity: 0, duration: 0.45 });
     };
 
     el.addEventListener("mousemove", onMove);
@@ -586,10 +881,14 @@ function WhatIsHoverCard({ reducedMotion, cardRef, icon, chip, title, acronym, b
               {title}
             </h3>
             {acronym ? (
-              <p className="mt-2 text-sm font-semibold tracking-wide text-blue-600/95">{acronym}</p>
+              <p className="mt-2 text-sm font-semibold tracking-wide text-blue-600/95">
+                {acronym}
+              </p>
             ) : null}
 
-            <p className="mt-5 flex-1 text-[15px] leading-relaxed text-ink/72 md:text-base">{body}</p>
+            <p className="mt-5 flex-1 text-[15px] leading-relaxed text-ink/72 md:text-base">
+              {body}
+            </p>
 
             {footerTags?.length ? (
               <div className="mt-8 flex flex-wrap gap-2 border-t border-slate-100 pt-6">
@@ -621,8 +920,14 @@ function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body }) {
     gsap.set(el, { transformOrigin: "50% 50%", transformPerspective: 1000 });
 
     const maxTilt = 8;
-    const setRX = gsap.quickTo(el, "rotateX", { duration: 0.32, ease: "power3.out" });
-    const setRY = gsap.quickTo(el, "rotateY", { duration: 0.32, ease: "power3.out" });
+    const setRX = gsap.quickTo(el, "rotateX", {
+      duration: 0.32,
+      ease: "power3.out",
+    });
+    const setRY = gsap.quickTo(el, "rotateY", {
+      duration: 0.32,
+      ease: "power3.out",
+    });
     const setY = gsap.quickTo(el, "y", { duration: 0.32, ease: "power3.out" });
 
     const onMove = (e) => {
@@ -646,7 +951,8 @@ function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body }) {
       setRX(0);
       setRY(0);
       setY(0);
-      if (glowRef.current) gsap.to(glowRef.current, { opacity: 0, duration: 0.4 });
+      if (glowRef.current)
+        gsap.to(glowRef.current, { opacity: 0, duration: 0.4 });
     };
 
     el.addEventListener("mousemove", onMove);
@@ -683,7 +989,9 @@ function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body }) {
             <h3 className="mt-5 font-geom-heading text-[1.2rem] font-normal leading-tight tracking-[-0.02em] text-ink md:text-[1.35rem] transition-transform duration-500 group-hover/ben:translate-x-0.5">
               {title}
             </h3>
-            <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/72 md:text-[15px]">{body}</p>
+            <p className="mt-3 flex-1 text-sm leading-relaxed text-ink/72 md:text-[15px]">
+              {body}
+            </p>
           </div>
         </div>
       </div>
@@ -727,7 +1035,11 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           stagger: 0.08,
           duration: 0.65,
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 84%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 84%",
+            toggleActions: "play none none none",
+          },
         });
       }
       [c0, c1].forEach((r, i) => {
@@ -739,7 +1051,11 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           duration: 0.75,
           delay: i * 0.12,
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 78%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 78%",
+            toggleActions: "play none none none",
+          },
         });
       });
 
@@ -752,7 +1068,11 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             stagger: 0.07,
             duration: 0.6,
             ease: "power3.out",
-            scrollTrigger: { trigger: whoEl, start: "top 86%", toggleActions: "play none none none" },
+            scrollTrigger: {
+              trigger: whoEl,
+              start: "top 86%",
+              toggleActions: "play none none none",
+            },
           });
         }
         [w0, w1, w2].forEach((r, i) => {
@@ -764,7 +1084,11 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             duration: 0.68,
             delay: i * 0.1,
             ease: "power3.out",
-            scrollTrigger: { trigger: whoEl, start: "top 80%", toggleActions: "play none none none" },
+            scrollTrigger: {
+              trigger: whoEl,
+              start: "top 80%",
+              toggleActions: "play none none none",
+            },
           });
         });
       }
@@ -778,7 +1102,11 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             stagger: 0.06,
             duration: 0.58,
             ease: "power3.out",
-            scrollTrigger: { trigger: uniqEl, start: "top 88%", toggleActions: "play none none none" },
+            scrollTrigger: {
+              trigger: uniqEl,
+              start: "top 88%",
+              toggleActions: "play none none none",
+            },
           });
         }
         [u0, u1, u2, u3].forEach((r, i) => {
@@ -790,7 +1118,11 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             duration: 0.6,
             delay: i * 0.09,
             ease: "back.out(1.35)",
-            scrollTrigger: { trigger: uniqEl, start: "top 82%", toggleActions: "play none none none" },
+            scrollTrigger: {
+              trigger: uniqEl,
+              start: "top 82%",
+              toggleActions: "play none none none",
+            },
           });
         });
       }
@@ -802,21 +1134,27 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-16 md:px-8 md:py-24"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-16 md:px-8 md:py-15"
       aria-labelledby="what-is-hifai-heading"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.2]"
         aria-hidden
         style={{
-          backgroundImage: "radial-gradient(circle, rgba(100, 116, 139, 0.12) 1px, transparent 1px)",
+          backgroundImage:
+            "radial-gradient(circle, rgba(100, 116, 139, 0.12) 1px, transparent 1px)",
           backgroundSize: "30px 30px",
         }}
       />
 
       <div className="relative mx-auto max-w-7xl">
-        <div ref={headerRef} className="mx-auto mb-12 max-w-3xl text-center md:mb-16">
-          <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">What is HIfAi?</p>
+        <div
+          ref={headerRef}
+          className="mx-auto mb-12 max-w-3xl text-center md:mb-16"
+        >
+          <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">
+            What is HIfAi?
+          </p>
           <h2
             id="what-is-hifai-heading"
             className="mt-3 font-geom-heading text-[clamp(1.9rem,4.5vw,2.85rem)] font-normal leading-[1.15] tracking-[-0.02em] text-ink"
@@ -825,7 +1163,8 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             <span className="text-blue-700">amplified by AI</span>
           </h2>
           <p className="mt-4 text-base leading-relaxed text-ink/65 md:text-[17px]">
-            Two sides of one platform—who you are as a learner, and how modern digital pillars power your growth.
+            Two sides of one platform—who you are as a learner, and how modern
+            digital pillars power your growth.
           </p>
         </div>
 
@@ -834,7 +1173,13 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             reducedMotion={reducedMotion}
             cardRef={c0}
             chip="Platform"
-            icon={<BrainCircuit className="h-7 w-7" strokeWidth={1.75} aria-hidden />}
+            icon={
+              <BrainCircuit
+                className="h-7 w-7"
+                strokeWidth={1.75}
+                aria-hidden
+              />
+            }
             title="HIfAi"
             acronym="Human Intelligence for Artificial Intelligence"
             body="HIfAi is a skill-centric platform focused on identifying and nurturing core human capabilities beyond academic knowledge."
@@ -856,8 +1201,13 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           className="relative mt-16 border-t border-slate-200/80 pt-14 md:mt-20 md:pt-16"
           aria-labelledby="who-benefits-heading"
         >
-          <div ref={whoHeaderRef} className="mx-auto mb-10 max-w-2xl text-center md:mb-12">
-            <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">Audience</p>
+          <div
+            ref={whoHeaderRef}
+            className="mx-auto mb-10 max-w-2xl text-center md:mb-12"
+          >
+            <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">
+              Audience
+            </p>
             <h2
               id="who-benefits-heading"
               className="mt-3 font-geom-heading text-[clamp(1.65rem,3.8vw,2.35rem)] font-normal leading-tight tracking-[-0.02em] text-ink"
@@ -865,7 +1215,8 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
               Who Benefits?
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-ink/60 md:text-base">
-              Learners, schools, and universities each get a clearer line of sight from skills to outcomes.
+              Learners, schools, and universities each get a clearer line of
+              sight from skills to outcomes.
             </p>
           </div>
 
@@ -873,21 +1224,39 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             <BeneficiaryHoverCard
               reducedMotion={reducedMotion}
               cardRef={w0}
-              icon={<GraduationCap className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
+              icon={
+                <GraduationCap
+                  className="h-7 w-7 md:h-8 md:w-8"
+                  strokeWidth={1.65}
+                  aria-hidden
+                />
+              }
               title="Students"
               body="Evaluate core skills, choose aligned career paths."
             />
             <BeneficiaryHoverCard
               reducedMotion={reducedMotion}
               cardRef={w1}
-              icon={<School className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
+              icon={
+                <School
+                  className="h-7 w-7 md:h-8 md:w-8"
+                  strokeWidth={1.65}
+                  aria-hidden
+                />
+              }
               title="Schools"
               body="Measure outcomes, redesign skill-based assessment."
             />
             <BeneficiaryHoverCard
               reducedMotion={reducedMotion}
               cardRef={w2}
-              icon={<Landmark className="h-7 w-7 md:h-8 md:w-8" strokeWidth={1.65} aria-hidden />}
+              icon={
+                <Landmark
+                  className="h-7 w-7 md:h-8 md:w-8"
+                  strokeWidth={1.65}
+                  aria-hidden
+                />
+              }
               title="Universities"
               body="Build employable skills via project-based learning."
             />
@@ -899,8 +1268,13 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           className="relative mt-16 border-t border-slate-200/80 pt-14 md:mt-20 md:pt-16"
           aria-labelledby="what-makes-unique-heading"
         >
-          <div ref={uniqueHeaderRef} className="mx-auto mb-12 max-w-2xl text-center md:mb-14">
-            <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">Differentiators</p>
+          <div
+            ref={uniqueHeaderRef}
+            className="mx-auto mb-12 max-w-2xl text-center md:mb-14"
+          >
+            <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">
+              Differentiators
+            </p>
             <h2
               id="what-makes-unique-heading"
               className="mt-3 font-geom-heading text-[clamp(1.65rem,3.8vw,2.45rem)] font-normal leading-tight tracking-[-0.02em] text-ink"
@@ -908,7 +1282,8 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
               What Makes HIfAi Unique?
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-ink/60 md:text-base">
-              Four pillars that separate skill intelligence from one-size-fits-all learning.
+              Four pillars that separate skill intelligence from
+              one-size-fits-all learning.
             </p>
           </div>
 
@@ -922,7 +1297,10 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
               aria-hidden
             />
 
-            <ol className="relative z-10 grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-5 lg:gap-8" role="list">
+            <ol
+              className="relative z-10 grid grid-cols-1 gap-10 md:grid-cols-4 md:gap-5 lg:gap-8"
+              role="list"
+            >
               {HIFAI_UNIQUE_STEPS.map((step, i) => {
                 const Icon = step.icon;
                 const refs = [u0, u1, u2, u3];
@@ -971,7 +1349,8 @@ const SERVICE_CARDS = [
     id: "s1",
     title: "21st Century Skills Development",
     image: "/skill-developement.jpg.jpeg",
-    short: "Critical thinking, collaboration, and digital fluency for the modern learner.",
+    short:
+      "Critical thinking, collaboration, and digital fluency for the modern learner.",
     description:
       "Structured pathways that build creativity, communication, and computational thinking alongside core academics-so learners stay ahead of a changing world.",
     bullets: [
@@ -979,10 +1358,15 @@ const SERVICE_CARDS = [
       "Problem Solving",
       "Critical Analysis",
       "Communication",
-      "Digital Use"
+      "Digital Use",
     ],
     icon: (
-      <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg
+        className="h-8 w-8"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -998,17 +1382,18 @@ const SERVICE_CARDS = [
     id: "s2",
     title: "Digital ABCD Problem Solving",
     image: "/abcd-problem-solving.jpg.jpeg",
-    short: "Analyze, Build, Connect, and Deliver with structured digital workflows.",
+    short:
+      "Analyze, Build, Connect, and Deliver with structured digital workflows.",
     description:
       "Our ABCD framework turns messy challenges into repeatable problem-solving: analyze context, build prototypes, connect data and people, and deliver measurable impact.",
-    bullets: [
-      "AI",
-      "Blockchain",
-      "Cloud",
-      "Data Analysis"
-    ],
+    bullets: ["AI", "Blockchain", "Cloud", "Data Analysis"],
     icon: (
-      <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg
+        className="h-8 w-8"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -1025,7 +1410,8 @@ const SERVICE_CARDS = [
     title: "High School Solutions",
     image: "/high-school-solution.jpg.jpeg",
     inquiry: "highSchool",
-    short: "Programs that align with college readiness and future-of-work skills.",
+    short:
+      "Programs that align with college readiness and future-of-work skills.",
     description:
       "From elective pathways to capstone experiences, we help high schools offer engaging, industry-aligned learning without overloading staff.",
     bullets: [
@@ -1034,7 +1420,12 @@ const SERVICE_CARDS = [
       "Student project showcases",
     ],
     icon: (
-      <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg
+        className="h-8 w-8"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -1051,7 +1442,8 @@ const SERVICE_CARDS = [
     title: "University Consulting Services",
     image: "/university-consulting-service.jpg.jpeg",
     inquiry: "university",
-    short: "Innovation labs, digital transformation, and workforce-aligned programs.",
+    short:
+      "Innovation labs, digital transformation, and workforce-aligned programs.",
     description:
       "Partner with HIFAI to modernize offerings: micro-credentials, industry projects, and research-to-practice pipelines that students and employers value.",
     bullets: [
@@ -1060,7 +1452,12 @@ const SERVICE_CARDS = [
       "Analytics for learner success",
     ],
     icon: (
-      <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg
+        className="h-8 w-8"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+      >
         <path
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -1140,7 +1537,8 @@ function validateResumeFile(file) {
   if (!file || !(file instanceof File) || file.size === 0) return "";
   if (file.size > RESUME_MAX_BYTES) return "File must be 5MB or smaller.";
   const name = file.name.toLowerCase();
-  const ok = name.endsWith(".pdf") || name.endsWith(".doc") || name.endsWith(".docx");
+  const ok =
+    name.endsWith(".pdf") || name.endsWith(".doc") || name.endsWith(".docx");
   if (!ok) return "Use PDF or Word only (.pdf, .doc, .docx).";
   return "";
 }
@@ -1166,7 +1564,12 @@ function InquiryFieldError({ id, message }) {
   );
 }
 
-function SchoolInquiryForm({ variant = "light", formId, className = "", hideSubmit = false }) {
+function SchoolInquiryForm({
+  variant = "light",
+  formId,
+  className = "",
+  hideSubmit = false,
+}) {
   const [done, setDone] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -1189,7 +1592,10 @@ function SchoolInquiryForm({ variant = "light", formId, className = "", hideSubm
     if (lastName) next.lastName = lastName;
     const grade = String(fd.get("grade") ?? "").trim();
     if (!grade) next.grade = "Please select your grade.";
-    const institution = validateRequiredText(fd.get("institution"), "Institution name");
+    const institution = validateRequiredText(
+      fd.get("institution"),
+      "Institution name",
+    );
     if (institution) next.institution = institution;
     const phone = validateInquiryPhone(fd.get("phone"));
     if (phone) next.phone = phone;
@@ -1198,7 +1604,14 @@ function SchoolInquiryForm({ variant = "light", formId, className = "", hideSubm
 
     setErrors(next);
     if (Object.keys(next).length) {
-      const order = ["firstName", "lastName", "grade", "institution", "phone", "email"];
+      const order = [
+        "firstName",
+        "lastName",
+        "grade",
+        "institution",
+        "phone",
+        "email",
+      ];
       const idFor = {
         firstName: `${formId}-fn`,
         lastName: `${formId}-ln`,
@@ -1232,7 +1645,10 @@ function SchoolInquiryForm({ variant = "light", formId, className = "", hideSubm
         >
           {/* Decorative confetti dots */}
           <div className="pointer-events-none absolute inset-0">
-            <span className="absolute left-[14%] top-[18%] h-2 w-2 rounded-full bg-accent/50" aria-hidden />
+            <span
+              className="absolute left-[14%] top-[18%] h-2 w-2 rounded-full bg-accent/50"
+              aria-hidden
+            />
             <span
               className="absolute left-[26%] top-[10%] h-1.5 w-1.5 rounded-full bg-accent-cyan/45"
               aria-hidden
@@ -1264,15 +1680,30 @@ function SchoolInquiryForm({ variant = "light", formId, className = "", hideSubm
                   : "border-accent/25 bg-gradient-to-br from-accent/15 to-accent-cyan/10"
             }`}
           >
-            <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <svg
+              className="h-7 w-7"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
               <path d="M20 6L9 17l-5-5" />
             </svg>
           </div>
 
-          <p className="font-geom-heading text-lg font-normal text-current md:text-xl">You’re in!</p>
+          <p className="font-geom-heading text-lg font-normal text-current md:text-xl">
+            You’re in!
+          </p>
           <p
             className={`mt-2 text-sm ${
-              variant === "dark" ? "text-white/80" : variant === "surface" ? "text-slate-600" : "text-ink/70"
+              variant === "dark"
+                ? "text-white/80"
+                : variant === "surface"
+                  ? "text-slate-600"
+                  : "text-ink/70"
             }`}
           >
             We’ve received your school inquiry and will be in touch soon.
@@ -1284,11 +1715,16 @@ function SchoolInquiryForm({ variant = "light", formId, className = "", hideSubm
               { label: "Next step", value: "A brief intro call" },
               { label: "What to prepare", value: "Your goals & timeline" },
             ].map((item) => (
-              <div key={item.label} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm">
+              <div
+                key={item.label}
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm"
+              >
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-cyan/90">
                   {item.label}
                 </p>
-                <p className={`mt-1 font-semibold ${variant === "dark" ? "text-white/85" : variant === "surface" ? "text-ink" : "text-ink/85"}`}>
+                <p
+                  className={`mt-1 font-semibold ${variant === "dark" ? "text-white/85" : variant === "surface" ? "text-ink" : "text-ink/85"}`}
+                >
                   {item.value}
                 </p>
               </div>
@@ -1297,139 +1733,196 @@ function SchoolInquiryForm({ variant = "light", formId, className = "", hideSubm
         </div>
       ) : (
         <>
-      <div className={inquiryFieldGridClass(variant)}>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-fn`} className={inquiryLabelClass(variant)}>
-            First name
-          </label>
-          <input
-            id={`${formId}-fn`}
-            name="firstName"
-            type="text"
-            autoComplete="given-name"
-            aria-required="true"
-            aria-invalid={errors.firstName ? "true" : "false"}
-            aria-describedby={errors.firstName ? `${formId}-fn-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.firstName)}
-            placeholder="Jane"
-            onChange={() => clearErr("firstName")}
-          />
-          <InquiryFieldError id={`${formId}-fn-err`} message={errors.firstName} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-ln`} className={inquiryLabelClass(variant)}>
-            Last name
-          </label>
-          <input
-            id={`${formId}-ln`}
-            name="lastName"
-            type="text"
-            autoComplete="family-name"
-            aria-required="true"
-            aria-invalid={errors.lastName ? "true" : "false"}
-            aria-describedby={errors.lastName ? `${formId}-ln-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.lastName)}
-            placeholder="Doe"
-            onChange={() => clearErr("lastName")}
-          />
-          <InquiryFieldError id={`${formId}-ln-err`} message={errors.lastName} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-grade`} className={inquiryLabelClass(variant)}>
-            Grade
-          </label>
-          <select
-            id={`${formId}-grade`}
-            name="grade"
-            defaultValue=""
-            aria-required="true"
-            aria-invalid={errors.grade ? "true" : "false"}
-            aria-describedby={errors.grade ? `${formId}-grade-err` : undefined}
-            className={`${inquiryControlClass(variant, !!errors.grade)} cursor-pointer`}
-            onChange={() => clearErr("grade")}
-          >
-            {SCHOOL_GRADES.map((g) => (
-              <option key={g.value || "placeholder"} value={g.value} disabled={g.value === ""}>
-                {g.label}
-              </option>
-            ))}
-          </select>
-          <InquiryFieldError id={`${formId}-grade-err`} message={errors.grade} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-school`} className={inquiryLabelClass(variant)}>
-            Institution name
-          </label>
-          <input
-            id={`${formId}-school`}
-            name="institution"
-            type="text"
-            autoComplete="organization"
-            aria-required="true"
-            aria-invalid={errors.institution ? "true" : "false"}
-            aria-describedby={errors.institution ? `${formId}-school-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.institution)}
-            placeholder="Your high school"
-            onChange={() => clearErr("institution")}
-          />
-          <InquiryFieldError id={`${formId}-school-err`} message={errors.institution} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-phone`} className={inquiryLabelClass(variant)}>
-            Phone number
-          </label>
-          <input
-            id={`${formId}-phone`}
-            name="phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            aria-required="true"
-            aria-invalid={errors.phone ? "true" : "false"}
-            aria-describedby={errors.phone ? `${formId}-phone-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.phone)}
-            placeholder="+1 · · · · · · · · · ·"
-            onChange={() => clearErr("phone")}
-          />
-          <InquiryFieldError id={`${formId}-phone-err`} message={errors.phone} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-email`} className={inquiryLabelClass(variant)}>
-            Email ID
-          </label>
-          <input
-            id={`${formId}-email`}
-            name="email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            aria-required="true"
-            aria-invalid={errors.email ? "true" : "false"}
-            aria-describedby={errors.email ? `${formId}-email-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.email)}
-            placeholder="you@school.edu"
-            onChange={() => clearErr("email")}
-          />
-          <InquiryFieldError id={`${formId}-email-err`} message={errors.email} />
-        </div>
-      </div>
-      {!hideSubmit && (
-        <div className="inquiry-stagger-item mt-5">
-          <button
-            type="submit"
-            className="w-full rounded-full bg-gradient-to-r from-accent to-accent-cyan px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-glow sm:w-auto"
-          >
-            Submit inquiry
-          </button>
-        </div>
-      )}
+          <div className={inquiryFieldGridClass(variant)}>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-fn`}
+                className={inquiryLabelClass(variant)}
+              >
+                First name
+              </label>
+              <input
+                id={`${formId}-fn`}
+                name="firstName"
+                type="text"
+                autoComplete="given-name"
+                aria-required="true"
+                aria-invalid={errors.firstName ? "true" : "false"}
+                aria-describedby={
+                  errors.firstName ? `${formId}-fn-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.firstName)}
+                placeholder="Jane"
+                onChange={() => clearErr("firstName")}
+              />
+              <InquiryFieldError
+                id={`${formId}-fn-err`}
+                message={errors.firstName}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-ln`}
+                className={inquiryLabelClass(variant)}
+              >
+                Last name
+              </label>
+              <input
+                id={`${formId}-ln`}
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+                aria-required="true"
+                aria-invalid={errors.lastName ? "true" : "false"}
+                aria-describedby={
+                  errors.lastName ? `${formId}-ln-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.lastName)}
+                placeholder="Doe"
+                onChange={() => clearErr("lastName")}
+              />
+              <InquiryFieldError
+                id={`${formId}-ln-err`}
+                message={errors.lastName}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-grade`}
+                className={inquiryLabelClass(variant)}
+              >
+                Grade
+              </label>
+              <select
+                id={`${formId}-grade`}
+                name="grade"
+                defaultValue=""
+                aria-required="true"
+                aria-invalid={errors.grade ? "true" : "false"}
+                aria-describedby={
+                  errors.grade ? `${formId}-grade-err` : undefined
+                }
+                className={`${inquiryControlClass(variant, !!errors.grade)} cursor-pointer`}
+                onChange={() => clearErr("grade")}
+              >
+                {SCHOOL_GRADES.map((g) => (
+                  <option
+                    key={g.value || "placeholder"}
+                    value={g.value}
+                    disabled={g.value === ""}
+                  >
+                    {g.label}
+                  </option>
+                ))}
+              </select>
+              <InquiryFieldError
+                id={`${formId}-grade-err`}
+                message={errors.grade}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-school`}
+                className={inquiryLabelClass(variant)}
+              >
+                Institution name
+              </label>
+              <input
+                id={`${formId}-school`}
+                name="institution"
+                type="text"
+                autoComplete="organization"
+                aria-required="true"
+                aria-invalid={errors.institution ? "true" : "false"}
+                aria-describedby={
+                  errors.institution ? `${formId}-school-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.institution)}
+                placeholder="Your high school"
+                onChange={() => clearErr("institution")}
+              />
+              <InquiryFieldError
+                id={`${formId}-school-err`}
+                message={errors.institution}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-phone`}
+                className={inquiryLabelClass(variant)}
+              >
+                Phone number
+              </label>
+              <input
+                id={`${formId}-phone`}
+                name="phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                aria-required="true"
+                aria-invalid={errors.phone ? "true" : "false"}
+                aria-describedby={
+                  errors.phone ? `${formId}-phone-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.phone)}
+                placeholder="+1 · · · · · · · · · ·"
+                onChange={() => clearErr("phone")}
+              />
+              <InquiryFieldError
+                id={`${formId}-phone-err`}
+                message={errors.phone}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-email`}
+                className={inquiryLabelClass(variant)}
+              >
+                Email ID
+              </label>
+              <input
+                id={`${formId}-email`}
+                name="email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                aria-required="true"
+                aria-invalid={errors.email ? "true" : "false"}
+                aria-describedby={
+                  errors.email ? `${formId}-email-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.email)}
+                placeholder="you@school.edu"
+                onChange={() => clearErr("email")}
+              />
+              <InquiryFieldError
+                id={`${formId}-email-err`}
+                message={errors.email}
+              />
+            </div>
+          </div>
+          {!hideSubmit && (
+            <div className="inquiry-stagger-item mt-5">
+              <button
+                type="submit"
+                className="w-full rounded-full bg-gradient-to-r from-accent to-accent-cyan px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-glow sm:w-auto"
+              >
+                Submit inquiry
+              </button>
+            </div>
+          )}
         </>
       )}
     </form>
   );
 }
 
-function UniversityInquiryForm({ variant = "light", formId, className = "", hideSubmit = false }) {
+function UniversityInquiryForm({
+  variant = "light",
+  formId,
+  className = "",
+  hideSubmit = false,
+}) {
   const [done, setDone] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -1450,9 +1943,15 @@ function UniversityInquiryForm({ variant = "light", formId, className = "", hide
     if (firstName) next.firstName = firstName;
     const lastName = validateRequiredText(fd.get("lastName"), "Last name");
     if (lastName) next.lastName = lastName;
-    const dept = validateRequiredText(fd.get("departmentYear"), "Department & year");
+    const dept = validateRequiredText(
+      fd.get("departmentYear"),
+      "Department & year",
+    );
     if (dept) next.departmentYear = dept;
-    const institution = validateRequiredText(fd.get("institution"), "Institution name");
+    const institution = validateRequiredText(
+      fd.get("institution"),
+      "Institution name",
+    );
     if (institution) next.institution = institution;
     const phone = validateInquiryPhone(fd.get("phone"));
     if (phone) next.phone = phone;
@@ -1526,7 +2025,10 @@ function UniversityInquiryForm({ variant = "light", formId, className = "", hide
         >
           {/* Decorative confetti dots */}
           <div className="pointer-events-none absolute inset-0">
-            <span className="absolute left-[14%] top-[18%] h-2 w-2 rounded-full bg-accent/45" aria-hidden />
+            <span
+              className="absolute left-[14%] top-[18%] h-2 w-2 rounded-full bg-accent/45"
+              aria-hidden
+            />
             <span
               className="absolute left-[26%] top-[10%] h-1.5 w-1.5 rounded-full bg-accent-cyan/40"
               aria-hidden
@@ -1558,15 +2060,30 @@ function UniversityInquiryForm({ variant = "light", formId, className = "", hide
                   : "border-accent/25 bg-gradient-to-br from-accent/15 to-accent-cyan/10"
             }`}
           >
-            <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+            <svg
+              className="h-7 w-7"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden
+            >
               <path d="M20 6L9 17l-5-5" />
             </svg>
           </div>
 
-          <p className="font-geom-heading text-lg font-normal text-current md:text-xl">You’re in!</p>
+          <p className="font-geom-heading text-lg font-normal text-current md:text-xl">
+            You’re in!
+          </p>
           <p
             className={`mt-2 text-sm ${
-              variant === "dark" ? "text-white/80" : variant === "surface" ? "text-slate-600" : "text-ink/70"
+              variant === "dark"
+                ? "text-white/80"
+                : variant === "surface"
+                  ? "text-slate-600"
+                  : "text-ink/70"
             }`}
           >
             We’ve received your university inquiry and will be in touch soon.
@@ -1578,11 +2095,16 @@ function UniversityInquiryForm({ variant = "light", formId, className = "", hide
               { label: "Next step", value: "Program-fit discussion" },
               { label: "What to prepare", value: "Your department priorities" },
             ].map((item) => (
-              <div key={item.label} className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm">
+              <div
+                key={item.label}
+                className="rounded-xl border border-white/10 bg-white/5 px-3 py-2 backdrop-blur-sm"
+              >
                 <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-cyan/90">
                   {item.label}
                 </p>
-                <p className={`mt-1 font-semibold ${variant === "dark" ? "text-white/85" : variant === "surface" ? "text-ink" : "text-ink/85"}`}>
+                <p
+                  className={`mt-1 font-semibold ${variant === "dark" ? "text-white/85" : variant === "surface" ? "text-ink" : "text-ink/85"}`}
+                >
                   {item.value}
                 </p>
               </div>
@@ -1591,158 +2113,227 @@ function UniversityInquiryForm({ variant = "light", formId, className = "", hide
         </div>
       ) : (
         <>
-      <div className={inquiryFieldGridClass(variant)}>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-fn`} className={inquiryLabelClass(variant)}>
-            First name
-          </label>
-          <input
-            id={`${formId}-fn`}
-            name="firstName"
-            type="text"
-            autoComplete="given-name"
-            aria-required="true"
-            aria-invalid={errors.firstName ? "true" : "false"}
-            aria-describedby={errors.firstName ? `${formId}-fn-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.firstName)}
-            placeholder="Alex"
-            onChange={() => clearErr("firstName")}
-          />
-          <InquiryFieldError id={`${formId}-fn-err`} message={errors.firstName} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-ln`} className={inquiryLabelClass(variant)}>
-            Last name
-          </label>
-          <input
-            id={`${formId}-ln`}
-            name="lastName"
-            type="text"
-            autoComplete="family-name"
-            aria-required="true"
-            aria-invalid={errors.lastName ? "true" : "false"}
-            aria-describedby={errors.lastName ? `${formId}-ln-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.lastName)}
-            placeholder="Kim"
-            onChange={() => clearErr("lastName")}
-          />
-          <InquiryFieldError id={`${formId}-ln-err`} message={errors.lastName} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-2">
-          <label htmlFor={`${formId}-dept`} className={inquiryLabelClass(variant)}>
-            Department & year
-          </label>
-          <input
-            id={`${formId}-dept`}
-            name="departmentYear"
-            type="text"
-            aria-required="true"
-            aria-invalid={errors.departmentYear ? "true" : "false"}
-            aria-describedby={errors.departmentYear ? `${formId}-dept-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.departmentYear)}
-            placeholder="e.g. Computer Science · Final year"
-            onChange={() => clearErr("departmentYear")}
-          />
-          <InquiryFieldError id={`${formId}-dept-err`} message={errors.departmentYear} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-inst`} className={inquiryLabelClass(variant)}>
-            Institution name
-          </label>
-          <input
-            id={`${formId}-inst`}
-            name="institution"
-            type="text"
-            autoComplete="organization"
-            aria-required="true"
-            aria-invalid={errors.institution ? "true" : "false"}
-            aria-describedby={errors.institution ? `${formId}-inst-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.institution)}
-            placeholder="Your university"
-            onChange={() => clearErr("institution")}
-          />
-          <InquiryFieldError id={`${formId}-inst-err`} message={errors.institution} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-phone`} className={inquiryLabelClass(variant)}>
-            Phone number
-          </label>
-          <input
-            id={`${formId}-phone`}
-            name="phone"
-            type="tel"
-            inputMode="tel"
-            autoComplete="tel"
-            aria-required="true"
-            aria-invalid={errors.phone ? "true" : "false"}
-            aria-describedby={errors.phone ? `${formId}-phone-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.phone)}
-            placeholder="+1 · · · · · · · · · ·"
-            onChange={() => clearErr("phone")}
-          />
-          <InquiryFieldError id={`${formId}-phone-err`} message={errors.phone} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-email`} className={inquiryLabelClass(variant)}>
-            Email ID
-          </label>
-          <input
-            id={`${formId}-email`}
-            name="email"
-            type="email"
-            inputMode="email"
-            autoComplete="email"
-            aria-required="true"
-            aria-invalid={errors.email ? "true" : "false"}
-            aria-describedby={errors.email ? `${formId}-email-err` : undefined}
-            className={inquiryControlClass(variant, !!errors.email)}
-            placeholder="you@university.edu"
-            onChange={() => clearErr("email")}
-          />
-          <InquiryFieldError id={`${formId}-email-err`} message={errors.email} />
-        </div>
-        <div className="inquiry-stagger-item sm:col-span-1">
-          <label htmlFor={`${formId}-resume`} className={inquiryLabelClass(variant)}>
-            Resume upload{" "}
-            <span
-              className={`font-normal ${
-                variant === "surface" ? "text-slate-500" : variant === "dark" ? "text-white/55" : "text-ink/50"
-              }`}
-            >
-              (optional)
-            </span>
-          </label>
-          <input
-            id={`${formId}-resume`}
-            name="resume"
-            type="file"
-            accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            aria-invalid={errors.resume ? "true" : "false"}
-            aria-describedby={errors.resume ? `${formId}-resume-err` : `${formId}-resume-hint`}
-            className={resumeFileClass()}
-            onChange={() => clearErr("resume")}
-          />
-          <InquiryFieldError id={`${formId}-resume-err`} message={errors.resume} />
-          <p
-            id={`${formId}-resume-hint`}
-            className={`mt-2 text-xs leading-relaxed ${
-              variant === "dark" ? "text-white/55" : variant === "surface" ? "text-slate-500" : "text-ink/50"
-            }`}
-          >
-            PDF or Word · optional for initial inquiry · max 5MB
-          </p>
-        </div>
-      </div>
-      {!hideSubmit && (
-        <div className="inquiry-stagger-item mt-5">
-          <button
-            type="submit"
-            className="w-full rounded-full bg-gradient-to-r from-accent to-accent-cyan px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-glow sm:w-auto"
-          >
-            Submit inquiry
-          </button>
-        </div>
-      )}
+          <div className={inquiryFieldGridClass(variant)}>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-fn`}
+                className={inquiryLabelClass(variant)}
+              >
+                First name
+              </label>
+              <input
+                id={`${formId}-fn`}
+                name="firstName"
+                type="text"
+                autoComplete="given-name"
+                aria-required="true"
+                aria-invalid={errors.firstName ? "true" : "false"}
+                aria-describedby={
+                  errors.firstName ? `${formId}-fn-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.firstName)}
+                placeholder="Alex"
+                onChange={() => clearErr("firstName")}
+              />
+              <InquiryFieldError
+                id={`${formId}-fn-err`}
+                message={errors.firstName}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-ln`}
+                className={inquiryLabelClass(variant)}
+              >
+                Last name
+              </label>
+              <input
+                id={`${formId}-ln`}
+                name="lastName"
+                type="text"
+                autoComplete="family-name"
+                aria-required="true"
+                aria-invalid={errors.lastName ? "true" : "false"}
+                aria-describedby={
+                  errors.lastName ? `${formId}-ln-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.lastName)}
+                placeholder="Kim"
+                onChange={() => clearErr("lastName")}
+              />
+              <InquiryFieldError
+                id={`${formId}-ln-err`}
+                message={errors.lastName}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-2">
+              <label
+                htmlFor={`${formId}-dept`}
+                className={inquiryLabelClass(variant)}
+              >
+                Department & year
+              </label>
+              <input
+                id={`${formId}-dept`}
+                name="departmentYear"
+                type="text"
+                aria-required="true"
+                aria-invalid={errors.departmentYear ? "true" : "false"}
+                aria-describedby={
+                  errors.departmentYear ? `${formId}-dept-err` : undefined
+                }
+                className={inquiryControlClass(
+                  variant,
+                  !!errors.departmentYear,
+                )}
+                placeholder="e.g. Computer Science · Final year"
+                onChange={() => clearErr("departmentYear")}
+              />
+              <InquiryFieldError
+                id={`${formId}-dept-err`}
+                message={errors.departmentYear}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-inst`}
+                className={inquiryLabelClass(variant)}
+              >
+                Institution name
+              </label>
+              <input
+                id={`${formId}-inst`}
+                name="institution"
+                type="text"
+                autoComplete="organization"
+                aria-required="true"
+                aria-invalid={errors.institution ? "true" : "false"}
+                aria-describedby={
+                  errors.institution ? `${formId}-inst-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.institution)}
+                placeholder="Your university"
+                onChange={() => clearErr("institution")}
+              />
+              <InquiryFieldError
+                id={`${formId}-inst-err`}
+                message={errors.institution}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-phone`}
+                className={inquiryLabelClass(variant)}
+              >
+                Phone number
+              </label>
+              <input
+                id={`${formId}-phone`}
+                name="phone"
+                type="tel"
+                inputMode="tel"
+                autoComplete="tel"
+                aria-required="true"
+                aria-invalid={errors.phone ? "true" : "false"}
+                aria-describedby={
+                  errors.phone ? `${formId}-phone-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.phone)}
+                placeholder="+1 · · · · · · · · · ·"
+                onChange={() => clearErr("phone")}
+              />
+              <InquiryFieldError
+                id={`${formId}-phone-err`}
+                message={errors.phone}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-email`}
+                className={inquiryLabelClass(variant)}
+              >
+                Email ID
+              </label>
+              <input
+                id={`${formId}-email`}
+                name="email"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                aria-required="true"
+                aria-invalid={errors.email ? "true" : "false"}
+                aria-describedby={
+                  errors.email ? `${formId}-email-err` : undefined
+                }
+                className={inquiryControlClass(variant, !!errors.email)}
+                placeholder="you@university.edu"
+                onChange={() => clearErr("email")}
+              />
+              <InquiryFieldError
+                id={`${formId}-email-err`}
+                message={errors.email}
+              />
+            </div>
+            <div className="inquiry-stagger-item sm:col-span-1">
+              <label
+                htmlFor={`${formId}-resume`}
+                className={inquiryLabelClass(variant)}
+              >
+                Resume upload{" "}
+                <span
+                  className={`font-normal ${
+                    variant === "surface"
+                      ? "text-slate-500"
+                      : variant === "dark"
+                        ? "text-white/55"
+                        : "text-ink/50"
+                  }`}
+                >
+                  (optional)
+                </span>
+              </label>
+              <input
+                id={`${formId}-resume`}
+                name="resume"
+                type="file"
+                accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                aria-invalid={errors.resume ? "true" : "false"}
+                aria-describedby={
+                  errors.resume
+                    ? `${formId}-resume-err`
+                    : `${formId}-resume-hint`
+                }
+                className={resumeFileClass()}
+                onChange={() => clearErr("resume")}
+              />
+              <InquiryFieldError
+                id={`${formId}-resume-err`}
+                message={errors.resume}
+              />
+              <p
+                id={`${formId}-resume-hint`}
+                className={`mt-2 text-xs leading-relaxed ${
+                  variant === "dark"
+                    ? "text-white/55"
+                    : variant === "surface"
+                      ? "text-slate-500"
+                      : "text-ink/50"
+                }`}
+              >
+                PDF or Word · optional for initial inquiry · max 5MB
+              </p>
+            </div>
+          </div>
+          {!hideSubmit && (
+            <div className="inquiry-stagger-item mt-5">
+              <button
+                type="submit"
+                className="w-full rounded-full bg-gradient-to-r from-accent to-accent-cyan px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-glow sm:w-auto"
+              >
+                Submit inquiry
+              </button>
+            </div>
+          )}
         </>
       )}
     </form>
@@ -1753,7 +2344,8 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
   const overlayRef = useRef(null);
   const panelRef = useRef(null);
   const listRef = useRef(null);
-  const isInquiry = service?.inquiry === "highSchool" || service?.inquiry === "university";
+  const isInquiry =
+    service?.inquiry === "highSchool" || service?.inquiry === "university";
   const modalFormId =
     service?.inquiry === "highSchool"
       ? "school-inquiry-modal"
@@ -1787,11 +2379,13 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
         ease: "back.out(1.4)",
         transformPerspective: 1000,
       },
-      "-=0.15"
+      "-=0.15",
     );
 
     if (listRef.current) {
-      const items = listRef.current.querySelectorAll(isInquiry ? ".inquiry-stagger-item" : "li");
+      const items = listRef.current.querySelectorAll(
+        isInquiry ? ".inquiry-stagger-item" : "li",
+      );
       tl.from(
         items,
         {
@@ -1801,7 +2395,7 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
           duration: 0.4,
           ease: "power2.out",
         },
-        "-=0.25"
+        "-=0.25",
       );
     }
 
@@ -1851,15 +2445,23 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
       <div
         ref={panelRef}
         className={`relative z-10 overflow-hidden rounded-[1.6rem] border border-white/70 bg-white/95 p-6 shadow-[0_28px_80px_rgba(9,15,26,0.28)] backdrop-blur-2xl md:p-7 ${
-          isInquiry ? "w-[min(92vw,720px)] flex flex-col" : "w-[min(92vw,700px)]"
+          isInquiry
+            ? "w-[min(92vw,720px)] flex flex-col"
+            : "w-[min(92vw,700px)]"
         }`}
         style={{
           transformStyle: "preserve-3d",
           height: isInquiry ? "min(92vh,860px)" : undefined,
         }}
       >
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent via-accent-cyan to-accent" aria-hidden />
-        <div className="pointer-events-none absolute -right-24 -top-20 h-48 w-48 rounded-full bg-accent/20 blur-3xl" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-accent via-accent-cyan to-accent"
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -right-24 -top-20 h-48 w-48 rounded-full bg-accent/20 blur-3xl"
+          aria-hidden
+        />
         <button
           type="button"
           onClick={handleClose}
@@ -1869,7 +2471,9 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
           x
         </button>
 
-        <p className="relative z-10 text-xs font-bold uppercase tracking-widest text-accent">Service Details</p>
+        <p className="relative z-10 text-xs font-bold uppercase tracking-widest text-accent">
+          Service Details
+        </p>
         <div className="relative z-10 mt-2 flex items-start justify-between gap-4 pr-12">
           <h2
             id="modal-title"
@@ -1906,15 +2510,27 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
               </p>
               <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-b from-slate-50/95 to-white p-6 shadow-[0_4px_32px_rgba(15,23,42,0.06),inset_0_1px_0_rgba(255,255,255,0.9)] md:p-8">
                 {service.inquiry === "highSchool" ? (
-                  <SchoolInquiryForm key={service.id} variant="surface" formId={modalFormId} hideSubmit />
+                  <SchoolInquiryForm
+                    key={service.id}
+                    variant="surface"
+                    formId={modalFormId}
+                    hideSubmit
+                  />
                 ) : (
-                  <UniversityInquiryForm key={service.id} variant="surface" formId={modalFormId} hideSubmit />
+                  <UniversityInquiryForm
+                    key={service.id}
+                    variant="surface"
+                    formId={modalFormId}
+                    hideSubmit
+                  />
                 )}
               </div>
             </div>
           ) : (
             <>
-              <p className="relative z-10 mt-4 leading-relaxed text-ink/75">{service.description}</p>
+              <p className="relative z-10 mt-4 leading-relaxed text-ink/75">
+                {service.description}
+              </p>
               <ul
                 ref={listRef}
                 className="relative z-10 mt-6 space-y-2.5 rounded-2xl border border-accent/15 bg-gradient-to-br from-accent/5 to-accent-cyan/6 p-4 text-sm text-ink/75"
@@ -1934,7 +2550,9 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
 
         <div
           className={`relative z-10 flex flex-wrap items-center gap-3 border-t pt-6 ${
-            isInquiry ? "justify-between border-slate-200/90" : "border-accent/15"
+            isInquiry
+              ? "justify-between border-slate-200/90"
+              : "border-accent/15"
           }`}
         >
           {isInquiry ? (
@@ -1945,7 +2563,9 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
                 className="group inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-accent to-accent-cyan px-7 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-accent/25 sm:w-auto"
               >
                 Submit inquiry
-                <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">→</span>
+                <span className="inline-block transition-transform duration-300 group-hover:translate-x-0.5">
+                  →
+                </span>
               </button>
               <button
                 type="button"
@@ -2029,17 +2649,28 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
         ease: "elastic.out(1, 0.5)",
         transformPerspective: 900,
       });
-      if (glowRef.current) gsap.to(glowRef.current, { opacity: 0, duration: 0.4 });
+      if (glowRef.current)
+        gsap.to(glowRef.current, { opacity: 0, duration: 0.4 });
     };
 
     const onEnter = () => {
       if (iconRef.current) {
-        gsap.to(iconRef.current, { scale: 1.15, rotate: -6, duration: 0.3, ease: "back.out(2)" });
+        gsap.to(iconRef.current, {
+          scale: 1.15,
+          rotate: -6,
+          duration: 0.3,
+          ease: "back.out(2)",
+        });
       }
     };
     const onIconLeave = () => {
       if (iconRef.current) {
-        gsap.to(iconRef.current, { scale: 1, rotate: 0, duration: 0.4, ease: "elastic.out(1, 0.5)" });
+        gsap.to(iconRef.current, {
+          scale: 1,
+          rotate: 0,
+          duration: 0.4,
+          ease: "elastic.out(1, 0.5)",
+        });
       }
     };
 
@@ -2069,7 +2700,10 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
         alt={card.title}
         className="absolute inset-0 h-full w-full object-cover"
       />
-      <div className="pointer-events-none absolute inset-0 bg-black/45" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-0 bg-black/45"
+        aria-hidden
+      />
       <div
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030b1f]/92 via-[#0a1f44]/70 to-[#071634]/36"
         aria-hidden
@@ -2078,7 +2712,10 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
         className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-[#020817]/90 via-[#091a36]/62 to-transparent"
         aria-hidden
       />
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-blue-500/90" aria-hidden />
+      <div
+        className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-blue-500/90"
+        aria-hidden
+      />
 
       <div
         ref={glowRef}
@@ -2107,7 +2744,9 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
         <h3 className="font-geom-heading text-[1.12rem] font-normal leading-[1.2] tracking-[-0.008em] text-white md:text-[1.35rem]">
           {card.title}
         </h3>
-        <p className="text-sm leading-relaxed text-white/85 md:text-base">{card.short}</p>
+        <p className="text-sm leading-relaxed text-white/85 md:text-base">
+          {card.short}
+        </p>
 
         <div className="mt-auto flex items-center justify-between border-t border-white/25 pt-4">
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 transition-all duration-300 group-hover:gap-3">
@@ -2158,9 +2797,15 @@ export function Services({ reducedMotion, isMobile }) {
   const maxIndex = Math.max(0, totalCards - slidesPerView);
 
   // Keep ref-mirrors in sync
-  useEffect(() => { currentIndexRef.current = currentIndex; }, [currentIndex]);
-  useEffect(() => { slidesPerViewRef.current = slidesPerView; }, [slidesPerView]);
-  useEffect(() => { maxIndexRef.current = maxIndex; }, [maxIndex]);
+  useEffect(() => {
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
+  useEffect(() => {
+    slidesPerViewRef.current = slidesPerView;
+  }, [slidesPerView]);
+  useEffect(() => {
+    maxIndexRef.current = maxIndex;
+  }, [maxIndex]);
 
   /* ── Sync track position on resize / slidesPerView change ── */
   useEffect(() => {
@@ -2196,7 +2841,10 @@ export function Services({ reducedMotion, isMobile }) {
     const direction = newIndex > currentIndex ? 1 : -1;
 
     /* Subtle scale/opacity punch on entering cards */
-    const enteringIndices = Array.from({ length: slidesPerView }, (_, k) => newIndex + k);
+    const enteringIndices = Array.from(
+      { length: slidesPerView },
+      (_, k) => newIndex + k,
+    );
     const enteringCards = enteringIndices
       .map((idx) => cardRefs.current[idx])
       .filter(Boolean);
@@ -2216,8 +2864,14 @@ export function Services({ reducedMotion, isMobile }) {
       ease: "power3.inOut",
     }).to(
       enteringCards,
-      { scale: 1, opacity: 1, duration: 0.45, ease: "power2.out", stagger: 0.06 },
-      "-=0.3"
+      {
+        scale: 1,
+        opacity: 1,
+        duration: 0.45,
+        ease: "power2.out",
+        stagger: 0.06,
+      },
+      "-=0.3",
     );
   };
 
@@ -2228,7 +2882,8 @@ export function Services({ reducedMotion, isMobile }) {
   const onTouchEnd = (e) => {
     if (touchStartX.current === null) return;
     const delta = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(delta) > 48) navigateTo(delta > 0 ? currentIndex + 1 : currentIndex - 1);
+    if (Math.abs(delta) > 48)
+      navigateTo(delta > 0 ? currentIndex + 1 : currentIndex - 1);
     touchStartX.current = null;
   };
 
@@ -2298,7 +2953,9 @@ export function Services({ reducedMotion, isMobile }) {
       if (targetIndex !== curI) {
         isAnimating.current = true;
         gsap.to(track, {
-          x: snapX, duration: 0.45, ease: "power3.out",
+          x: snapX,
+          duration: 0.45,
+          ease: "power3.out",
           onComplete: () => {
             isAnimating.current = false;
             setCurrentIndex(targetIndex);
@@ -2339,7 +2996,9 @@ export function Services({ reducedMotion, isMobile }) {
     if (!section) return;
 
     if (reducedMotion) {
-      cardRefs.current.filter(Boolean).forEach((c) => gsap.set(c, { clearProps: "all" }));
+      cardRefs.current
+        .filter(Boolean)
+        .forEach((c) => gsap.set(c, { clearProps: "all" }));
       return;
     }
 
@@ -2351,7 +3010,11 @@ export function Services({ reducedMotion, isMobile }) {
           stagger: 0.1,
           duration: 0.7,
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 82%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 82%",
+            toggleActions: "play none none none",
+          },
         });
       }
 
@@ -2364,8 +3027,12 @@ export function Services({ reducedMotion, isMobile }) {
             clipPath: "inset(0 0% 0 0 round 24px)",
             duration: isMobile ? 0.7 : 0.95,
             ease: "power4.inOut",
-            scrollTrigger: { trigger: section, start: "top 72%", toggleActions: "play none none none" },
-          }
+            scrollTrigger: {
+              trigger: section,
+              start: "top 72%",
+              toggleActions: "play none none none",
+            },
+          },
         );
       }
 
@@ -2381,8 +3048,12 @@ export function Services({ reducedMotion, isMobile }) {
             duration: isMobile ? 0.55 : 0.7,
             stagger: isMobile ? 0.08 : 0.12,
             ease: "power3.out",
-            scrollTrigger: { trigger: section, start: "top 68%", toggleActions: "play none none none" },
-          }
+            scrollTrigger: {
+              trigger: section,
+              start: "top 68%",
+              toggleActions: "play none none none",
+            },
+          },
         );
       }
 
@@ -2391,7 +3062,12 @@ export function Services({ reducedMotion, isMobile }) {
           yPercent: -22,
           xPercent: 7,
           ease: "none",
-          scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1 },
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
         });
       }
       if (decorBRef.current) {
@@ -2399,7 +3075,12 @@ export function Services({ reducedMotion, isMobile }) {
           yPercent: 16,
           xPercent: -5,
           ease: "none",
-          scrollTrigger: { trigger: section, start: "top bottom", end: "bottom top", scrub: 1.2 },
+          scrollTrigger: {
+            trigger: section,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.2,
+          },
         });
       }
     }, section);
@@ -2433,7 +3114,9 @@ export function Services({ reducedMotion, isMobile }) {
       <div className="mx-auto max-w-7xl">
         {/* ── Section heading ── */}
         <div ref={introRef} className="mb-12 max-w-2xl md:mb-16">
-          <p className="text-sm font-bold uppercase tracking-widest text-blue-600">What we offer</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
+            What we offer
+          </p>
           <h2 className="mt-2 font-geom-heading text-[clamp(1.8rem,4.6vw,3.25rem)] font-normal leading-[1.4] tracking-[-0.012em] text-ink">
             Services built for{" "}
             <span className="relative inline-block">
@@ -2456,8 +3139,18 @@ export function Services({ reducedMotion, isMobile }) {
             disabled={currentIndex === 0}
             className="absolute -left-4 top-1/2 z-10 -translate-y-1/2 md:-left-6 flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/90 text-ink shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-white hover:shadow-lg disabled:pointer-events-none disabled:opacity-30"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </button>
 
@@ -2469,8 +3162,18 @@ export function Services({ reducedMotion, isMobile }) {
             disabled={currentIndex >= maxIndex}
             className="absolute -right-4 top-1/2 z-10 -translate-y-1/2 md:-right-6 flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/90 text-ink shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-white hover:shadow-lg disabled:pointer-events-none disabled:opacity-30"
           >
-            <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            <svg
+              className="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </button>
 
@@ -2490,7 +3193,9 @@ export function Services({ reducedMotion, isMobile }) {
               {SERVICE_CARDS.map((card, i) => (
                 <div
                   key={card.id}
-                  ref={(el) => { cardRefs.current[i] = el; }}
+                  ref={(el) => {
+                    cardRefs.current[i] = el;
+                  }}
                   className="flex-shrink-0 px-3"
                   style={{ width: `${100 / totalCards}%` }}
                 >
@@ -2506,7 +3211,11 @@ export function Services({ reducedMotion, isMobile }) {
           </div>
 
           {/* ── Dot pagination ── */}
-          <div className="mt-8 flex items-center justify-center gap-2.5" role="tablist" aria-label="Slides">
+          <div
+            className="mt-8 flex items-center justify-center gap-2.5"
+            role="tablist"
+            aria-label="Slides"
+          >
             {Array.from({ length: dotCount }).map((_, i) => (
               <button
                 key={i}
@@ -2546,10 +3255,26 @@ export function TargetUsers() {
 }
 
 const STEPS = [
-  { n: "01", title: "Learn Skills", desc: "Structured modules across AI, data, and digital fluency." },
-  { n: "02", title: "Apply Knowledge", desc: "Hands-on labs and guided challenges every week." },
-  { n: "03", title: "Solve Real Problems", desc: "Team projects modelled on industry scenarios." },
-  { n: "04", title: "Grow Career", desc: "Portfolios, credentials, and pathways that compound." },
+  {
+    n: "01",
+    title: "Learn Skills",
+    desc: "Structured modules across AI, data, and digital fluency.",
+  },
+  {
+    n: "02",
+    title: "Apply Knowledge",
+    desc: "Hands-on labs and guided challenges every week.",
+  },
+  {
+    n: "03",
+    title: "Solve Real Problems",
+    desc: "Team projects modelled on industry scenarios.",
+  },
+  {
+    n: "04",
+    title: "Grow Career",
+    desc: "Portfolios, credentials, and pathways that compound.",
+  },
 ];
 
 export function HowItWorks({ reducedMotion, isMobile }) {
@@ -2567,7 +3292,9 @@ export function HowItWorks({ reducedMotion, isMobile }) {
 
     const lineM = lineMobileRef.current;
     const lineD = lineDesktopRef.current;
-    const allSteps = [...mobileSteps.current, ...desktopSteps.current].filter(Boolean);
+    const allSteps = [...mobileSteps.current, ...desktopSteps.current].filter(
+      Boolean,
+    );
 
     if (reducedMotion) {
       gsap.set([lineM, lineD].filter(Boolean), { clearProps: "all" });
@@ -2583,7 +3310,11 @@ export function HowItWorks({ reducedMotion, isMobile }) {
           stagger: 0.1,
           duration: 0.62,
           ease: "power3.out",
-          scrollTrigger: { trigger: section, start: "top 82%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 82%",
+            toggleActions: "play none none none",
+          },
         });
       }
 
@@ -2594,8 +3325,13 @@ export function HowItWorks({ reducedMotion, isMobile }) {
           {
             scaleY: 1,
             ease: "none",
-            scrollTrigger: { trigger: section, start: "top 60%", end: "bottom 70%", scrub: 0.7 },
-          }
+            scrollTrigger: {
+              trigger: section,
+              start: "top 60%",
+              end: "bottom 70%",
+              scrub: 0.7,
+            },
+          },
         );
       }
 
@@ -2606,8 +3342,13 @@ export function HowItWorks({ reducedMotion, isMobile }) {
           {
             scaleX: 1,
             ease: "none",
-            scrollTrigger: { trigger: section, start: "top 68%", end: "bottom 52%", scrub: 1 },
-          }
+            scrollTrigger: {
+              trigger: section,
+              start: "top 68%",
+              end: "bottom 52%",
+              scrub: 1,
+            },
+          },
         );
       }
 
@@ -2624,7 +3365,11 @@ export function HowItWorks({ reducedMotion, isMobile }) {
           onUpdate: () => {
             el.textContent = String(Math.round(proxy.v)).padStart(2, "0");
           },
-          scrollTrigger: { trigger: section, start: "top 72%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 72%",
+            toggleActions: "play none none none",
+          },
         });
       });
 
@@ -2634,7 +3379,11 @@ export function HowItWorks({ reducedMotion, isMobile }) {
           y: isMobile ? 28 : 20,
           duration: isMobile ? 0.5 : 0.6,
           ease: "power3.out",
-          scrollTrigger: { trigger: el, start: "top 88%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: el,
+            start: "top 88%",
+            toggleActions: "play none none none",
+          },
         });
       });
 
@@ -2648,7 +3397,11 @@ export function HowItWorks({ reducedMotion, isMobile }) {
           duration: 0.55,
           ease: "back.out(2)",
           delay: i * 0.15,
-          scrollTrigger: { trigger: section, start: "top 72%", toggleActions: "play none none none" },
+          scrollTrigger: {
+            trigger: section,
+            start: "top 72%",
+            toggleActions: "play none none none",
+          },
         });
       });
     }, section);
@@ -2657,10 +3410,16 @@ export function HowItWorks({ reducedMotion, isMobile }) {
   }, [reducedMotion, isMobile]);
 
   return (
-    <section id="how" ref={sectionRef} className="relative bg-white px-4 py-20 md:px-8 md:py-24">
+    <section
+      id="how"
+      ref={sectionRef}
+      className="relative bg-white px-4 py-20 md:px-8 md:py-24"
+    >
       <div className="mx-auto max-w-7xl">
         <div ref={headingRef} className="mb-12 md:mb-16">
-          <p className="text-sm font-bold uppercase tracking-widest text-blue-600">How it works</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
+            How it works
+          </p>
           <h2 className="mt-2 font-geom-heading text-[clamp(1.8rem,4.6vw,3.25rem)] font-normal leading-[1.4] tracking-[-0.012em] text-ink">
             From first lesson to lasting momentum
           </h2>
@@ -2711,7 +3470,10 @@ export function HowItWorks({ reducedMotion, isMobile }) {
               >
                 <div className="step-circle relative z-[1] mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-blue-400/20 bg-white shadow-glass backdrop-blur-md">
                   {i === 0 && !reducedMotion && (
-                    <span className="absolute inset-0 animate-ping rounded-2xl bg-blue-400/20" aria-hidden />
+                    <span
+                      className="absolute inset-0 animate-ping rounded-2xl bg-blue-400/20"
+                      aria-hidden
+                    />
                   )}
                   <span
                     ref={(el) => {
@@ -2758,7 +3520,11 @@ const PROJECTS = [
     title: "Institution Innovation Tracks",
     summary:
       "Schools and universities launch guided project tracks aligned with future-of-work outcomes and measurable impact.",
-    meta: ["School + University", "Implementation Support", "Outcome Analytics"],
+    meta: [
+      "School + University",
+      "Implementation Support",
+      "Outcome Analytics",
+    ],
     accent: "from-blue-700/12 to-slate-300/10",
   },
 ];
@@ -2827,10 +3593,16 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
   }, [reducedMotion, isMobile]);
 
   return (
-    <section id="projects" ref={sectionRef} className="relative px-4 py-20 md:px-8 md:py-24">
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="relative px-4 py-20 md:px-8 md:py-24"
+    >
       <div className="mx-auto max-w-7xl">
         <div ref={introRef} className="mb-12 max-w-3xl md:mb-16">
-          <p className="text-sm font-bold uppercase tracking-widest text-blue-600">Projects in action</p>
+          <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
+            Projects in action
+          </p>
           <h2 className="mt-2 font-geom-heading text-[clamp(1.8rem,4.6vw,3.1rem)] font-normal leading-[1.3] tracking-[-0.012em] text-ink">
             Real-world project journeys built for measurable outcomes
           </h2>
@@ -2845,7 +3617,10 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
               }}
               className="group relative overflow-hidden rounded-[1.6rem] border border-white/75 bg-white/75 p-6 shadow-[0_16px_40px_rgba(9,15,26,0.08)] backdrop-blur-xl transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-1 hover:border-blue-300/50 hover:shadow-[0_22px_56px_rgba(37,99,235,0.18)] md:p-7"
             >
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-blue-600/90" aria-hidden />
+              <div
+                className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-blue-600/90"
+                aria-hidden
+              />
               <div
                 className={`pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-gradient-to-br ${project.accent} blur-2xl`}
                 aria-hidden
@@ -2858,7 +3633,9 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
                 <h3 className="mt-3 font-geom-heading text-[1.28rem] font-normal leading-[1.2] tracking-[-0.01em] text-ink">
                   {project.title}
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-ink/70 md:text-base">{project.summary}</p>
+                <p className="mt-3 text-sm leading-relaxed text-ink/70 md:text-base">
+                  {project.summary}
+                </p>
 
                 <ul className="mt-5 space-y-2 border-t border-blue-100/90 pt-4 text-sm text-ink/75">
                   {project.meta.map((item) => (

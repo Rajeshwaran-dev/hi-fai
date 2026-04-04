@@ -10,7 +10,9 @@ const FOUR_E_META = [
 
 export function SectionLabel({ children }) {
   return (
-    <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600">{children}</p>
+    <p className="mb-2 text-[11px] font-bold uppercase tracking-[0.2em] text-blue-600">
+      {children}
+    </p>
   );
 }
 
@@ -26,7 +28,9 @@ export function SectionHeading({ children, as: Tag = "h2", className = "" }) {
 
 export function Lead({ children, className = "" }) {
   return (
-    <p className={`mt-3 max-w-3xl text-base leading-relaxed text-slate-600 md:text-[17px] ${className}`}>
+    <p
+      className={`mt-3 max-w-3xl text-base leading-relaxed text-slate-600 md:text-[17px] ${className}`}
+    >
       {children}
     </p>
   );
@@ -41,7 +45,9 @@ export function Card({ icon, title, children }) {
         </span>
       ) : null}
       <h3 className="text-lg font-bold text-slate-900">{title}</h3>
-      <div className="mt-2 text-sm leading-relaxed text-slate-600">{children}</div>
+      <div className="mt-2 text-sm leading-relaxed text-slate-600">
+        {children}
+      </div>
     </article>
   );
 }
@@ -50,7 +56,10 @@ export function CheckList({ items }) {
   return (
     <ul className="mt-5 space-y-3">
       {items.map((text) => (
-        <li key={text} className="flex gap-3 text-sm leading-relaxed text-slate-600">
+        <li
+          key={text}
+          className="flex gap-3 text-sm leading-relaxed text-slate-600"
+        >
           <span
             className="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-500 to-cyan-500 text-[10px] font-bold text-white"
             aria-hidden
@@ -65,27 +74,43 @@ export function CheckList({ items }) {
 }
 
 /** Inner pages: four pillars + shared CTA band. `copy` is four body strings in order. Optional `pillarTitles` overrides default Explore/Expand/Evaluate/Excel. Optional `betweenCardsAndCta` renders between the grid and CTA. */
-export function FourCardFramework({ copy, ctaTitle, children, pillarTitles, betweenCardsAndCta }) {
+export function FourCardFramework({
+  copy,
+  ctaTitle,
+  children,
+  pillarTitles,
+  betweenCardsAndCta,
+}) {
   const bodies = copy;
 
   return (
     <>
-      <div className="grid gap-5 md:grid-cols-2">
-        {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
-          const title = pillarTitles?.[i] ?? defaultTitle;
-          return (
-            <Card
-              key={`${i}-${title}`}
-              icon={<Icon className="h-5 w-5 text-blue-600" strokeWidth={2.2} aria-hidden />}
-              title={title}
-            >
-              {bodies[i]}
-            </Card>
-          );
-        })}
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid gap-5 md:grid-cols-2">
+          {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
+            const title = pillarTitles?.[i] ?? defaultTitle;
+            return (
+              <Card
+                key={`${i}-${title}`}
+                icon={
+                  <Icon
+                    className="h-5 w-5 text-blue-600"
+                    strokeWidth={2.2}
+                    aria-hidden
+                  />
+                }
+                title={title}
+              >
+                {bodies[i]}
+              </Card>
+            );
+          })}
+        </div>
+        {betweenCardsAndCta ? (
+          <div className="mt-10 md:mt-12">{betweenCardsAndCta}</div>
+        ) : null}
+        <CtaBand title={ctaTitle}>{children}</CtaBand>
       </div>
-      {betweenCardsAndCta ? <div className="mt-10 md:mt-12">{betweenCardsAndCta}</div> : null}
-      <CtaBand title={ctaTitle}>{children}</CtaBand>
     </>
   );
 }
@@ -101,8 +126,12 @@ export function CtaBand({ title, children }) {
         aria-hidden
         className="pointer-events-none absolute -bottom-12 -left-12 h-40 w-40 rounded-full bg-blue-500/20 blur-3xl"
       />
-      <h3 className="relative text-xl font-bold text-white md:text-2xl">{title}</h3>
-      <div className="relative mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">{children}</div>
+      <h3 className="relative text-xl font-bold text-white md:text-2xl">
+        {title}
+      </h3>
+      <div className="relative mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+        {children}
+      </div>
     </div>
   );
 }
