@@ -23,6 +23,7 @@ export function LearningHubBody() {
       <HowItWorks reducedMotion={reducedMotion} isMobile={isMobile} />
       <div className="mt-2 md:mt-6">
         <FourCardFramework
+          ctaBelowCards
           copy={[
             "Start with readiness checklists, primers, and discussion starters for classrooms, families, and advisors.",
             "Deploy sprint playbooks, milestone prompts, and facilitation notes that keep studios consistent week to week.",
@@ -39,7 +40,7 @@ export function LearningHubBody() {
           </InnerPageLink>
           <InnerPageLink
             to="/students/college-students"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
           >
             Students (College)
           </InnerPageLink>

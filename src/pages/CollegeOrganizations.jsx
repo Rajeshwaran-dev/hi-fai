@@ -22,6 +22,7 @@ export function CollegeOrganizationsBody() {
       <ProjectsSection reducedMotion={reducedMotion} isMobile={isMobile} />
       <div className="mt-2 md:mt-6">
         <FourCardFramework
+          ctaBelowCards
           copy={[
             "Design certificates, minors, and co-curricular paths with clear outcomes that departments and innovation centers can stack together.",
             "Extend support for research-adjacent work—responsible use playbooks, literature acceleration, and cross-lab collaboration protocols.",
@@ -38,7 +39,7 @@ export function CollegeOrganizationsBody() {
           </a>
           <InnerPageLink
             to="/learning-hub"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
+            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
           >
             See facilitator resources
           </InnerPageLink>

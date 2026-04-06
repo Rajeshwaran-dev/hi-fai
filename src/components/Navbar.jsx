@@ -279,7 +279,7 @@ export default function Navbar({ reducedMotion }) {
                     navigateTo(item.to);
                   }
                 }}
-                className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-[15px] font-semibold transition hover:bg-white/10 hover:text-white ${
+                className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left text-[16px] font-semibold transition hover:bg-white/10 hover:text-white ${
                   item.to && location.pathname === item.to
                     ? "bg-blue-400/20 text-white"
                     : "text-blue-50/90"

@@ -104,7 +104,7 @@ export default function BreadcrumbPage({ title, subtitle, children }) {
             </svg>
 
             {/* Active pill */}
-            <span className="bc-active-glow relative inline-flex items-center gap-1.5 rounded-full border border-blue-200 px-4 py-1.5 text-[11px] font-bold text-blue-600 shadow-sm select-none"
+            <span className="bc-active-glow relative inline-flex items-center gap-1.5 rounded-full border border-blue-200 px-4 py-1.5 text-[11px] font-bold text-[#1F3860] shadow-sm select-none"
               style={{ background: 'linear-gradient(135deg, #eff6ff 0%, #ecfeff 100%)' }}>
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: 'linear-gradient(135deg, #3b82f6, #06b6d4)' }} />
               {title}

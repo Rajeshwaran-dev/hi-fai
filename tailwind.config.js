@@ -3,6 +3,13 @@ export default {
   content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {
+      fontSize: {
+        // Default body / paragraph size 18px (was 16px via default `base`)
+        base: ["1.125rem", { lineHeight: "1.75rem" }],
+        // Keep clear steps above body copy
+        lg: ["1.25rem", { lineHeight: "1.75rem" }],
+        xl: ["1.375rem", { lineHeight: "1.75rem" }],
+      },
       colors: {
         cream: "#FFF6F6",
         ink: "#0a0f1a",
@@ -28,11 +35,20 @@ export default {
       animation: {
         pulseSlow: "pulseSlow 3s ease-in-out infinite",
         fadeInUp: "fadeInUp 0.95s ease-out forwards",
+        brainBeat: "brainBeat 2.15s ease-in-out infinite",
       },
       keyframes: {
         pulseSlow: {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: "0.92", transform: "scale(1.02)" },
+        },
+        /** Double-pulse “heartbeat” for center brain graphic */
+        brainBeat: {
+          "0%, 100%": { transform: "scale(1)" },
+          "12%": { transform: "scale(1.07)" },
+          "22%": { transform: "scale(1)" },
+          "34%": { transform: "scale(1.1)" },
+          "48%": { transform: "scale(1)" },
         },
         fadeInUp: {
           "0%": { opacity: "0", transform: "translateY(28px)" },

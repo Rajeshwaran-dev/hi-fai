@@ -52,6 +52,7 @@ function CollegeProjectDetails() {
 export function CollegeStudentsBody() {
   return (
     <FourCardFramework
+      ctaBelowCards
       pillarTitles={["Discover", "Build", "Apply", "Validate"]}
       copy={[
         "It starts with awareness. Explore possibilities, understand your strengths, and begin shaping a direction that feels truly yours.",
@@ -80,7 +81,7 @@ export function CollegeStudentsBody() {
       </a>
       <InnerPageLink
         to="/get-started"
-        className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
+        className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
       >
         Register and Join Now
       </InnerPageLink>

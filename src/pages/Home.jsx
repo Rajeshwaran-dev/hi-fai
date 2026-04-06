@@ -271,6 +271,19 @@ const PARTNERSHIP_RECOGNITION_AWARDS = [
   },
 ];
 
+const STATIC_ASSET_BASE = import.meta.env.BASE_URL;
+const FEMALE_AVATAR_URL = `${STATIC_ASSET_BASE}human.png`;
+const MALE_AVATAR_URL = `${STATIC_ASSET_BASE}man.png`;
+const BRAIN_IMAGE_URL = `${STATIC_ASSET_BASE}brain.png`;
+
+function getMemberAvatar(member) {
+  if (member.gender === "female") return FEMALE_AVATAR_URL;
+  if (member.gender === "male") return MALE_AVATAR_URL;
+  return /^ms\.|^mrs\./i.test(member.name.trim())
+    ? FEMALE_AVATAR_URL
+    : MALE_AVATAR_URL;
+}
+
 const PARTNERSHIP_TEAM_GROUPS = [
   {
     title: "Leadership",
@@ -291,6 +304,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
         role: "Consultant",
         org: "Kanavoogle",
         initials: "NV",
+        gender: "male",
         orgKind: "partner",
       },
       {
@@ -298,6 +312,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
         role: "IT Director",
         org: "HIfAi",
         initials: "MR",
+        gender: "male",
         orgKind: "hifai",
       },
     ],
@@ -321,6 +336,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
         role: "Public Relations Officer",
         org: "HIfAi",
         initials: "GS",
+        gender: "male",
         orgKind: "hifai",
       },
       {
@@ -328,6 +344,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
         role: "Critical Analyst",
         org: "HIfAi",
         initials: "SB",
+        gender: "female",
         orgKind: "hifai",
       },
     ],
@@ -351,6 +368,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
         role: "Marketing Lead",
         org: "HIfAi",
         initials: "SV",
+        gender: "female",
         orgKind: "hifai",
       },
       {
@@ -358,6 +376,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
         role: "Academic Expert",
         org: "HIfAi",
         initials: "NM",
+        gender: "female",
         orgKind: "hifai",
       },
     ],
@@ -477,7 +496,7 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
             </a>
             <span className="text-ink/80">, Australia</span>
           </h2>
-          <p className="mt-3 text-sm leading-relaxed text-ink/65 md:text-[15px]">
+          <p className="mt-3 text-sm leading-relaxed text-ink/65 md:text-[18px]">
             <span className={hifaiHighlightClass}>HIfAi</span> is shaped through
             an active partnership with{" "}
             <a
@@ -529,9 +548,9 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                     id="partnership-recognition-heading"
                     className="font-geom-heading text-lg font-normal tracking-[-0.02em] text-slate-900 mb-2"
                   >
-                    Recognition & grants
+                    Recognition & Grants
                   </h3>
-                  <p className="relative text-sm leading-relaxed text-slate-700 md:text-[15px]">
+                  <p className="relative text-sm leading-relaxed text-slate-700 md:text-[18px]">
               Together, <span className={hifaiHighlightClass}>HIfAi</span> and{" "}
               <a
                 href={PARTNER_SITE_URL}
@@ -574,7 +593,7 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                         href={item.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="group/link inline-flex flex-wrap items-center gap-1.5 text-[15px] font-semibold leading-snug text-ink no-underline transition-colors hover:text-blue-800"
+                        className="group/link inline-flex flex-wrap items-center gap-1.5 text-[16px] font-semibold leading-snug text-ink no-underline transition-colors hover:text-blue-800"
                       >
                         <span className="underline-offset-[3px] group-hover/link:underline">
                           {item.title}
@@ -706,10 +725,16 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                                   className={`flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-xl border text-[10px] font-bold uppercase tracking-[0.1em] ${theme.avatar}`}
                                   aria-hidden
                                 >
-                                  {m.initials}
+                                  <img
+                                    src={getMemberAvatar(m)}
+                                    alt=""
+                                    className="h-full w-full rounded-[0.65rem] object-cover"
+                                    loading="lazy"
+                                    decoding="async"
+                                  />
                                 </div>
                                 <div className="min-w-0 flex-1">
-                                  <p className="text-[15px] font-semibold leading-snug tracking-tight text-slate-900">
+                                  <p className="text-[16px] font-semibold leading-snug tracking-tight text-slate-900">
                                     {m.name}
                                   </p>
                                   <p className="mt-1 text-sm leading-relaxed text-slate-600">
@@ -858,7 +883,7 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
                   .
                 </h2>
               </div>
-              <p className="relative mt-4 max-w-2xl text-base leading-relaxed text-ink/65 md:text-[17px]">
+              <p className="relative mt-4 max-w-2xl text-base leading-relaxed text-ink/65">
                 Most systems stop at marks. But how you think, solve, and adapt
                 goes far beyond that.
               </p>
@@ -876,7 +901,7 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
                       className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-600 shadow-[0_0_0_3px_rgba(37,99,235,0.15)]"
                       aria-hidden
                     />
-                    <span className="text-[15px] font-medium leading-relaxed text-ink md:text-base">
+                    <span className="text-[18px] font-medium leading-relaxed text-ink">
                       {text}
                     </span>
                   </li>
@@ -1025,7 +1050,7 @@ function WhatIsHoverCard({
             ) : null}
 
             <p
-              className={`leading-relaxed text-slate-600 font-medium ${compact ? "mt-4 text-sm md:text-[15px]" : "mt-6 text-[15px] md:text-base"}`}
+              className={`leading-relaxed text-slate-600 font-medium ${compact ? "mt-4 text-sm md:text-[18px]" : "mt-6 text-[16px] md:text-base"}`}
             >
               {body}
             </p>
@@ -1188,7 +1213,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
               Artificial Intelligence Control
             </span>
           </h2>
-          <p className="mt-2.5 text-sm leading-relaxed text-ink/65 md:text-[15px]">
+          <p className="mt-2.5 text-sm leading-relaxed text-ink/65 md:text-[18px]">
             By bringing together HI & Al, we create pathways that help learners
             discover their strengths, build real skills, and move towards
             meaningful outcomes.
@@ -1241,7 +1266,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             >
               What Makes <span className="text-blue-700">HIfAi</span> Unique?
             </h2>
-            <p className="mt-2 text-sm leading-relaxed text-ink/60 md:text-[15px]">
+            <p className="mt-2 text-sm leading-relaxed text-ink/60 md:text-[18px]">
               Four pillars that separate skill intelligence from
               one-size-fits-all learning.
             </p>
@@ -1252,8 +1277,24 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
               className="pointer-events-none absolute left-1/2 top-[46%] z-0 hidden aspect-square h-[min(78vw,22rem)] w-[min(78vw,22rem)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-300/60 bg-gradient-to-br from-blue-100/50 via-white/55 to-sky-100/45 shadow-[0_0_0_1px_rgba(37,99,235,0.16),0_12px_48px_-12px_rgba(37,99,235,0.32),0_32px_80px_-24px_rgba(15,23,42,0.14),inset_0_0_80px_rgba(37,99,235,0.16),inset_0_3px_28px_rgba(255,255,255,0.92)] md:block lg:h-[min(72vw,24rem)] lg:w-[min(72vw,24rem)]"
               aria-hidden
             />
+            <div
+              className="pointer-events-none relative z-[1] mx-auto mb-5 flex h-[min(28vw,7.25rem)] w-[min(28vw,7.25rem)] max-w-[8.75rem] items-center justify-center sm:h-32 sm:w-32 md:absolute md:left-1/2 md:top-[52%] md:mb-0 md:h-[min(32vw,9.25rem)] md:w-[min(32vw,9.25rem)] md:max-w-none md:-translate-x-1/2 md:-translate-y-1/2 lg:h-[min(28vw,10rem)] lg:w-[min(28vw,10rem)]"
+              aria-hidden
+            >
+              <div
+                className={`flex h-full w-full items-center justify-center will-change-transform ${reducedMotion ? "" : "motion-safe:animate-brainBeat"}`}
+              >
+                <img
+                  src={BRAIN_IMAGE_URL}
+                  alt=""
+                  className="h-full w-full max-h-[10rem] object-contain drop-shadow-[0_10px_32px_rgba(37,99,235,0.22)] md:max-h-[11rem]"
+                  decoding="async"
+                  loading="lazy"
+                />
+              </div>
+            </div>
             <ul
-              className="relative z-[1] mx-auto flex list-none flex-col gap-3 p-0 md:grid md:max-w-4xl md:grid-cols-3 md:grid-rows-[auto_auto_auto] md:items-center md:gap-x-5 md:gap-y-4 lg:max-w-5xl lg:gap-x-8 lg:gap-y-6"
+              className="relative z-[2] mx-auto flex list-none flex-col gap-3 p-0 md:grid md:max-w-4xl md:grid-cols-3 md:grid-rows-[auto_auto_auto] md:items-center md:gap-x-5 md:gap-y-4 lg:max-w-5xl lg:gap-x-8 lg:gap-y-6"
               role="list"
             >
               {HIFAI_UNIQUE_STEPS.map((step, index) => {
@@ -1296,7 +1337,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
                           <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600/90 sm:text-[11px]">
                             Pillar {String(index + 1).padStart(2, "0")}
                           </p>
-                          <p className="mt-2 text-[14px] font-semibold leading-snug tracking-[-0.015em] text-slate-900 transition-colors duration-300 group-hover/uni:text-blue-950 sm:text-[15px] md:text-base md:leading-snug">
+                          <p className="mt-2 text-[14px] font-semibold leading-snug tracking-[-0.015em] text-slate-900 transition-colors duration-300 group-hover/uni:text-blue-950 sm:text-[16px] md:text-base md:leading-snug">
                             {step.title}
                           </p>
                         </div>

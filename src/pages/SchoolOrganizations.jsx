@@ -4,6 +4,7 @@ import { FourCardFramework } from "./subpageShared.jsx";
 export function SchoolOrganizationsBody() {
   return (
     <FourCardFramework
+      ctaBelowCards
       copy={[
         "Align programs with your goals, bell schedule, device policy, and safeguarding needs through scoped modules, electives, or club formats.",
         "Empower teachers with co-designed lesson guides, assessment rubrics, and live facilitation coaching—not slides alone.",
@@ -20,7 +21,7 @@ export function SchoolOrganizationsBody() {
       </a>
       <InnerPageLink
         to="/get-started"
-        className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
+        className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
       >
         Interest form
       </InnerPageLink>

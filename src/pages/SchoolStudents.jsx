@@ -1,35 +1,84 @@
 import { useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
+import { Play, X } from "lucide-react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
 import enThiranDemoSrc from "../assets/videos/enthiran.mp4?url";
 import { FourCardFramework } from "./subpageShared.jsx";
 
-function EnThiranPhoneDemo() {
+function CenterPlayTrigger({ onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group inline-flex h-16 w-16 items-center justify-center rounded-full border border-blue-200/70 bg-white/95 text-blue-600 shadow-[0_12px_28px_rgba(15,23,42,0.2)] transition hover:scale-105 hover:border-blue-300 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70"
+      aria-label="Play En-Thiran demo video"
+    >
+      <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] text-white transition group-hover:shadow-[0_8px_22px_rgba(20,131,255,0.45)]">
+        <Play className="ml-0.5 h-5 w-5" fill="currentColor" />
+      </span>
+    </button>
+  );
+}
+
+function SchoolStudentVideoModal({ isOpen, onClose }) {
   const videoRef = useRef(null);
   const [videoError, setVideoError] = useState(false);
 
   useEffect(() => {
+    if (!isOpen) return undefined;
+
     const el = videoRef.current;
     if (!el) return;
-    const tryPlay = () => {
-      el.muted = true;
-      const p = el.play();
-      if (p !== undefined) p.catch(() => {});
-    };
-    tryPlay();
-    el.addEventListener("loadeddata", tryPlay);
-    return () => el.removeEventListener("loadeddata", tryPlay);
-  }, []);
 
-  return (
-    <div className="relative z-10 -mt-2 mb-2 flex flex-col items-center animate-fadeInUp motion-reduce:animate-none motion-reduce:opacity-100 [animation-delay:0.05s]">
-      <p className="mb-5 text-center text-[11px] font-bold uppercase tracking-[0.22em] text-blue-600 md:text-xs">
-        Try our HIfAi experience
-      </p>
-      <div className="relative flex w-full justify-center px-2">
-        <div
-          className="relative w-full max-w-[280px] drop-shadow-[0_28px_60px_rgba(15,23,42,0.35)]"
-          style={{ animationDelay: "0.08s" }}
+    const p = el.play();
+    if (p !== undefined) p.catch(() => {});
+
+    return () => {
+      el.pause();
+      el.currentTime = 0;
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[9999] flex min-h-[100dvh] w-full items-center justify-center bg-slate-950/70 p-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-label="En-Thiran demo video"
+      onClick={onClose}
+    >
+      <div className="relative w-full max-w-[360px]" onClick={(event) => event.stopPropagation()}>
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute -right-2 -top-2 z-20 inline-flex h-9 w-9 items-center justify-center rounded-full bg-white text-slate-800 shadow-lg transition hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70"
+          aria-label="Close video popup"
         >
+          <X className="h-4 w-4" />
+        </button>
+
+        <div className="relative w-full drop-shadow-[0_28px_60px_rgba(15,23,42,0.4)]">
           <div
             className="pointer-events-none absolute -inset-3 rounded-[2.75rem] bg-gradient-to-b from-blue-400/15 via-transparent to-cyan-400/10 blur-xl"
             aria-hidden
@@ -44,11 +93,9 @@ function EnThiranPhoneDemo() {
                 ref={videoRef}
                 className="h-full w-full object-cover"
                 src={enThiranDemoSrc}
-                muted
+                controls
                 playsInline
-                loop
-                autoPlay
-                preload="auto"
+                preload="metadata"
                 onError={() => setVideoError(true)}
               />
               {videoError ? (
@@ -63,36 +110,48 @@ function EnThiranPhoneDemo() {
           </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
 
 export function SchoolStudentsBody() {
+  const [isVideoOpen, setIsVideoOpen] = useState(false);
+
   return (
-    <FourCardFramework
-      copy={[
-        "Get a glimpse of your true potential with En-Thiran - our smart skill discovery experience, where you can interact, explore, and begin understanding yourself in a whole new way.",
-        "Explore different skills. Discover what clicks for you. Start building your foundation step by step.",
-        "We help you change your Hi to learn and think digitally to innovate and lead global AI. Take a quick 5-minute trial. See your strengths unfold in real time.",
-        "Grow with confidence. Move beyond just academics. Get our Expert support when you need it - personalised, focused, and designed for you(available only with pre-booking).",
-      ]}
-      ctaTitle="Unlock what's uniquely yours."
-      ctaSubtitle="You start. We help you move ahead."
-      ctaFooterNote="Takes less than a minute"
-      betweenCardsAndCta={<EnThiranPhoneDemo />}
-    >
-      <InnerPageLink
-        to="/get-started"
-        className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
+    <>
+      <FourCardFramework
+        ctaBelowCards
+        copy={[
+          "Get a glimpse of your true potential with En-Thiran - our smart skill discovery experience, where you can interact, explore, and begin understanding yourself in a whole new way.",
+          "Explore different skills. Discover what clicks for you. Start building your foundation step by step.",
+          "We help you change your Hi to learn and think digitally to innovate and lead global AI. Take a quick 5-minute trial. See your strengths unfold in real time.",
+          "Grow with confidence. Move beyond just academics. Get our Expert support when you need it - personalised, focused, and designed for you(available only with pre-booking).",
+        ]}
+        ctaTitle="Unlock what's uniquely yours."
+        ctaSubtitle="You start. We help you move ahead."
+        ctaFooterNote="Takes less than a minute"
+        cardsCenterOverlay={<CenterPlayTrigger onClick={() => setIsVideoOpen(true)} />}
+        belowCardsContent={
+          <div className="flex justify-center md:hidden">
+            <CenterPlayTrigger onClick={() => setIsVideoOpen(true)} />
+          </div>
+        }
       >
-        Start your journey
-      </InnerPageLink>
-      <InnerPageLink
-        to="/learning-hub"
-        className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
-      >
-        Explore how it works
-      </InnerPageLink>
-    </FourCardFramework>
+        <InnerPageLink
+          to="/get-started"
+          className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
+        >
+          Start your journey
+        </InnerPageLink>
+        <InnerPageLink
+          to="/learning-hub"
+          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+        >
+          Explore how it works
+        </InnerPageLink>
+      </FourCardFramework>
+      <SchoolStudentVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+    </>
   );
 }

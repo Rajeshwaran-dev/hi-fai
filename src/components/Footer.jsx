@@ -19,7 +19,7 @@ const FOOTER_NAV_LINKS = [
 ];
 
 const FOOTER_ADDRESS_LINE =
-  "24, Rengadevi Amman Koil Street, Main Road, Dindigul-624001";
+  "24, Rengadevi Amman Koil Street, Main Road, Dindigul-624001, Tamil Nadu, India";
 const FOOTER_PHONE_DISPLAY = "+91 93848 82012";
 const FOOTER_PHONE_TEL = "+919384882012";
 const FOOTER_EMAIL = "innovate@hifai.io";
@@ -39,7 +39,6 @@ export default function Footer({ reducedMotion }) {
   const col2Ref   = useRef(null);
   const col3Ref   = useRef(null);
   const col4Ref   = useRef(null);
-  const bottomRef = useRef(null);
   const [showBackToTop, setShowBackToTop] = useState(false);
 
   useEffect(() => {
@@ -57,15 +56,6 @@ export default function Footer({ reducedMotion }) {
         ease: "power3.out",
         scrollTrigger: { trigger: inner, start: "top 88%", toggleActions: "play none none none" },
       });
-
-      if (bottomRef.current) {
-        gsap.from(bottomRef.current, {
-          opacity: 0,
-          duration: 0.6,
-          ease: "power2.out",
-          scrollTrigger: { trigger: inner, start: "top 82%", toggleActions: "play none none none" },
-        });
-      }
     }, inner);
 
     return () => ctx.revert();
@@ -138,7 +128,7 @@ export default function Footer({ reducedMotion }) {
         <a
           href="#hero"
           aria-label="Back to top"
-          className="fixed bottom-8 right-8 z-[135] flex h-12 items-center justify-center gap-2 rounded-full border border-white/15 bg-ink/70 px-4 text-accent-cyan shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-200 hover:border-accent/40 hover:bg-ink/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+          className="fixed bottom-[5.4rem] right-16 z-[135] flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-ink/70 text-accent-cyan shadow-[0_18px_60px_rgba(0,0,0,0.35)] backdrop-blur-xl transition-all duration-200 hover:border-accent/40 hover:bg-ink/85 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 md:bottom-20 md:right-8 md:h-12 md:w-auto md:px-4"
         >
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M12 19V5" />
@@ -268,14 +258,26 @@ export default function Footer({ reducedMotion }) {
             </div>
           </div>
 
-          {/* Bottom bar */}
-          <div
-            ref={bottomRef}
-            className="flex flex-col gap-2 border-t border-white/15 bg-black/10 px-8 py-4 text-xs text-white/60 md:flex-row md:items-center md:justify-between md:px-10"
-          >
-            <p>© {new Date().getFullYear()} HIfAi Skills. All rights reserved.</p>
-            <p>Designed for immersive digital innovation experiences.</p>
-          </div>
+        </div>
+      </div>
+      <div className="fixed inset-x-0 bottom-0 z-[133] border-t border-white/10 bg-[#020a18]/90 text-xs text-white/80 backdrop-blur-md">
+        <div className="mx-auto flex max-w-7xl flex-col items-center gap-2 px-4 py-3 text-center md:flex-row md:items-center md:justify-between md:px-8 md:text-left">
+          <p>© 2026 HIfAi Skills. All rights reserved.</p>
+          <p className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 md:justify-end">
+            <a
+              href={`tel:${FOOTER_PHONE_TEL}`}
+              className="text-accent-cyan transition-colors hover:text-white"
+            >
+              {FOOTER_PHONE_DISPLAY}
+            </a>
+            <span className="hidden text-white/35 md:inline">|</span>
+            <a
+              href={`mailto:${FOOTER_EMAIL}`}
+              className="text-accent-cyan transition-colors hover:text-white"
+            >
+              {FOOTER_EMAIL}
+            </a>
+          </p>
         </div>
       </div>
     </footer>

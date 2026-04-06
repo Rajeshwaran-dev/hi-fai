@@ -29,7 +29,7 @@ export function SectionHeading({ children, as: Tag = "h2", className = "" }) {
 export function Lead({ children, className = "" }) {
   return (
     <p
-      className={`mt-3 max-w-3xl text-base leading-relaxed text-slate-600 md:text-[17px] ${className}`}
+      className={`mt-3 max-w-3xl text-base leading-relaxed text-slate-600 ${className}`}
     >
       {children}
     </p>
@@ -38,15 +38,19 @@ export function Lead({ children, className = "" }) {
 
 export function Card({ icon, title, children }) {
   return (
-    <article className="group flex flex-col rounded-2xl border border-slate-200/90 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition hover:border-blue-200/80 hover:shadow-md md:p-7">
+    <article className="group flex flex-row items-start gap-4 rounded-2xl border border-slate-200/90 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300/80 hover:bg-gradient-to-br hover:from-white hover:via-blue-50/35 hover:to-cyan-50/40 hover:shadow-[0_16px_46px_-18px_rgba(37,99,235,0.45)] md:gap-5 md:p-7">
       {icon ? (
-        <span className="mb-4 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 text-lg ring-1 ring-blue-100/80">
+        <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 text-lg ring-1 ring-blue-100/80 transition-all duration-300 group-hover:from-blue-600 group-hover:to-cyan-500 group-hover:text-white group-hover:ring-blue-500/40 group-hover:shadow-[0_10px_24px_-8px_rgba(37,99,235,0.55)]">
           {icon}
         </span>
       ) : null}
-      <h3 className="text-lg font-bold text-slate-900">{title}</h3>
-      <div className="mt-2 text-sm leading-relaxed text-slate-600">
-        {children}
+      <div className="min-w-0 flex-1">
+        <h3 className="text-lg font-bold text-slate-900 transition-colors duration-300 group-hover:text-blue-900">
+          {title}
+        </h3>
+        <div className="mt-2 text-sm leading-relaxed text-slate-600 transition-colors duration-300 group-hover:text-slate-700">
+          {children}
+        </div>
       </div>
     </article>
   );
@@ -82,50 +86,72 @@ export function FourCardFramework({
   children,
   pillarTitles,
   betweenCardsAndCta,
+  cardsCenterOverlay,
+  belowCardsContent,
+  ctaBelowCards = false,
 }) {
   const bodies = copy;
 
   return (
     <>
       <div className="mx-auto max-w-7xl px-6">
-        <div className="grid gap-5 md:grid-cols-2">
-          {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
-            const title = pillarTitles?.[i] ?? defaultTitle;
-            return (
-              <Card
-                key={`${i}-${title}`}
-                icon={
-                  <Icon
-                    className="h-5 w-5 text-blue-600"
-                    strokeWidth={2.2}
-                    aria-hidden
-                  />
-                }
-                title={title}
-              >
-                {bodies[i]}
-              </Card>
-            );
-          })}
+        <div className="relative">
+          <div className="grid gap-5 md:grid-cols-2">
+            {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
+              const title = pillarTitles?.[i] ?? defaultTitle;
+              return (
+                <Card
+                  key={`${i}-${title}`}
+                  icon={
+                    <Icon
+                    className="h-5 w-5 text-blue-600 transition-colors duration-300 group-hover:text-white"
+                      strokeWidth={2.2}
+                      aria-hidden
+                    />
+                  }
+                  title={title}
+                >
+                  {bodies[i]}
+                </Card>
+              );
+            })}
+          </div>
+          {cardsCenterOverlay ? (
+            <div className="pointer-events-none absolute left-1/2 top-1/2 z-20 hidden -translate-x-1/2 -translate-y-1/2 md:block">
+              <div className="pointer-events-auto">{cardsCenterOverlay}</div>
+            </div>
+          ) : null}
         </div>
+        {belowCardsContent ? (
+          <div className="mt-6 md:mt-8">{belowCardsContent}</div>
+        ) : null}
+        {ctaBelowCards ? (
+          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-7 sm:flex-row sm:gap-4">
+            {children}
+          </div>
+        ) : null}
         {betweenCardsAndCta ? (
           <div className="mt-10 md:mt-12">{betweenCardsAndCta}</div>
         ) : null}
-        <CtaBand
-          title={ctaTitle}
-          subtitle={ctaSubtitle}
-          footerNote={ctaFooterNote}
-        >
-          {children}
-        </CtaBand>
+        {!ctaBelowCards ? (
+          <CtaBand
+            title={ctaTitle}
+            subtitle={ctaSubtitle}
+            footerNote={ctaFooterNote}
+          >
+            {children}
+          </CtaBand>
+        ) : null}
       </div>
     </>
   );
 }
 
-export function CtaBand({ title, subtitle, footerNote, children }) {
+export function CtaBand({ title, subtitle, footerNote, children, className = "mt-12" }) {
   return (
-    <div className="relative mt-12 overflow-hidden rounded-[1.35rem] border border-blue-200/60 bg-gradient-to-br from-slate-900 via-[#0f2744] to-[#0a1734] p-8 text-center shadow-[0_20px_50px_rgba(15,23,42,0.25)] md:p-10">
+    <div
+      className={`relative ${className} overflow-hidden rounded-[1.35rem] border border-blue-200/60 bg-gradient-to-br from-slate-900 via-[#0f2744] to-[#0a1734] p-8 text-center shadow-[0_20px_50px_rgba(15,23,42,0.25)] md:p-10`}
+    >
       <div
         aria-hidden
         className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-cyan-400/20 blur-3xl"

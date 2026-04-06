@@ -45,7 +45,6 @@ createRoot(document.getElementById("root")).render(
             element={
               <BreadcrumbPage
                 title="School Student (Grades 9–12)"
-                subtitle="This page focuses on early skill discovery and assessment."
               >
                 <SchoolStudentsBody />
               </BreadcrumbPage>
@@ -56,7 +55,6 @@ createRoot(document.getElementById("root")).render(
             element={
               <BreadcrumbPage
                 title="College Student (3rd & Final Year Students)"
-                subtitle="This page focuses on real-world exposure through global projects."
               >
                 <CollegeStudentsBody />
               </BreadcrumbPage>
@@ -67,7 +65,6 @@ createRoot(document.getElementById("root")).render(
             element={
               <BreadcrumbPage
                 title="Schools"
-                subtitle="Partner with HIfAi to roll out age-right programs, teacher enablement, and outcome analytics."
               >
                 <SchoolOrganizationsBody />
               </BreadcrumbPage>
@@ -78,7 +75,6 @@ createRoot(document.getElementById("root")).render(
             element={
               <BreadcrumbPage
                 title="Universities"
-                subtitle="Scale interdisciplinary studios, credit-bearing paths, and employer-backed challenges with shared rubrics."
               >
                 <CollegeOrganizationsBody />
               </BreadcrumbPage>
@@ -89,7 +85,6 @@ createRoot(document.getElementById("root")).render(
             element={
               <BreadcrumbPage
                 title="Learning Hub"
-                subtitle="Templates, sprint playbooks, and facilitator resources for everyone in the HIfAi network."
               >
                 <LearningHubBody />
               </BreadcrumbPage>
@@ -100,7 +95,6 @@ createRoot(document.getElementById("root")).render(
             element={
               <BreadcrumbPage
                 title="Let's Hi-fAi"
-                subtitle="Share a few details so we can match you to the right pathway and onboarding pack."
               >
                 <GetStartedBody />
               </BreadcrumbPage>
