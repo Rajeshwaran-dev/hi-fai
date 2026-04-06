@@ -6,8 +6,8 @@ export function GetStartedBody() {
   const [tab, setTab] = useState("school-org");
 
   const tabOptions = [
-    { id: "school-org", label: "High school" },
-    { id: "college-org", label: "University" },
+    { id: "school-org", label: "Schools" },
+    { id: "college-org", label: "Universities" },
     { id: "school-student", label: "School Students" },
     { id: "college-student", label: "College Students" },
   ];
@@ -15,11 +15,10 @@ export function GetStartedBody() {
   return (
     <div className="mx-auto w-full max-w-6xl">
       <div className="mb-10 text-center">
-        <SectionLabel>Join a cohort</SectionLabel>
-        <SectionHeading>Tell us who you are—we will route your request to the right team</SectionHeading>
+        <SectionLabel>Get started</SectionLabel>
+        <SectionHeading>Start your journey</SectionHeading>
         <Lead className="mx-auto">
-          Applications are reviewed weekly. Schools and universities can share procurement details in the notes
-          field; students should use a supervised email where possible.
+          Tell us a little about you and we&apos;ll take it from there to guide you in the right direction.
         </Lead>
       </div>
 

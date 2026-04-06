@@ -8,15 +8,15 @@ const navItems = [
     label: "Students",
     submenu: [
       {
-        label: "School Students",
+        label: "Students (Grades 9–12)",
         to: "/students/school-students",
-        description: "Programs, projects, and AI skill pathways for school learners.",
+        description: "Discover your potential beyond marks with En-Thiran",
         icon: "school",
       },
       {
-        label: "College Students",
+        label: "Students (College)",
         to: "/students/college-students",
-        description: "Career-focused tracks and innovation labs for higher education.",
+        description: "Build real-world solutions through global, project-based learning",
         icon: "college",
       },
     ],
@@ -126,7 +126,7 @@ export default function Navbar({ reducedMotion }) {
       ref={barRef}
       className="fixed top-0 left-0 right-0 z-50 px-3 pt-3 md:px-8 md:pt-4"
     >
-      <nav className="mx-auto flex w-full max-w-7xl items-center gap-3 rounded-[18px] border border-[#3f5f95]/70 bg-gradient-to-r from-[#0a1734]/95 via-[#0c2244]/90 to-[#102b57]/95 px-3 py-2.5 shadow-[0_12px_40px_rgba(3,10,30,0.45),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl md:px-6 md:py-3">
+      <nav className="mx-auto flex w-full max-w-7xl items-center gap-3 rounded-[18px] border border-[#3f5f95]/70 bg-gradient-to-r from-[#0a1734]/95 via-[#0c2244]/90 to-[#102b57]/95 px-3 py-2 shadow-[0_12px_40px_rgba(3,10,30,0.45),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl md:px-6 md:py-2.5">
         <Link
           to="/"
           className="inline-flex shrink-0 items-center"
@@ -134,9 +134,10 @@ export default function Navbar({ reducedMotion }) {
           onClick={(e) => handleNavClick(e, "/")}
         >
           <img
+          style={{ transform: "scale(1.3)"}}
             src="/logo-1.png"
             alt="HIfAi — human hand and robotic hand high-five"
-            className="h-9 w-auto md:h-16"
+            className="h-11 w-auto object-contain object-left md:h-[56px] lg:h-[62px] xl:h-[80px]"
           />
         </Link>
         <ul className="hidden flex-1 items-center justify-center gap-7 text-sm font-semibold text-white/90 md:flex">
@@ -218,7 +219,7 @@ export default function Navbar({ reducedMotion }) {
           onClick={() => navigateTo("/get-started")}
           className="ml-auto hidden min-h-[42px] shrink-0 items-center justify-center rounded-full border border-cyan-300/20 bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-5 py-2 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(20,131,255,0.45)] transition-transform duration-200 hover:scale-[1.03] hover:shadow-glow active:scale-[0.98] md:inline-flex md:px-6"
         >
-          Get Started
+          Let's Hi-fAi
         </button>
         <button
           type="button"
@@ -324,7 +325,7 @@ export default function Navbar({ reducedMotion }) {
           onClick={() => navigateTo("/get-started")}
           className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(20,131,255,0.45)]"
         >
-          Get Started
+          Let's Hi-fAi
         </button>
       </aside>
     </header>

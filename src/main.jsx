@@ -81,7 +81,7 @@ createRoot(document.getElementById("root")).render(
             path="/get-started"
             element={
               <BreadcrumbPage
-                title="Get Started"
+                title="Let's Hi-fAi"
                 subtitle="Share a few details so we can match you to the right pathway and onboarding pack."
               >
                 <GetStartedBody />

@@ -13,7 +13,7 @@ export function SchoolOrganizationsBody() {
       ctaTitle="Plan a conversation with our school partnerships team"
     >
       <a
-        href="mailto:hifaidgl@gmail.com?subject=School%20organization%20partnership"
+        href="mailto:innovate@hifai.io?subject=School%20organization%20partnership"
         className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
       >
         Email to schedule

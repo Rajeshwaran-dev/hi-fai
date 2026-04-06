@@ -9,7 +9,6 @@ import {
   KanavooglePartnershipSection,
   WhyHifaiMissingLinkSection,
   WhatIsHifaiSection,
-  TargetUsers,
 } from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
 import CustomCursor from "./components/CustomCursor.jsx";
@@ -55,12 +54,11 @@ export default function App() {
       <Navbar reducedMotion={reducedMotion} />
       <main>
         <Hero reducedMotion={reducedMotion} isMobile={isMobile} />
+        <WhatIsHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
         <WhyHifaiMissingLinkSection
           reducedMotion={reducedMotion}
           isMobile={isMobile}
         />
-        <WhatIsHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
-        <TargetUsers reducedMotion={reducedMotion} isMobile={isMobile} />
         <KanavooglePartnershipSection reducedMotion={reducedMotion} isMobile={isMobile} />
       </main>
       <Footer reducedMotion={reducedMotion} />

@@ -10,8 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
 /** Matches primary header navigation routes */
 const FOOTER_NAV_LINKS = [
   { label: "Home", to: "/" },
-  { label: "School Students", to: "/students/school-students" },
-  { label: "College Students", to: "/students/college-students" },
+  { label: "Students (Grades 9–12)", to: "/students/school-students" },
+  { label: "Students (College)", to: "/students/college-students" },
   { label: "Schools", to: "/school-organizations" },
   { label: "Universities", to: "/college-organizations" },
   { label: "Learning Hub", to: "/learning-hub" },
@@ -21,14 +21,14 @@ const FOOTER_ADDRESS_LINE =
   "24, Rengadevi Amman Koil Street, Main Road, Dindigul-624001";
 const FOOTER_PHONE_DISPLAY = "+91 93848 82012";
 const FOOTER_PHONE_TEL = "+919384882012";
-const FOOTER_EMAIL = "hifaidgl@gmail.com";
+const FOOTER_EMAIL = "innovate@hifai.io";
 const FOOTER_WHATSAPP_URL = "https://wa.me/message/PQNSXRG6VDSCI1";
 const FOOTER_INSTAGRAM_URL =
   "https://www.instagram.com/hifai2026?igsh=MXJzODhuemU5ZHFiMQ==";
-/** Google Maps embed (query-based; no API key) */
-const FOOTER_MAP_EMBED_SRC = `https://maps.google.com/maps?q=${encodeURIComponent(
-  FOOTER_ADDRESS_LINE
-)}&hl=en&z=16&output=embed`;
+
+/** Google Maps embed — HIfAi place (Dindigul) */
+const FOOTER_MAP_EMBED_SRC =
+  "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d493.78774831078425!2d77.97051!3d10.3618454!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00ab09fa3836eb%3A0xc2981c3295ec6fab!2sHIfAi!5e1!3m2!1sen!2sin!4v1775460424439!5m2!1sen!2sin";
 
 export default function Footer({ reducedMotion }) {
   const location = useLocation();
@@ -162,15 +162,16 @@ export default function Footer({ reducedMotion }) {
                 aria-label="HIfAi home"
               >
                 <img
+                style={{ transform: "scale(1.4)", marginLeft: "10px" }}
                   src="/logo-1.png"
                   alt="HIfAi — human hand and robotic hand high-five"
-                  className="h-14 w-auto md:h-16"
+                  className="h-16 w-auto object-contain object-left sm:h-[4.25rem] md:h-[4.5rem] lg:h-[4.75rem]"
                 />
               </a>
-              <p className="mt-1 text-xs uppercase tracking-[0.14em] text-white/60">Human Intelligence for AI Use</p>
-              <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/75">
-                Crafting future-ready talent through AI literacy, problem solving, and real-world
-                digital innovation programs.
+              <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/80">
+                <span className="font-semibold text-accent-cyan">HIfAi</span>{" "}
+                brings forward what often goes unseen, shaping it into meaningful,
+                real-world impact.
               </p>
 
               {/* Tags */}
@@ -211,7 +212,7 @@ export default function Footer({ reducedMotion }) {
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-cyan">Location</p>
               <div className="mt-4 overflow-hidden rounded-2xl border border-white/15 bg-black/20 shadow-inner">
                 <iframe
-                  title="HIfAi location on Google Maps"
+                  title="HIfAi on Google Maps"
                   src={FOOTER_MAP_EMBED_SRC}
                   className="h-[200px] w-full border-0 sm:h-[220px]"
                   loading="lazy"
@@ -271,7 +272,7 @@ export default function Footer({ reducedMotion }) {
             ref={bottomRef}
             className="flex flex-col gap-2 border-t border-white/15 bg-black/10 px-8 py-4 text-xs text-white/60 md:flex-row md:items-center md:justify-between md:px-10"
           >
-            <p>© {new Date().getFullYear()} HIFAI Skills. All rights reserved.</p>
+            <p>© {new Date().getFullYear()} HIfAi Skills. All rights reserved.</p>
             <p>Designed for immersive digital innovation experiences.</p>
           </div>
         </div>

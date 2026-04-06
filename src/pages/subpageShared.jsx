@@ -77,6 +77,8 @@ export function CheckList({ items }) {
 export function FourCardFramework({
   copy,
   ctaTitle,
+  ctaSubtitle,
+  ctaFooterNote,
   children,
   pillarTitles,
   betweenCardsAndCta,
@@ -109,13 +111,19 @@ export function FourCardFramework({
         {betweenCardsAndCta ? (
           <div className="mt-10 md:mt-12">{betweenCardsAndCta}</div>
         ) : null}
-        <CtaBand title={ctaTitle}>{children}</CtaBand>
+        <CtaBand
+          title={ctaTitle}
+          subtitle={ctaSubtitle}
+          footerNote={ctaFooterNote}
+        >
+          {children}
+        </CtaBand>
       </div>
     </>
   );
 }
 
-export function CtaBand({ title, children }) {
+export function CtaBand({ title, subtitle, footerNote, children }) {
   return (
     <div className="relative mt-12 overflow-hidden rounded-[1.35rem] border border-blue-200/60 bg-gradient-to-br from-slate-900 via-[#0f2744] to-[#0a1734] p-8 text-center shadow-[0_20px_50px_rgba(15,23,42,0.25)] md:p-10">
       <div
@@ -129,9 +137,19 @@ export function CtaBand({ title, children }) {
       <h3 className="relative text-xl font-bold text-white md:text-2xl">
         {title}
       </h3>
-      <div className="relative mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+      {subtitle ? (
+        <p className="relative mx-auto mt-3 max-w-xl text-base leading-relaxed text-white/85 md:text-lg">
+          {subtitle}
+        </p>
+      ) : null}
+      <div className="relative mt-5 flex flex-col items-center justify-center gap-3 sm:mt-6 sm:flex-row sm:gap-4">
         {children}
       </div>
+      {footerNote ? (
+        <p className="relative mt-4 text-xs font-medium text-white/50 md:text-sm">
+          {footerNote}
+        </p>
+      ) : null}
     </div>
   );
 }

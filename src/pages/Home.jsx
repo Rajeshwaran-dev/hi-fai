@@ -6,78 +6,40 @@ import {
   BrainCircuit,
   Briefcase,
   ExternalLink,
-  GraduationCap,
+  Globe2,
   Landmark,
-  LayoutGrid,
+  MonitorSmartphone,
   Orbit,
-  Route,
-  School,
   Sparkles,
+  UserCheck,
   Users,
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import * as THREE from "three";
-import GLOBE from "vanta/dist/vanta.globe.min.js";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HEADLINE = "Human Intelligence for Artificial Control";
-const WORDS = HEADLINE.split(" ");
+const HERO_HOOK_LINES = ["Marks matter...", "but what is being unseen?"];
+const HERO_SUBTEXT =
+  "There's a side of you beyond marks that remains undiscovered and HIfAi got you discover it differently.";
 
 export function Hero({ reducedMotion, isMobile }) {
   const rootRef = useRef(null);
-  const vantaRef = useRef(null);
-  const vantaEffect = useRef(null);
+  const heroBgRef = useRef(null);
   const headlineRef = useRef(null);
   const subRef = useRef(null);
   const ctaRef = useRef(null);
   const parallaxRef = useRef(null);
-  const trailLayerRef = useRef(null);
-
-  useEffect(() => {
-    if (!vantaRef.current || vantaEffect.current) return;
-
-    const opts = {
-      el: vantaRef.current,
-      THREE,
-      mouseControls: !isMobile,
-      touchControls: true,
-      gyroControls: false,
-      minHeight: 200,
-      minWidth: 200,
-      scale: isMobile ? 0.92 : 1,
-      scaleMobile: 0.9,
-      color: 0x2f63ff,
-      color2: 0x4a7dff,
-      backgroundColor: 0xffffff,
-      size: isMobile ? 0.62 : 0.72,
-    };
-
-    try {
-      vantaEffect.current = GLOBE(opts);
-    } catch {
-      // Vanta may fail if WebGL unavailable.
-    }
-
-    return () => {
-      if (vantaEffect.current) {
-        vantaEffect.current.destroy();
-        vantaEffect.current = null;
-      }
-    };
-  }, [isMobile]);
 
   useLayoutEffect(() => {
     const root = rootRef.current;
     if (!root) return;
 
     const clearIntroTargets = () => {
-      const wordSpans =
-        headlineRef.current?.querySelectorAll(".hero-word") ?? [];
+      const lines = headlineRef.current?.querySelectorAll(".hero-line") ?? [];
       const sub = subRef.current;
       const cta = ctaRef.current;
-      gsap.set([...wordSpans, sub, cta].filter(Boolean), { clearProps: "all" });
+      gsap.set([...lines, sub, cta].filter(Boolean), { clearProps: "all" });
     };
 
     if (reducedMotion) {
@@ -86,24 +48,23 @@ export function Hero({ reducedMotion, isMobile }) {
     }
 
     const ctx = gsap.context(() => {
-      const wordSpans =
-        headlineRef.current?.querySelectorAll(".hero-word") ?? [];
+      const lines = headlineRef.current?.querySelectorAll(".hero-line") ?? [];
       const sub = subRef.current;
       const cta = ctaRef.current;
-      if (!wordSpans.length) return;
+      if (!lines.length) return;
 
       const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
-      tl.from(wordSpans, {
-        y: isMobile ? 24 : 48,
+      tl.from(lines, {
+        y: isMobile ? 20 : 36,
         opacity: 0,
-        stagger: isMobile ? 0.06 : 0.08,
-        duration: isMobile ? 0.55 : 0.75,
+        stagger: isMobile ? 0.08 : 0.12,
+        duration: isMobile ? 0.55 : 0.72,
       });
       if (sub) {
-        tl.from(sub, { y: 20, opacity: 0, duration: 0.6 }, "-=0.35");
+        tl.from(sub, { y: 16, opacity: 0, duration: 0.55 }, "-=0.32");
       }
       if (cta) {
-        tl.from(cta, { y: 20, opacity: 0, duration: 0.55 }, "-=0.28");
+        tl.from(cta, { y: 16, opacity: 0, duration: 0.5 }, "-=0.26");
       }
     }, root);
 
@@ -114,52 +75,10 @@ export function Hero({ reducedMotion, isMobile }) {
   }, [reducedMotion, isMobile]);
 
   useEffect(() => {
-    if (reducedMotion || isMobile) return;
-    const root = rootRef.current;
-    const layer = trailLayerRef.current;
-    if (!root || !layer) return;
-
-    const dots = Array.from({ length: 16 }, (_, i) => {
-      const dot = document.createElement("span");
-      dot.className = "hero-trail-dot";
-      dot.style.width = `${8 - i * 0.22}px`;
-      dot.style.height = `${8 - i * 0.22}px`;
-      layer.appendChild(dot);
-      return dot;
-    });
-    let index = 0;
-
-    const spawn = (x, y) => {
-      const dot = dots[index];
-      index = (index + 1) % dots.length;
-      gsap.killTweensOf(dot);
-      gsap.set(dot, { x, y, opacity: 0.52, scale: 1 });
-      gsap.to(dot, {
-        y: y - 8,
-        opacity: 0,
-        scale: 0.25,
-        duration: 0.8,
-        ease: "power2.out",
-      });
-    };
-
-    const onMove = (e) => {
-      const rect = root.getBoundingClientRect();
-      spawn(e.clientX - rect.left, e.clientY - rect.top);
-    };
-
-    root.addEventListener("pointermove", onMove);
-    return () => {
-      root.removeEventListener("pointermove", onMove);
-      dots.forEach((dot) => dot.remove());
-    };
-  }, [reducedMotion, isMobile]);
-
-  useEffect(() => {
     if (reducedMotion || !rootRef.current || !parallaxRef.current) return;
     const ctx = gsap.context(() => {
       gsap.to(parallaxRef.current, {
-        y: isMobile ? 0 : 80,
+        y: isMobile ? 0 : 48,
         ease: "none",
         scrollTrigger: {
           trigger: rootRef.current,
@@ -172,72 +91,132 @@ export function Hero({ reducedMotion, isMobile }) {
     return () => ctx.revert();
   }, [reducedMotion, isMobile]);
 
+  useEffect(() => {
+    if (reducedMotion || isMobile || !rootRef.current || !heroBgRef.current)
+      return undefined;
+
+    const root = rootRef.current;
+    const bg = heroBgRef.current;
+
+    gsap.set(bg, {
+      position: "absolute",
+      left: "50%",
+      top: "50%",
+      xPercent: -50,
+      yPercent: -50,
+      width: "120%",
+      height: "120%",
+      force3D: true,
+    });
+
+    const maxX = 42;
+    const maxY = 26;
+
+    const xTo = gsap.quickTo(bg, "x", {
+      duration: 0.85,
+      ease: "power3.out",
+    });
+    const yTo = gsap.quickTo(bg, "y", {
+      duration: 0.85,
+      ease: "power3.out",
+    });
+
+    const onMove = (e) => {
+      const rect = root.getBoundingClientRect();
+      const w = rect.width || 1;
+      const h = rect.height || 1;
+      const nx = ((e.clientX - rect.left) / w) * 2 - 1;
+      const ny = ((e.clientY - rect.top) / h) * 2 - 1;
+      xTo(-nx * maxX);
+      yTo(-ny * maxY);
+    };
+
+    const onLeave = () => {
+      xTo(0);
+      yTo(0);
+    };
+
+    root.addEventListener("pointermove", onMove, { passive: true });
+    root.addEventListener("pointerleave", onLeave);
+
+    return () => {
+      root.removeEventListener("pointermove", onMove);
+      root.removeEventListener("pointerleave", onLeave);
+      gsap.killTweensOf(bg);
+    };
+  }, [reducedMotion, isMobile]);
+
   return (
     <section
       id="hero"
       ref={rootRef}
-      className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden bg-white px-4 pt-32 pb-20 md:pb-16"
+      className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden bg-slate-950 px-4 pt-32 pb-20 md:pb-16"
     >
-      <div ref={vantaRef} className="absolute inset-0 z-0" aria-hidden />
-      <div
-        className="pointer-events-none absolute inset-0 z-[1] bg-hero-mesh"
-        aria-hidden
-      />
-      <div
-        ref={trailLayerRef}
-        className="pointer-events-none absolute inset-0 z-[11]"
-        aria-hidden
-      />
-      <div
-        ref={parallaxRef}
-        className="relative z-10 mx-auto flex max-w-6xl flex-col items-center text-center"
-      >
-        <p className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-500/20 bg-white/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-widest text-blue-700 shadow-sm backdrop-blur-md md:text-sm">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-blue-600" />
-          Digital innovation services
-        </p>
-
-        <h1
-          ref={headlineRef}
-          data-tilt-ignore
-          className="font-display text-[clamp(2.2rem,8vw,4.6rem)] font-normal leading-[1.5] tracking-[-0.015em] text-ink"
-        >
-          {WORDS.map((w, i) => (
-            <span
-              key={i}
-              className="hero-word inline-block mr-[0.2em] last:mr-0"
-            >
-              {w}
-            </span>
-          ))}
-        </h1>
-
-        <p
-          ref={subRef}
-          className="mt-6 max-w-2xl text-base leading-relaxed text-ink/70 md:text-[1.45rem]"
-        >
-          Empowering Students & Institutions with Future Skills
-        </p>
-
+      <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
         <div
-          ref={ctaRef}
-          className="mt-10 flex flex-col items-stretch gap-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4"
+          ref={heroBgRef}
+          className="bg-slate-950 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center bg-no-repeat will-change-transform"
+          aria-hidden
+        />
+      </div>
+      <div
+        className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-black/80 via-black/50 to-black/85"
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute inset-0 z-[2] bg-gradient-to-t from-black/45 via-transparent to-black/30"
+        aria-hidden
+      />
+
+      <div ref={parallaxRef} className="relative z-10 mx-auto w-full max-w-4xl">
+        <div
+          className="rounded-[1.75rem] border border-white/[0.14] bg-white/[0.08] px-7 py-9 shadow-[0_25px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl md:rounded-[2rem] md:px-12 md:py-11"
+          style={{
+            boxShadow:
+              "0 25px 80px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",
+          }}
         >
-          <Link
-            to="/learning-hub#services"
-            data-magnetic
-            className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 px-8 py-3.5 text-center text-sm font-semibold text-white shadow-md transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:bg-blue-700 hover:shadow-lg md:text-base"
-          >
-            <span className="relative z-10">Explore Services</span>
-            <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
-          </Link>
-          <Link
-            to="/get-started"
-            data-magnetic
-            className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-full border-2 border-ink/10 bg-white/70 px-8 py-3.5 text-center text-sm font-semibold text-ink backdrop-blur-md transition-all duration-300 hover:border-blue-500/40 hover:bg-white hover:shadow-md md:text-base"
-          >
-            Get Started
-          </Link>
+          <div className="text-center">
+            <h1
+              ref={headlineRef}
+              data-tilt-ignore
+              className="font-display text-[clamp(1.85rem,6.5vw,3.35rem)] font-normal leading-[1.5] tracking-[-0.02em] text-white"
+            >
+              {HERO_HOOK_LINES.map((line, i) => (
+                <span key={i} className="hero-line block">
+                  {line}
+                </span>
+              ))}
+            </h1>
+
+            <p
+              ref={subRef}
+              className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/80 md:mt-7 md:text-lg md:leading-relaxed"
+            >
+              {HERO_SUBTEXT}
+            </p>
+
+            <div
+              ref={ctaRef}
+              className="mt-9 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4"
+            >
+              <Link
+                to="/learning-hub"
+                data-magnetic
+                className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 px-8 py-3.5 text-center text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:bg-blue-500 hover:shadow-xl md:text-base"
+              >
+                <span className="relative z-10">Explore Services</span>
+                <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
+              </Link>
+              <Link
+                to="/get-started"
+                data-magnetic
+                className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/[0.08] px-8 py-3.5 text-center text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.14] md:text-base"
+              >
+                Let's HI-fAi
+              </Link>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -245,8 +224,8 @@ export function Hero({ reducedMotion, isMobile }) {
         className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2 md:bottom-10"
         aria-hidden
       >
-        <div className="flex h-10 w-6 justify-center rounded-full border-2 border-ink/20 pt-2">
-          <div className="h-2 w-1 animate-bounce rounded-full bg-blue-600/60" />
+        <div className="flex h-10 w-6 justify-center rounded-full border-2 border-white/25 pt-2">
+          <div className="h-2 w-1 animate-bounce rounded-full bg-white/50" />
         </div>
       </div>
     </section>
@@ -254,9 +233,13 @@ export function Hero({ reducedMotion, isMobile }) {
 }
 
 const PARTNER_SITE_URL = "https://kanavoogle.com/";
+const PARTNER_SITE_DISPLAY = "kanavoogle.com";
 
 const kanavoogleLinkClass =
-  "font-medium text-blue-800 no-underline rounded-md px-1.5 py-0.5 transition-colors hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
+  "font-medium text-blue-700 no-underline rounded-md px-1.5 py-0.5 transition-colors hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
+
+const hifaiHighlightClass =
+  "font-semibold text-blue-700";
 
 /** Partnership column: year — linked title — issuing body / program (external sources). */
 const PARTNERSHIP_RECOGNITION_AWARDS = [
@@ -335,10 +318,10 @@ const PARTNERSHIP_TEAM_GROUPS = [
         orgKind: "hifai",
       },
       {
-        name: "Mrs.Sayee Baggiyalakshmiimage.png",
+        name: "Mrs. M. Sayee Baggiyalakshmi",
         role: "Critical Analyst",
         org: "HIfAi",
-        initials: "C",
+        initials: "SB",
         orgKind: "hifai",
       },
     ],
@@ -489,7 +472,8 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
             <span className="text-ink/80">, Australia</span>
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-ink/65 md:text-[15px]">
-            HIfAi is shaped through an active partnership with{" "}
+            <span className={hifaiHighlightClass}>HIfAi</span> is shaped through
+            an active partnership with{" "}
             <a
               href={PARTNER_SITE_URL}
               target="_blank"
@@ -500,7 +484,16 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
             </a>
             —connecting Australian innovation networks with our mission to make
             human intelligence visible, measurable, and actionable in a world
-            shaped by AI.
+            shaped by AI. Explore the collaboration further at{" "}
+            <a
+              href={PARTNER_SITE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={kanavoogleLinkClass}
+            >
+              {PARTNER_SITE_DISPLAY}
+            </a>
+            .
           </p>
         </div>
 
@@ -512,49 +505,6 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
             className="h-1 bg-gradient-to-r from-blue-800 via-blue-600 to-sky-500"
             aria-hidden
           />
-
-          <aside className="relative border-b border-slate-100 bg-gradient-to-br from-slate-50/90 via-white to-white px-5 py-6 md:px-8 md:py-7">
-            <div
-              className="pointer-events-none absolute right-0 top-0 h-40 w-40 translate-x-1/4 -translate-y-1/4 rounded-full bg-blue-600/[0.06] blur-3xl"
-              aria-hidden
-            />
-            <div className="relative flex flex-col gap-5 sm:flex-row sm:items-start sm:gap-6">
-              <div
-                className="flex h-[4.25rem] w-[4.25rem] shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-700 to-blue-600 text-base font-bold uppercase tracking-wide text-white shadow-lg shadow-blue-900/20 ring-4 ring-blue-50/90"
-                aria-hidden
-              >
-                NV
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="grid gap-5 md:grid-cols-[minmax(0,15rem)_1fr] md:items-start md:gap-10">
-                  <div>
-                    <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-blue-600">
-                      Kanavoogle consultant
-                    </p>
-                    <p className="mt-2 font-geom-heading text-xl font-normal leading-snug tracking-[-0.02em] text-ink md:text-[1.35rem]">
-                      Dr. N. Venkatachalam
-                    </p>
-                    <p className="mt-1 text-xs font-medium leading-snug text-slate-500">
-                      BE (Hons), MBA, PhD
-                    </p>
-                  </div>
-                  <div className="md:border-l md:border-slate-200/90 md:pl-8">
-                    <p className="text-sm leading-relaxed text-slate-600 md:text-[15px]">
-                      Strategic guidance on validating the HIfAi concept,
-                      strengthening institutional narratives, and aligning the
-                      platform with global standards for skills, assessment, and
-                      responsible AI adoption.
-                    </p>
-                    <p className="mt-3 rounded-lg bg-slate-100/80 px-3 py-2 text-[11px] leading-relaxed text-slate-500">
-                      Advisory role with HIfAi in support of the Kanavoogle
-                      partnership. Credentials reflect academic and professional
-                      preparation.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </aside>
 
           <div
             className="relative border-t border-slate-100 bg-gradient-to-b from-slate-50/70 via-white to-white px-5 py-6 md:px-8 md:py-7"
@@ -571,22 +521,33 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                 <div>
                   <h3
                     id="partnership-recognition-heading"
-                    className="font-geom-heading text-lg font-normal tracking-[-0.02em] text-slate-900"
+                    className="font-geom-heading text-lg font-normal tracking-[-0.02em] text-slate-900 mb-2"
                   >
                     Recognition & grants
                   </h3>
-                  <p className="mt-0.5 text-sm text-slate-500">
-                    Research-linked honours alongside{" "}
-                    <a
-                      href={PARTNER_SITE_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={kanavoogleLinkClass}
-                    >
-                      Kanavoogle
-                    </a>{" "}
-                    &amp; HIfAi.
-                  </p>
+                  <p className="relative text-sm leading-relaxed text-slate-700 md:text-[15px]">
+              Together, <span className={hifaiHighlightClass}>HIfAi</span> and{" "}
+              <a
+                href={PARTNER_SITE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={kanavoogleLinkClass} 
+              >
+                Kanavoogle
+              </a>{" "}
+              bridge innovation in Australia with programs that make skills and
+              human intelligence easier to see and act on. For partnership
+              context, research, and networks, visit{" "}
+              <a
+                href={PARTNER_SITE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={kanavoogleLinkClass}
+              >
+                {PARTNER_SITE_DISPLAY}
+              </a>
+              .
+            </p>
                 </div>
               </div>
             </div>
@@ -633,9 +594,7 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
             className="relative overflow-hidden rounded-[1.35rem] border border-slate-200/90 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_24px_64px_-16px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/[0.03]"
             aria-labelledby="partnership-team-heading"
           >
-            <div
-              className="relative overflow-hidden bg-gradient-to-br from-[#0a1628] via-[#0f2844] to-[#143d62] px-6 py-11 md:px-10 md:py-14"
-            >
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#0a1628] via-[#0f2844] to-[#143d62] px-6 py-11 md:px-10 md:py-14">
               <div
                 className="pointer-events-none absolute inset-0 opacity-[0.35]"
                 aria-hidden
@@ -650,18 +609,28 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                 aria-hidden
               />
               <div className="relative mx-auto max-w-2xl text-center">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-sky-300/90">
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-300/95 md:text-base md:tracking-[0.22em]">
                   Meet our team
                 </p>
                 <h3
                   id="partnership-team-heading"
-                  className="mt-3 font-geom-heading text-[clamp(1.5rem,3.2vw,2rem)] font-normal leading-snug tracking-[-0.02em] text-white"
+                  className="mt-4 font-geom-heading text-[clamp(1.75rem,3.8vw,2.35rem)] font-normal leading-snug tracking-[-0.02em] text-white md:mt-5"
                 >
                   People powering the partnership
                 </h3>
-                <p className="mt-4 text-[15px] leading-relaxed text-slate-300/95 md:text-base">
-                  Leadership, operations, and support working together across
-                  HIfAi and our Kanavoogle collaboration.
+                <p className="mt-4 text-base leading-relaxed text-slate-300/95 md:mt-5 md:text-lg">
+                  Leadership, operations, and support working together across{" "}
+                  <span className="font-semibold text-sky-200">HIfAi</span> and
+                  our{" "}
+                  <a
+                    href={PARTNER_SITE_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-sky-200 underline decoration-sky-200/50 underline-offset-2 transition-colors hover:text-white hover:decoration-white"
+                  >
+                    Kanavoogle
+                  </a>{" "}
+                  collaboration.
                 </p>
               </div>
             </div>
@@ -743,12 +712,19 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                                   <div className="mt-3 flex flex-wrap items-center gap-2">
                                     <span
                                       className={
-                                        m.orgKind === "partner"
+                                        m.orgKind === "partner" ||
+                                        m.org === "HIfAi"
                                           ? "inline-flex items-center rounded-md bg-blue-600/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-blue-800 ring-1 ring-blue-600/15"
                                           : "inline-flex items-center rounded-md bg-slate-100/90 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-600 ring-1 ring-slate-200/80"
                                       }
                                     >
-                                      {m.org}
+                                      {m.org === "HIfAi" ? (
+                                        <span className="text-blue-800">
+                                          HIfAi
+                                        </span>
+                                      ) : (
+                                        m.org
+                                      )}
                                     </span>
                                   </div>
                                 </div>
@@ -769,27 +745,17 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
   );
 }
 
-const WHY_HIFAI_POINTS = [
-  { text: "Education measures knowledge, not skills.", kind: "gap" },
-  { text: "Core human abilities remain unidentified.", kind: "gap" },
-  { text: "No unified skill assessment exists.", kind: "gap" },
-  { text: "HIfAi maps human intelligence using AI.", kind: "answer" },
-  { text: "Enables focused skill development.", kind: "answer" },
-  { text: "Aligns strengths with future pathways.", kind: "answer" },
+const WHY_HIFAI_INSIGHTS = [
+  "Your real potential often stays unnoticed.",
+  "One system measures everyone, but each of us is unique.",
+  "HIfAi changes how this is seen.",
 ];
 
-const MISSING_LINK_POINTS = [
-  "One-size-fits-all assessments dominate learning.",
-  "Exam results reflect knowledge only.",
-  "Cognitive skills remain unmeasured.",
-  "Students lack visibility of real strengths.",
-  "Educators lack skill-based evaluation tools.",
-];
+const WHY_HIFAI_CLOSING = "Discover what's hidden within you";
 
 export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
   const sectionRef = useRef(null);
   const whyRef = useRef(null);
-  const missingRef = useRef(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -810,20 +776,6 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
           },
         });
       }
-      if (missingRef.current?.children?.length) {
-        gsap.from(missingRef.current.children, {
-          y: isMobile ? 16 : 24,
-          opacity: 0,
-          stagger: 0.06,
-          duration: 0.62,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: section,
-            start: "top 78%",
-            toggleActions: "play none none none",
-          },
-        });
-      }
     }, section);
 
     return () => ctx.revert();
@@ -833,7 +785,7 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
     <section
       ref={sectionRef}
       className="relative overflow-hidden border-t border-slate-200/80 bg-gradient-to-b from-slate-50/80 via-white to-white px-4 py-14 md:px-8 md:py-16"
-      aria-labelledby="why-hifai-heading missing-link-heading"
+      aria-labelledby="why-hifai-heading"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -854,8 +806,8 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
       />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_36px_-12px_rgba(15,23,42,0.1),0_0_0_1px_rgba(15,23,42,0.02)] ring-1 ring-slate-900/[0.02] lg:grid lg:grid-cols-2 lg:items-stretch">
-          <div className="relative overflow-hidden lg:border-r lg:border-slate-200/70">
+        <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_36px_-12px_rgba(15,23,42,0.1),0_0_0_1px_rgba(15,23,42,0.02)] ring-1 ring-slate-900/[0.02]">
+          <div className="relative overflow-hidden">
             <div
               className="pointer-events-none absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-blue-600 via-blue-500 to-blue-400/40"
               aria-hidden
@@ -871,10 +823,14 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
 
             <div
               ref={whyRef}
-              className="relative flex flex-col px-5 py-8 sm:px-7 sm:py-9 lg:px-9 lg:py-10 xl:pr-11"
+              className="relative flex flex-col px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-11"
             >
-              <p className="inline-flex w-fit items-center rounded-full border border-blue-200/90 bg-blue-50/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
-                Why HIfAi?
+              <p className="inline-flex w-fit items-center gap-2 rounded-full border border-blue-200/90 bg-blue-50/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
+                <span
+                  className="h-1.5 w-1.5 rounded-full bg-blue-600"
+                  aria-hidden
+                />
+                Why <span className={hifaiHighlightClass}>HIfAi</span>?
               </p>
               <div className="relative mt-4">
                 <span
@@ -883,129 +839,47 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
                 />
                 <h2
                   id="why-hifai-heading"
-                  className="relative font-geom-heading text-[clamp(1.65rem,3.6vw,2.35rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
+                  className="relative font-geom-heading text-[clamp(1.65rem,3.6vw,2.35rem)] font-normal leading-[1.25] tracking-[-0.02em] text-ink"
                 >
-                  Skills and intelligence,{" "}
-                  <span className="relative inline-block">
-                    <span className="relative z-10">made visible</span>
+                  Skills aren&apos;t missing. They&apos;re just{" "}
+                  <span className="relative inline-block whitespace-nowrap">
+                    <span className="relative z-10">not seen</span>
                     <span
                       className="absolute -bottom-0.5 left-0 h-2.5 w-full rounded-md bg-blue-600/25"
                       aria-hidden
                     />
                   </span>
+                  .
                 </h2>
               </div>
-              <p className="relative mt-4 max-w-xl text-base leading-relaxed text-ink/65 md:text-[17px]">
-                Traditional systems stop at grades. HIfAi closes the loop between
-                what people know, what they can do, and where they are headed next.
+              <p className="relative mt-4 max-w-2xl text-base leading-relaxed text-ink/65 md:text-[17px]">
+                Most systems stop at marks. But how you think, solve, and adapt
+                goes far beyond that.
               </p>
 
               <ul
-                className="relative mt-8 space-y-1.5 rounded-xl border border-slate-200/70 bg-slate-50/40 p-2 sm:p-2.5"
+                className="relative mt-8 space-y-2 rounded-xl border border-slate-200/70 bg-slate-50/40 p-2.5 sm:p-3"
                 role="list"
               >
-                {WHY_HIFAI_POINTS.map(({ text, kind }, i) => (
+                {WHY_HIFAI_INSIGHTS.map((text, i) => (
                   <li
                     key={i}
-                    className={`flex gap-3.5 rounded-lg px-3 py-3 transition-colors md:gap-4 md:px-3.5 md:py-3.5 ${
-                      kind === "gap"
-                        ? "bg-white/50 hover:bg-white/90"
-                        : "border-l-2 border-blue-500/70 bg-gradient-to-r from-blue-50/80 to-white/60 hover:from-blue-50 hover:to-white"
-                    }`}
+                    className="flex gap-3.5 rounded-lg border border-blue-200/50 bg-gradient-to-r from-blue-50/80 to-white/70 px-3 py-3.5 transition-colors hover:from-blue-50 hover:to-white md:gap-4 md:px-3.5 md:py-3.5"
                   >
                     <span
-                      className={`mt-1.5 h-2 w-2 shrink-0 rounded-full ${
-                        kind === "gap"
-                          ? "bg-slate-300 ring-2 ring-slate-200/90"
-                          : "bg-blue-600 shadow-[0_0_0_3px_rgba(37,99,235,0.15)]"
-                      }`}
+                      className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-600 shadow-[0_0_0_3px_rgba(37,99,235,0.15)]"
                       aria-hidden
                     />
-                    <span
-                      className={`text-[15px] leading-relaxed md:text-base ${
-                        kind === "gap" ? "text-ink/70" : "font-medium text-ink"
-                      }`}
-                    >
+                    <span className="text-[15px] font-medium leading-relaxed text-ink md:text-base">
                       {text}
                     </span>
                   </li>
                 ))}
               </ul>
-            </div>
-          </div>
 
-          <div className="relative overflow-hidden border-t border-slate-200/70 lg:border-t-0">
-            <div
-              className="pointer-events-none absolute bottom-0 right-0 h-48 w-48 translate-x-1/4 translate-y-1/4 rounded-full bg-indigo-500/[0.05] blur-3xl"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none absolute right-8 top-24 h-20 w-20 rounded-full bg-blue-600/[0.05] blur-xl"
-              aria-hidden
-            />
-
-            <div
-              ref={missingRef}
-              className="relative flex flex-col px-5 py-8 sm:px-7 sm:py-9 lg:px-9 lg:py-10 xl:pl-11"
-            >
-              <p className="inline-flex w-fit items-center rounded-full border border-blue-200/90 bg-blue-50/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
-                Education today
+              <p className="relative mt-8 text-center font-geom-heading text-[clamp(1.15rem,2.4vw,1.35rem)] font-normal tracking-[-0.015em] text-blue-800 md:mt-9">
+                {WHY_HIFAI_CLOSING}
               </p>
-              <div className="relative mt-4">
-                <span
-                  className="pointer-events-none absolute -left-1 -top-2 h-24 w-24 rounded-full bg-indigo-400/[0.1] blur-2xl"
-                  aria-hidden
-                />
-                <h2
-                  id="missing-link-heading"
-                  className="relative font-geom-heading text-[clamp(1.65rem,3.6vw,2.35rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
-                >
-                  This Missing Link{" "}
-                  <span className="relative inline-block">
-                    <span className="relative z-10">in Education</span>
-                    <span
-                      className="absolute -bottom-0.5 left-0 h-2.5 w-full rounded-md bg-blue-600/25"
-                      aria-hidden
-                    />
-                  </span>
-                </h2>
-              </div>
-              <p className="relative mt-4 max-w-xl text-base leading-relaxed text-ink/65 md:text-[17px]">
-                When measurement ends at marks, both learners and teachers lose the
-                signal they need for the next best step—skills stay invisible and
-                decisions stay guesswork.
-              </p>
-
-              <ul
-                className="relative mt-8 space-y-1.5 rounded-xl border border-slate-200/70 bg-slate-50/40 p-2 sm:p-2.5"
-                role="list"
-              >
-                {MISSING_LINK_POINTS.map((text, i) => (
-                  <li
-                    key={i}
-                    className="flex gap-3.5 rounded-lg bg-white/50 px-3 py-3 transition-colors hover:bg-white/95 md:gap-4 md:px-3.5 md:py-3.5"
-                  >
-                    <span
-                      className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 ring-2 ring-blue-100"
-                      aria-hidden
-                    />
-                    <span className="text-[15px] leading-relaxed text-ink/75 md:text-base">
-                      {text}
-                    </span>
-                  </li>
-                ))}
-                <li className="mt-2 flex gap-3.5 overflow-hidden rounded-xl border border-blue-200/60 bg-gradient-to-br from-blue-50/90 via-white to-slate-50/80 p-4 shadow-[0_8px_30px_-12px_rgba(37,99,235,0.2)] ring-1 ring-blue-600/10 md:gap-4 md:p-5">
-                  <span
-                    className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-sm font-bold text-white shadow-md shadow-blue-900/20"
-                    aria-hidden
-                  >
-                    !
-                  </span>
-                  <p className="text-[15px] font-semibold leading-relaxed text-ink md:text-base">
-                    This gap limits academic and career decisions.
-                  </p>
-                </li>
-              </ul>
             </div>
           </div>
         </div>
@@ -1049,15 +923,21 @@ function WhatIsHoverCard({
       const r = el.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
+      const nx = ((e.clientX - r.left) / r.width) * 100;
+      const ny = ((e.clientY - r.top) / r.height) * 100;
+      
+      el.style.setProperty("--x", `${nx}%`);
+      el.style.setProperty("--y", `${ny}%`);
+
       setRX(-py * maxTilt);
       setRY(px * maxTilt);
-      setY(-6);
+      setY(-8);
       if (glowRef.current) {
         gsap.to(glowRef.current, {
-          left: `${((e.clientX - r.left) / r.width) * 100}%`,
-          top: `${((e.clientY - r.top) / r.height) * 100}%`,
-          opacity: 0.55,
-          duration: 0.25,
+          left: `${nx}%`,
+          top: `${ny}%`,
+          opacity: 0.6,
+          duration: 0.2,
         });
       }
     };
@@ -1084,69 +964,74 @@ function WhatIsHoverCard({
   return (
     <article ref={cardRef} className="group/card h-full perspective-[1400px]">
       <div
-        className={`relative flex h-full flex-col border border-slate-200/90 bg-white shadow-[0_8px_28px_rgba(15,23,42,0.05)] transition-all duration-500 ease-out group-hover/card:border-blue-200/90 group-hover/card:shadow-[0_14px_36px_rgba(15,23,42,0.08)] ${shellRadius}`}
+        className={`relative flex h-full flex-col border border-white/40 bg-white/60 backdrop-blur-md shadow-[0_8px_32px_rgba(31,38,135,0.07)] transition-all duration-700 ease-out group-hover/card:border-blue-400/50 group-hover/card:shadow-[0_20px_50px_rgba(31,38,135,0.12)] ${shellRadius}`}
+        style={{
+          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%)",
+        }}
       >
         <div
           ref={innerRef}
-          className={`what-is-card-inner relative flex min-h-0 flex-1 flex-col overflow-hidden border border-slate-100 bg-gradient-to-b from-white to-slate-50/40 transition-[box-shadow] duration-500 group-hover/card:border-slate-200 group-hover/card:to-blue-50/25 ${innerRadius}`}
+          className={`what-is-card-inner relative flex min-h-0 flex-1 flex-col overflow-hidden transition-[box-shadow,transform] duration-700 group-hover/card:bg-white/40 ${innerRadius}`}
           style={{ transformStyle: "preserve-3d" }}
         >
-          <div
-            ref={glowRef}
-            className={`pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/18 blur-3xl opacity-0 transition-opacity duration-300 ${compact ? "h-36 w-36" : "h-52 w-52"}`}
-            style={{ left: "50%", top: "50%" }}
+          {/* Animated Gradient Background */}
+          <div 
+            className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover/card:opacity-100 bg-[radial-gradient(circle_at_var(--x,50%)_var(--y,50%),rgba(59,130,246,0.08),transparent_70%)]"
             aria-hidden
           />
+          
           <div
-            className={`pointer-events-none absolute rounded-full bg-blue-600/[0.06] blur-3xl transition-all duration-700 group-hover/card:scale-110 ${compact ? "-right-10 -top-10 h-28 w-28" : "-right-16 -top-16 h-44 w-44"}`}
+            ref={glowRef}
+            className={`pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-[80px] opacity-0 transition-opacity duration-300 ${compact ? "h-40 w-40" : "h-60 w-60"}`}
+            style={{ left: "50%", top: "50%" }}
             aria-hidden
           />
 
           <div
-            className={`relative z-10 flex min-h-0 flex-1 flex-col ${compact ? "p-5 sm:p-6" : "h-full p-8 md:p-10"}`}
+            className={`relative z-10 flex min-h-0 flex-1 flex-col ${compact ? "p-6 sm:p-7" : "h-full p-8 md:p-10"}`}
           >
-            <div
-              className={`flex items-center justify-between gap-3 ${compact ? "border-b border-slate-100/90 pb-3" : ""}`}
-            >
-              <span
-                className={`inline-flex shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-blue-700 shadow-sm transition-all duration-500 group-hover/card:scale-[1.03] group-hover/card:border-blue-200 group-hover/card:bg-blue-50/80 ${compact ? "h-10 w-10 ring-2 ring-white" : "h-14 w-14 rounded-2xl"}`}
+            <div className="flex items-center justify-between gap-4 mb-6">
+              <div
+                className={`relative flex shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-[0_10px_20px_-5px_rgba(37,99,235,0.3)] transition-all duration-500 group-hover/card:scale-110 group-hover/card:rotate-3 ${compact ? "h-12 w-12" : "h-16 w-16"}`}
               >
+                <div className="absolute inset-0 rounded-2xl bg-white/20 blur-[1px] opacity-0 group-hover/card:opacity-100 transition-opacity" />
                 {icon}
-              </span>
+              </div>
               <span
-                className={`rounded-full border border-slate-200 bg-slate-50 font-bold uppercase tracking-[0.14em] text-slate-700 transition-colors duration-300 group-hover/card:border-blue-200 group-hover/card:bg-blue-50 group-hover/card:text-blue-800 ${compact ? "px-2.5 py-0.5 text-[10px]" : "px-3 py-1 text-[11px] tracking-[0.16em]"}`}
+                className={`rounded-full border border-blue-100 bg-blue-50/50 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-blue-700 backdrop-blur-sm transition-all duration-500 group-hover/card:bg-blue-600 group-hover/card:text-white group-hover/card:border-transparent ${compact ? "" : "text-[11px]"}`}
               >
                 {chip}
               </span>
             </div>
 
             <h3
-              className={`font-geom-heading font-normal leading-tight tracking-[-0.02em] text-ink transition-transform duration-500 group-hover/card:translate-x-0.5 ${compact ? "mt-3.5 text-[1.2rem] md:text-[1.3rem]" : "mt-6 text-[1.45rem] md:text-[1.65rem]"}`}
+              className={`font-geom-heading font-normal leading-tight tracking-tight text-slate-900 transition-transform duration-500 group-hover/card:translate-x-1 ${compact ? "text-[1.35rem] md:text-[1.5rem]" : "text-[1.6rem] md:text-[1.85rem]"}`}
             >
               {title}
             </h3>
+            
             {acronym ? (
               <p
-                className={`font-semibold text-blue-600/95 ${compact ? "mt-1 text-xs leading-snug md:text-[13px]" : "mt-2 text-sm tracking-wide"}`}
+                className={`font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent ${compact ? "mt-1.5 text-xs tracking-wide" : "mt-2.5 text-sm tracking-wider"}`}
               >
                 {acronym}
               </p>
             ) : null}
 
             <p
-              className={`leading-relaxed text-ink/72 ${compact ? "mt-2.5 min-h-0 flex-1 text-sm md:text-[15px]" : "mt-5 flex-1 text-[15px] md:text-base"}`}
+              className={`leading-relaxed text-slate-600 font-medium ${compact ? "mt-4 text-sm md:text-[15px]" : "mt-6 text-[15px] md:text-base"}`}
             >
               {body}
             </p>
 
             {footerTags?.length ? (
               <div
-                className={`mt-auto flex flex-wrap border-slate-100 ${compact ? "gap-1.5 border-t border-dashed border-slate-200/80 pt-3" : "mt-8 gap-2 border-t pt-6"}`}
+                className={`mt-auto flex flex-wrap border-slate-200/60 ${compact ? "gap-2 border-t border-dashed pt-4" : "mt-8 gap-3 border-t pt-6"}`}
               >
                 {footerTags.map((tag) => (
                   <span
                     key={tag}
-                    className={`rounded-md border border-slate-200 bg-slate-50 font-semibold text-slate-600 transition-all duration-300 group-hover/card:border-blue-200 group-hover/card:bg-blue-50 group-hover/card:text-blue-900 ${compact ? "px-2 py-0.5 text-[10px] uppercase tracking-wide" : "rounded-lg px-2.5 py-1 text-xs"}`}
+                    className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-bold rounded-lg bg-slate-100/80 text-slate-600 border border-slate-200 transition-all duration-300 group-hover/card:bg-blue-50 group-hover/card:text-blue-700 group-hover/card:border-blue-100"
                   >
                     {tag}
                   </span>
@@ -1155,112 +1040,27 @@ function WhatIsHoverCard({
             ) : null}
           </div>
         </div>
-      </div>
-    </article>
-  );
-}
-
-function BeneficiaryHoverCard({ reducedMotion, cardRef, icon, title, body }) {
-  const innerRef = useRef(null);
-  const glowRef = useRef(null);
-
-  useEffect(() => {
-    const el = innerRef.current;
-    if (!el || reducedMotion) return;
-
-    gsap.set(el, { transformOrigin: "50% 50%", transformPerspective: 1000 });
-
-    const maxTilt = 8;
-    const setRX = gsap.quickTo(el, "rotateX", {
-      duration: 0.32,
-      ease: "power3.out",
-    });
-    const setRY = gsap.quickTo(el, "rotateY", {
-      duration: 0.32,
-      ease: "power3.out",
-    });
-    const setY = gsap.quickTo(el, "y", { duration: 0.32, ease: "power3.out" });
-
-    const onMove = (e) => {
-      const r = el.getBoundingClientRect();
-      const px = (e.clientX - r.left) / r.width - 0.5;
-      const py = (e.clientY - r.top) / r.height - 0.5;
-      setRX(-py * maxTilt);
-      setRY(px * maxTilt);
-      setY(-5);
-      if (glowRef.current) {
-        gsap.to(glowRef.current, {
-          left: `${((e.clientX - r.left) / r.width) * 100}%`,
-          top: `${((e.clientY - r.top) / r.height) * 100}%`,
-          opacity: 0.5,
-          duration: 0.22,
-        });
-      }
-    };
-
-    const onLeave = () => {
-      setRX(0);
-      setRY(0);
-      setY(0);
-      if (glowRef.current)
-        gsap.to(glowRef.current, { opacity: 0, duration: 0.4 });
-    };
-
-    el.addEventListener("mousemove", onMove);
-    el.addEventListener("mouseleave", onLeave);
-    return () => {
-      el.removeEventListener("mousemove", onMove);
-      el.removeEventListener("mouseleave", onLeave);
-    };
-  }, [reducedMotion]);
-
-  return (
-    <article ref={cardRef} className="group/ben h-full perspective-[1300px]">
-      <div className="relative h-full rounded-xl border border-slate-200/90 bg-white shadow-[0_4px_20px_rgba(15,23,42,0.05)] ring-1 ring-slate-900/[0.02] transition-all duration-300 ease-out group-hover/ben:border-blue-200/80 group-hover/ben:shadow-[0_12px_32px_-8px_rgba(37,99,235,0.12)] group-hover/ben:ring-blue-600/10">
-        <div
-          ref={innerRef}
-          className="relative h-full overflow-hidden rounded-[0.65rem] border border-slate-100/90 bg-gradient-to-br from-white to-slate-50/30 transition-[box-shadow] duration-300 group-hover/ben:border-slate-200 group-hover/ben:from-white group-hover/ben:to-blue-50/20 sm:rounded-[0.7rem]"
-          style={{ transformStyle: "preserve-3d" }}
-        >
-          <div
-            className="pointer-events-none absolute inset-y-3 left-0 w-0.5 rounded-full bg-gradient-to-b from-blue-600 to-sky-500 opacity-0 transition-opacity duration-300 group-hover/ben:opacity-100"
-            aria-hidden
-          />
-          <div
-            ref={glowRef}
-            className="pointer-events-none absolute h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/12 blur-3xl opacity-0"
-            style={{ left: "50%", top: "50%" }}
-            aria-hidden
-          />
-          <div
-            className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-blue-600/[0.06] blur-2xl transition-all duration-500 group-hover/ben:scale-110"
-            aria-hidden
-          />
-
-          <div className="relative z-10 flex h-full items-start gap-3.5 p-4 sm:gap-4 sm:p-5 md:gap-5">
-            <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-blue-200/70 bg-blue-50/90 text-blue-700 shadow-sm transition-all duration-300 group-hover/ben:scale-[1.05] group-hover/ben:border-blue-300 group-hover/ben:bg-blue-100/90 group-hover/ben:shadow-md md:h-12 md:w-12">
-              {icon}
-            </span>
-            <div className="min-w-0 flex-1">
-              <h3 className="font-geom-heading text-base font-normal leading-tight tracking-[-0.02em] text-ink md:text-lg">
-                {title}
-              </h3>
-              <p className="mt-1 text-[13px] leading-snug text-slate-600 md:text-sm md:leading-relaxed">
-                {body}
-              </p>
-            </div>
-          </div>
+        
+        {/* Decorative elements */}
+        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/card:opacity-20 transition-opacity">
+          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
+          </svg>
         </div>
       </div>
     </article>
   );
+
 }
 
 const HIFAI_UNIQUE_STEPS = [
-  { title: "Personalized Skill Development", icon: Sparkles },
-  { title: "Customizable Learning Paths", icon: Route },
-  { title: "Board-Agnostic Skill Building", icon: LayoutGrid },
-  { title: "Lifelong Skills Portfolio", icon: Briefcase },
+  {
+    title: "The Best of Both Worlds (Online & On-site Access)",
+    icon: MonitorSmartphone,
+  },
+  { title: "Expert Guidance", icon: UserCheck },
+  { title: "Personalised Skill Development", icon: Sparkles },
+  { title: "Global Level Exposure", icon: Globe2 },
 ];
 
 export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
@@ -1268,11 +1068,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
   const headerRef = useRef(null);
   const c0 = useRef(null);
   const c1 = useRef(null);
-  const whoBlockRef = useRef(null);
-  const whoHeaderRef = useRef(null);
-  const w0 = useRef(null);
-  const w1 = useRef(null);
-  const w2 = useRef(null);
   const uniqueBlockRef = useRef(null);
   const uniqueHeaderRef = useRef(null);
   const u0 = useRef(null);
@@ -1315,40 +1110,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           },
         });
       });
-
-      const whoEl = whoBlockRef.current;
-      if (whoEl) {
-        if (whoHeaderRef.current?.children?.length) {
-          gsap.from(whoHeaderRef.current.children, {
-            y: isMobile ? 12 : 18,
-            opacity: 0,
-            stagger: 0.07,
-            duration: 0.6,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: whoEl,
-              start: "top 86%",
-              toggleActions: "play none none none",
-            },
-          });
-        }
-        [w0, w1, w2].forEach((r, i) => {
-          if (!r.current) return;
-          gsap.from(r.current, {
-            y: isMobile ? 24 : 32,
-            opacity: 0,
-            rotateX: 6,
-            duration: 0.68,
-            delay: i * 0.1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: whoEl,
-              start: "top 80%",
-              toggleActions: "play none none none",
-            },
-          });
-        });
-      }
 
       const uniqEl = uniqueBlockRef.current;
       if (uniqEl) {
@@ -1410,22 +1171,25 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           className="mx-auto mb-7 max-w-2xl text-center md:mb-9"
         >
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600 md:text-sm">
-            What is HIfAi?
+            What is <span className={hifaiHighlightClass}>HIfAi</span>?
           </p>
           <h2
             id="what-is-hifai-heading"
             className="mt-2 font-geom-heading text-[clamp(1.65rem,4vw,2.45rem)] font-normal leading-[1.15] tracking-[-0.02em] text-ink md:mt-2.5"
           >
-            Human intelligence,{" "}
-            <span className="text-blue-700">amplified by AI</span>
+            Human intelligence for <br></br>
+            <span className="text-blue-700">
+              Artificial Intelligence Control
+            </span>
           </h2>
           <p className="mt-2.5 text-sm leading-relaxed text-ink/65 md:text-[15px]">
-            Two sides of one platform—who you are as a learner, and how modern
-            digital pillars power your growth.
+            By bringing together HI & Al, we create pathways that help learners
+            discover their strengths, build real skills, and move towards
+            meaningful outcomes.
           </p>
         </div>
 
-        <div className="flex flex-col gap-[3px] overflow-hidden rounded-2xl border border-slate-200/80 bg-slate-100/50 p-[3px] shadow-[0_8px_30px_-12px_rgba(15,23,42,0.08)] md:grid md:grid-cols-2 md:items-stretch md:gap-[3px]">
+        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 md:items-stretch lg:gap-8">
           <WhatIsHoverCard
             reducedMotion={reducedMotion}
             cardRef={c0}
@@ -1433,94 +1197,25 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             compact
             icon={
               <BrainCircuit
-                className="h-5 w-5"
-                strokeWidth={1.75}
+                className="h-6 w-6"
+                strokeWidth={1.5}
                 aria-hidden
               />
             }
-            title="HIfAi"
-            acronym="Human Intelligence for Artificial Intelligence"
-            body="HIfAi is a skill-centric platform focused on identifying and nurturing core human capabilities beyond academic knowledge."
+            title="21st Century Skills"
+            body="At the core, we focus on creative thinking, problem solving, critical analysis, communication, and digital use - helping individuals understand how they think, respond, and grow"
           />
           <WhatIsHoverCard
             reducedMotion={reducedMotion}
             cardRef={c1}
             chip="Digital ABCD"
             compact
-            icon={<Orbit className="h-5 w-5" strokeWidth={1.75} aria-hidden />}
-            title="AI-driven pathways"
-            acronym={null}
-            body="It utilizes AI-driven insights and the Digital ABCD model (AI, Blockchain, Cloud, Data) to enable targeted skill development and help learners apply their strengths in education and career pathways."
-            footerTags={["AI", "Blockchain", "Cloud", "Data"]}
+            icon={<Orbit className="h-6 w-6" strokeWidth={1.5} aria-hidden />}
+            title="Digital ABCD Model"
+            body="Building on that, Al, Blockchain, Cloud, and Data Analysis create the space where these abilities are applied, explored, and shaped into real-world outcomes."
           />
         </div>
 
-        <div
-          ref={whoBlockRef}
-          className="relative mt-12 border-t border-slate-200/80 pt-10 md:mt-14 md:pt-12"
-          aria-labelledby="who-benefits-heading"
-        >
-          <div
-            ref={whoHeaderRef}
-            className="mx-auto mb-7 max-w-2xl text-center md:mb-9"
-          >
-            <p className="text-sm font-bold uppercase tracking-[0.22em] text-blue-600">
-              Audience
-            </p>
-            <h2
-              id="who-benefits-heading"
-              className="mt-3 font-geom-heading text-[clamp(1.65rem,3.8vw,2.35rem)] font-normal leading-tight tracking-[-0.02em] text-ink"
-            >
-              Who Benefits?
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-ink/60 md:text-base">
-              Learners, schools, and universities each get a clearer line of
-              sight from skills to outcomes.
-            </p>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5">
-            <BeneficiaryHoverCard
-              reducedMotion={reducedMotion}
-              cardRef={w0}
-              icon={
-                <GraduationCap
-                  className="h-5 w-5 md:h-6 md:w-6"
-                  strokeWidth={1.65}
-                  aria-hidden
-                />
-              }
-              title="Students"
-              body="Evaluate core skills, choose aligned career paths."
-            />
-            <BeneficiaryHoverCard
-              reducedMotion={reducedMotion}
-              cardRef={w1}
-              icon={
-                <School
-                  className="h-5 w-5 md:h-6 md:w-6"
-                  strokeWidth={1.65}
-                  aria-hidden
-                />
-              }
-              title="Schools"
-              body="Measure outcomes, redesign skill-based assessment."
-            />
-            <BeneficiaryHoverCard
-              reducedMotion={reducedMotion}
-              cardRef={w2}
-              icon={
-                <Landmark
-                  className="h-5 w-5 md:h-6 md:w-6"
-                  strokeWidth={1.65}
-                  aria-hidden
-                />
-              }
-              title="Universities"
-              body="Build employable skills via project-based learning."
-            />
-          </div>
-        </div>
 
         <div
           ref={uniqueBlockRef}
@@ -1538,7 +1233,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
               id="what-makes-unique-heading"
               className="mt-2 font-geom-heading text-[clamp(1.5rem,3.4vw,2.15rem)] font-normal leading-tight tracking-[-0.02em] text-ink md:mt-2.5"
             >
-              What Makes HIfAi Unique?
+              What Makes <span className="text-blue-700">HIfAi</span> Unique?
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-ink/60 md:text-[15px]">
               Four pillars that separate skill intelligence from
@@ -1546,39 +1241,66 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             </p>
           </div>
 
-          <ul
-            className="mx-auto grid max-w-5xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 lg:gap-3.5"
-            role="list"
-          >
-            {HIFAI_UNIQUE_STEPS.map((step, index) => {
-              const Icon = step.icon;
-              const refs = [u0, u1, u2, u3];
-              return (
-                <li
-                  key={step.title}
-                  ref={refs[index]}
-                  className="group/uni h-full"
-                >
-                  <div className="relative flex h-full items-start gap-3 overflow-hidden rounded-xl border border-slate-200/80 bg-gradient-to-br from-white via-white to-slate-50/60 p-3.5 shadow-sm ring-1 ring-slate-900/[0.02] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200/70 hover:shadow-md hover:ring-blue-600/10 sm:gap-3.5 sm:p-4">
-                    <span
-                      className="pointer-events-none absolute -right-6 -top-6 h-20 w-20 rounded-full bg-blue-500/[0.07] blur-2xl transition-opacity duration-500 group-hover/uni:opacity-100"
-                      aria-hidden
-                    />
-                    <span className="relative inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-blue-600 to-blue-700 text-white shadow-md shadow-blue-900/20 ring-2 ring-blue-500/20 transition-transform duration-300 group-hover/uni:scale-[1.06]">
-                      <Icon
-                        className="h-[1.15rem] w-[1.15rem] sm:h-5 sm:w-5"
-                        strokeWidth={1.85}
+          <div className="relative mx-auto max-w-5xl px-1 sm:px-2">
+            <div
+              className="pointer-events-none absolute left-1/2 top-[46%] z-0 hidden aspect-square h-[min(78vw,22rem)] w-[min(78vw,22rem)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-300/60 bg-gradient-to-br from-blue-100/50 via-white/55 to-sky-100/45 shadow-[0_0_0_1px_rgba(37,99,235,0.16),0_12px_48px_-12px_rgba(37,99,235,0.32),0_32px_80px_-24px_rgba(15,23,42,0.14),inset_0_0_80px_rgba(37,99,235,0.16),inset_0_3px_28px_rgba(255,255,255,0.92)] md:block lg:h-[min(72vw,24rem)] lg:w-[min(72vw,24rem)]"
+              aria-hidden
+            />
+            <ul
+              className="relative z-[1] mx-auto flex list-none flex-col gap-3 p-0 md:grid md:max-w-4xl md:grid-cols-3 md:grid-rows-[auto_auto_auto] md:items-center md:gap-x-5 md:gap-y-4 lg:max-w-5xl lg:gap-x-8 lg:gap-y-6"
+              role="list"
+            >
+              {HIFAI_UNIQUE_STEPS.map((step, index) => {
+                const Icon = step.icon;
+                const refs = [u0, u1, u2, u3];
+                const diamondPlacement = [
+                  "md:col-start-2 md:row-start-1 md:justify-self-center md:w-full md:max-w-sm",
+                  "md:col-start-1 md:row-start-2 md:justify-self-end md:w-full md:max-w-[17.5rem] lg:max-w-sm",
+                  "md:col-start-3 md:row-start-2 md:justify-self-start md:w-full md:max-w-[17.5rem] lg:max-w-sm",
+                  "md:col-start-2 md:row-start-3 md:justify-self-center md:w-full md:max-w-sm",
+                ][index];
+                return (
+                  <li
+                    key={step.title}
+                    ref={refs[index]}
+                    className={`group/uni mx-auto h-full w-full max-w-lg md:mx-0 md:max-w-none ${diamondPlacement}`}
+                  >
+                    <div className="relative flex h-full min-h-[5.5rem] overflow-hidden rounded-2xl border border-slate-200/70 bg-white shadow-[0_4px_24px_-6px_rgba(15,23,42,0.08),0_0_0_1px_rgba(15,23,42,0.03)] ring-1 ring-slate-900/[0.02] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-blue-200/90 hover:shadow-[0_16px_48px_-12px_rgba(37,99,235,0.2),0_0_0_1px_rgba(37,99,235,0.08)] md:min-h-0">
+                      <div
+                        className="absolute inset-y-3 left-0 w-1 rounded-full bg-gradient-to-b from-blue-500 via-blue-600 to-sky-500 opacity-90 shadow-sm shadow-blue-500/30 transition-all duration-300 group-hover/uni:opacity-100 group-hover/uni:shadow-blue-500/40"
                         aria-hidden
                       />
-                    </span>
-                    <p className="relative min-w-0 flex-1 pt-0.5 text-[13px] font-semibold leading-snug text-ink transition-colors duration-300 group-hover/uni:text-blue-800 sm:text-sm">
-                      {step.title}
-                    </p>
-                  </div>
-                </li>
-              );
-            })}
-          </ul>
+                      <span
+                        className="pointer-events-none absolute -right-8 -top-12 h-36 w-36 rounded-full bg-gradient-to-br from-blue-400/[0.12] to-sky-400/[0.06] blur-2xl transition-opacity duration-500 group-hover/uni:opacity-100"
+                        aria-hidden
+                      />
+                      <span
+                        className="pointer-events-none absolute -bottom-10 left-1/2 h-24 w-40 -translate-x-1/2 rounded-full bg-blue-600/[0.04] blur-2xl"
+                        aria-hidden
+                      />
+                      <div className="relative flex min-h-[5.5rem] flex-1 items-start gap-4 p-4 pl-5 sm:min-h-[6rem] sm:gap-4 sm:p-5 sm:pl-6 md:min-h-[6.75rem]">
+                        <span className="relative inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 via-blue-600 to-indigo-700 text-white shadow-[0_8px_20px_-4px_rgba(37,99,235,0.45)] ring-[3px] ring-blue-500/15 transition-transform duration-300 group-hover/uni:scale-[1.05] group-hover/uni:shadow-[0_12px_28px_-6px_rgba(37,99,235,0.5)] sm:h-14 sm:w-14">
+                          <Icon
+                            className="h-[1.35rem] w-[1.35rem] sm:h-6 sm:w-6"
+                            strokeWidth={1.75}
+                            aria-hidden
+                          />
+                        </span>
+                        <div className="min-w-0 flex-1 pt-0.5">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-blue-600/90 sm:text-[11px]">
+                            Pillar {String(index + 1).padStart(2, "0")}
+                          </p>
+                          <p className="mt-2 text-[14px] font-semibold leading-snug tracking-[-0.015em] text-slate-900 transition-colors duration-300 group-hover/uni:text-blue-950 sm:text-[15px] md:text-base md:leading-snug">
+                            {step.title}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -1658,7 +1380,7 @@ const SERVICE_CARDS = [
     bullets: [
       "Curriculum mapping support",
       "Teacher enablement workshops",
-      "Student project showcases",
+      "Students' project showcases",
     ],
     icon: (
       <svg
@@ -1686,7 +1408,7 @@ const SERVICE_CARDS = [
     short:
       "Innovation labs, digital transformation, and workforce-aligned programs.",
     description:
-      "Partner with HIFAI to modernize offerings: micro-credentials, industry projects, and research-to-practice pipelines that students and employers value.",
+      "Partner with HIfAi to modernize offerings: micro-credentials, industry projects, and research-to-practice pipelines that Students and employers value.",
     bullets: [
       "Program design sprints",
       "Industry advisory loops",
@@ -3489,10 +3211,6 @@ export function Services({ reducedMotion, isMobile }) {
       />
     </section>
   );
-}
-
-export function TargetUsers() {
-  return null;
 }
 
 const STEPS = [

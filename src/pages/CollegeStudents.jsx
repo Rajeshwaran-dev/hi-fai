@@ -4,7 +4,7 @@ import { FourCardFramework, SectionLabel } from "./subpageShared.jsx";
 function CollegeProjectDetails() {
   const rows = [
     { label: "Duration", value: "3 months", emphasize: true },
-    { label: "First phase", value: "April 15 – June 15", emphasize: true },
+    { label: "First phase", value: "April 15-July 15", emphasize: true },
     { label: "Team size", value: "Minimum 4 – Maximum 5 students", emphasize: true },
     { label: "Capacity", value: "Only 10 teams per quarter", emphasize: true },
   ];
@@ -54,16 +54,26 @@ export function CollegeStudentsBody() {
     <FourCardFramework
       pillarTitles={["Discover", "Build", "Apply", "Validate"]}
       copy={[
-        "Designed for college students to explore domains, ideas, and opportunities aligned with their career path.",
-        "Develop practical skills by learning new technologies and collaborating in team-based environments.",
-        "Work on real-time project tasks and gain hands-on experience by applying your knowledge in a structured project environment.",
-        "Track your progress through continuous evaluation and mentorship. The project will be guided by the HIFAI IT Tech Head throughout, with reviews by the Director of Kanavoogle once every two weeks, and a final in-person review in Dindigul during the last two weeks. Certification will be issued upon successful completion and validation of the project.",
+        "It starts with awareness. Explore possibilities, understand your strengths, and begin shaping a direction that feels truly yours.",
+        "This is where skills take form. Engage with real-time technologies, collaborate, and build projects that are designed around your strengths and thinking.",
+        "Step into real execution. Work on live project tasks, apply what you've learned, and start solving problems in a structured, real-time project environment.",
+        "Watch your progress turn into something real. With continuous evaluation and mentorship, every step is guided and helping you improve, refine, and grow with clarity.",
       ]}
-      betweenCardsAndCta={<CollegeProjectDetails />}
-      ctaTitle="Tell us about your program and goals"
+      betweenCardsAndCta={
+        <>
+          <p className="mx-auto mb-10 max-w-4xl text-center text-base leading-relaxed text-slate-700 md:text-lg">
+            Your project is supported throughout by the HIfAi IT Tech Head, with structured reviews by the Director
+            of Kanavoogle every two weeks, followed by a final in-person review in Dindigul. And at the end—your work
+            doesn&apos;t just stay as experience. It gets recognized with certification that reflects what you&apos;ve
+            built and achieved.
+          </p>
+          <CollegeProjectDetails />
+        </>
+      }
+      ctaTitle="Start building your real-world experience"
     >
       <a
-        href="mailto:hifaidgl@gmail.com?subject=College%20student%20project%20%28limited%20slots%29"
+        href="mailto:innovate@hifai.io?subject=College%20student%20project%20%28limited%20slots%29"
         className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
       >
         Limited team slots available
@@ -72,7 +82,7 @@ export function CollegeStudentsBody() {
         to="/get-started"
         className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
       >
-        Register and join now
+        Register and Join Now
       </InnerPageLink>
     </FourCardFramework>
   );

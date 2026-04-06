@@ -134,7 +134,7 @@ export default function BreadcrumbPage({ title, subtitle, children }) {
       </section>
 
       {children ? (
-        <section className="relative w-full overflow-hidden bg-white pb-16 pt-2 md:pb-24 md:pt-4">
+        <section className="relative w-full overflow-x-hidden bg-white pb-16 pt-2 md:pb-24 md:pt-4">
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-[0.35]"

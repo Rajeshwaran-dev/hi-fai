@@ -29,19 +29,19 @@ export function LearningHubBody() {
             "Adapt policy language, acceptable-use templates, and lightweight evaluation criteria for student AI projects.",
             "Grow with portfolio guides, partner office hours, and hub updates driven by real cohort requests.",
           ]}
-          ctaTitle="New to HIfAi? Start with the student pathways"
+          ctaTitle="New to HIfAi? Start with pathways for Students"
         >
           <InnerPageLink
             to="/students/school-students"
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
           >
-            School students
+            Students (Grades 9–12)
           </InnerPageLink>
           <InnerPageLink
             to="/students/college-students"
             className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-white/25 bg-white/10 px-8 py-3 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/15"
           >
-            College students
+            Students (College)
           </InnerPageLink>
         </FourCardFramework>
       </div>
