@@ -16,6 +16,11 @@ import {
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import heroBgUrl from "../assets/images/hero-bg.jpg?url";
+import skillDevelopmentImg from "../assets/images/skill-developement.jpg.jpeg?url";
+import abcdProblemImg from "../assets/images/abcd-problem-solving.jpg.jpeg?url";
+import highSchoolImg from "../assets/images/high-school-solution.jpg.jpeg?url";
+import universityConsultingImg from "../assets/images/university-consulting-service.jpg.jpeg?url";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -155,7 +160,8 @@ export function Hero({ reducedMotion, isMobile }) {
       <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
         <div
           ref={heroBgRef}
-          className="bg-slate-950 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center bg-no-repeat will-change-transform"
+          className="bg-slate-950 bg-cover bg-center bg-no-repeat will-change-transform"
+          style={{ backgroundImage: `url(${heroBgUrl})` }}
           aria-hidden
         />
       </div>
@@ -1311,7 +1317,7 @@ const SERVICE_CARDS = [
   {
     id: "s1",
     title: "21st Century Skills Development",
-    image: "/skill-developement.jpg.jpeg",
+    image: skillDevelopmentImg,
     short:
       "Critical thinking, collaboration, and digital fluency for the modern learner.",
     description:
@@ -1344,7 +1350,7 @@ const SERVICE_CARDS = [
   {
     id: "s2",
     title: "Digital ABCD Problem Solving",
-    image: "/abcd-problem-solving.jpg.jpeg",
+    image: abcdProblemImg,
     short:
       "Analyze, Build, Connect, and Deliver with structured digital workflows.",
     description:
@@ -1371,7 +1377,7 @@ const SERVICE_CARDS = [
   {
     id: "s3",
     title: "High School Solutions",
-    image: "/high-school-solution.jpg.jpeg",
+    image: highSchoolImg,
     inquiry: "highSchool",
     short:
       "Programs that align with college readiness and future-of-work skills.",
@@ -1403,7 +1409,7 @@ const SERVICE_CARDS = [
   {
     id: "s4",
     title: "University Consulting Services",
-    image: "/university-consulting-service.jpg.jpeg",
+    image: universityConsultingImg,
     inquiry: "university",
     short:
       "Innovation labs, digital transformation, and workforce-aligned programs.",

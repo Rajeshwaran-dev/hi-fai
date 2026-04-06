@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
+import enThiranDemoSrc from "../assets/videos/enthiran.mp4?url";
 import { FourCardFramework } from "./subpageShared.jsx";
-
-/** Served from `public/videos/enthiran.mp4` → `/videos/enthiran.mp4` */
-const EN_THIRAN_DEMO_SRC = "/videos/enthiran.mp4";
 
 function EnThiranPhoneDemo() {
   const videoRef = useRef(null);
@@ -45,7 +43,7 @@ function EnThiranPhoneDemo() {
               <video
                 ref={videoRef}
                 className="h-full w-full object-cover"
-                src={EN_THIRAN_DEMO_SRC}
+                src={enThiranDemoSrc}
                 muted
                 playsInline
                 loop
@@ -57,7 +55,7 @@ function EnThiranPhoneDemo() {
                 <div className="absolute inset-0 z-[5] flex flex-col items-center justify-center gap-2 bg-slate-900 p-4 text-center text-xs text-white/80">
                   <p className="font-semibold text-white">Video unavailable</p>
                   <p className="text-white/70">
-                    Add <code className="rounded bg-white/10 px-1">public/videos/enthiran.mp4</code> and refresh.
+                    Add <code className="rounded bg-white/10 px-1">src/assets/videos/enthiran.mp4</code> and refresh.
                   </p>
                 </div>
               ) : null}

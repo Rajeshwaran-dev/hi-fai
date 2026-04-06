@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Link, useLocation } from "react-router-dom";
 import { useRouteTransition } from "./RouteTransitionProvider.jsx";
+import logo1Url from "../assets/images/logo-1.png?url";
 
 const navItems = [
   {
@@ -135,7 +136,7 @@ export default function Navbar({ reducedMotion }) {
         >
           <img
           style={{ transform: "scale(1.3)"}}
-            src="/logo-1.png"
+            src={logo1Url}
             alt="HIfAi — human hand and robotic hand high-five"
             className="h-11 w-auto object-contain object-left md:h-[56px] lg:h-[62px] xl:h-[80px]"
           />

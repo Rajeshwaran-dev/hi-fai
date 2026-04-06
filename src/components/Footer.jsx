@@ -4,6 +4,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouteTransition } from "./RouteTransitionProvider.jsx";
 import { SiInstagram, SiWhatsapp } from "react-icons/si";
+import logo1Url from "../assets/images/logo-1.png?url";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -163,7 +164,7 @@ export default function Footer({ reducedMotion }) {
               >
                 <img
                 style={{ transform: "scale(1.4)", marginLeft: "10px" }}
-                  src="/logo-1.png"
+                  src={logo1Url}
                   alt="HIfAi — human hand and robotic hand high-five"
                   className="h-16 w-auto object-contain object-left sm:h-[4.25rem] md:h-[4.5rem] lg:h-[4.75rem]"
                 />

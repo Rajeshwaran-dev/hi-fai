@@ -1,7 +1,6 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
 import gsap from "gsap";
-
-const VIDEO_SRC = "/preloader.mp4";
+import preloaderVideoUrl from "../assets/videos/preloader.mp4?url";
 /** Minimum overlay time so very short clips do not disappear instantly. */
 const MIN_VISIBLE_MS = 900;
 /** Safety cap if playback never ends. */
@@ -16,7 +15,7 @@ function waitForWindowLoad() {
 }
 
 /**
- * Homepage entry preloader: fullscreen `public/preloader.mp4`.
+ * Homepage entry preloader: fullscreen demo video (bundled via Vite).
  * Only mounted from `App.jsx` (route `/`).
  */
 export default function Preloader({ onComplete, reducedMotion = false }) {
@@ -110,7 +109,7 @@ export default function Preloader({ onComplete, reducedMotion = false }) {
       <video
         ref={videoRef}
         className="preloader-video"
-        src={VIDEO_SRC}
+        src={preloaderVideoUrl}
         muted
         playsInline
         preload="auto"

@@ -1,7 +1,25 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import logoPngUrl from "./assets/images/logo.png?url";
 import "./index.css";
+
+(() => {
+  const ensureBrandLink = (rel, extra = {}) => {
+    const sel = `link[rel="${rel}"][data-hifai-asset]`;
+    let el = document.head.querySelector(sel);
+    if (!el) {
+      el = document.createElement("link");
+      el.rel = rel;
+      el.setAttribute("data-hifai-asset", "");
+      Object.assign(el, extra);
+      document.head.appendChild(el);
+    }
+    el.href = logoPngUrl;
+  };
+  ensureBrandLink("icon", { type: "image/png" });
+  ensureBrandLink("apple-touch-icon");
+})();
 import App from "./App.jsx";
 import BreadcrumbPage from "./components/BreadcrumbPage.jsx";
 import { RouteTransitionProvider } from "./components/RouteTransitionProvider.jsx";
