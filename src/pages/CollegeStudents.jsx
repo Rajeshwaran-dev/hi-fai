@@ -79,7 +79,7 @@ export function CollegeStudentsBody() {
         ctaTitle="Start building your real-world experience"
       >
         <a
-          href="mailto:innovate@hifai.io?subject=College%20student%20project%20%28limited%20slots%29"
+          href="mailto:innovate@hifaiskills.io?subject=College%20student%20project%20%28limited%20slots%29"
           className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
         >
           Limited team slots available

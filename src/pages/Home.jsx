@@ -845,10 +845,26 @@ export function HowCanHiFAISection() {
   const [activeStart, setActiveStart] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [dragX, setDragX] = useState(0);
+  const [itemsPerView, setItemsPerView] = useState(() =>
+    typeof window !== "undefined" && window.innerWidth >= 1024 ? 2 : 1
+  );
   const viewportRef = useRef(null);
   const dragStartXRef = useRef(0);
 
-  const maxStart = Math.max(0, HOW_CAN_HIFAI_SLIDES.length - 2);
+  useEffect(() => {
+    const updateItemsPerView = () => {
+      setItemsPerView(window.innerWidth >= 1024 ? 2 : 1);
+    };
+    updateItemsPerView();
+    window.addEventListener("resize", updateItemsPerView);
+    return () => window.removeEventListener("resize", updateItemsPerView);
+  }, []);
+
+  const maxStart = Math.max(0, HOW_CAN_HIFAI_SLIDES.length - itemsPerView);
+
+  useEffect(() => {
+    setActiveStart((prev) => Math.min(prev, maxStart));
+  }, [maxStart]);
 
   const goTo = (nextStart) => {
     const clamped = Math.max(0, Math.min(nextStart, maxStart));
@@ -904,7 +920,9 @@ export function HowCanHiFAISection() {
             className={`flex touch-pan-y ${isDragging ? "cursor-grabbing select-none" : "cursor-grab"} ${
               isDragging ? "" : "transition-transform duration-300 ease-out"
             }`}
-            style={{ transform: `translateX(calc(${-activeStart * 50}% + ${dragX}px))` }}
+            style={{
+              transform: `translateX(calc(${-activeStart * (100 / itemsPerView)}% + ${dragX}px))`,
+            }}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
@@ -912,7 +930,11 @@ export function HowCanHiFAISection() {
             onPointerLeave={onPointerUp}
           >
             {HOW_CAN_HIFAI_SLIDES.map((slide) => (
-              <article key={slide.title} className="w-1/2 shrink-0 p-2 md:p-3">
+              <article
+                key={slide.title}
+                className="shrink-0 p-2 md:p-3"
+                style={{ width: `${100 / itemsPerView}%` }}
+              >
                 <div className="h-full overflow-hidden rounded-xl shadow-[0_10px_28px_-18px_rgba(15,23,42,0.45)]">
                   <div className="relative bg-slate-950">
                     <img

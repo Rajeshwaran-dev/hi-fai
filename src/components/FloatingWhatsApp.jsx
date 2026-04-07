@@ -41,7 +41,7 @@ export default function FloatingWhatsApp() {
 
   return (
     <div
-      className="fixed z-[135] bottom-8 right-([max(0.75rem,envsafe-area-inset-right,0px))] md:bottom-[calc(6rem+env(safe-area-inset-bottom,0px))] md:right-8"
+      className="fixed bottom-8 right-3 z-[135] md:bottom-[calc(6rem+env(safe-area-inset-bottom,0px))] md:right-8"
     >
       {showBackToTop && (
         <a
