@@ -38,9 +38,9 @@ export function Lead({ children, className = "" }) {
 
 export function Card({ icon, title, children }) {
   return (
-    <article className="group flex flex-row items-start gap-4 rounded-2xl border border-slate-200/90 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300/80 hover:bg-gradient-to-br hover:from-white hover:via-blue-50/35 hover:to-cyan-50/40 hover:shadow-[0_16px_46px_-18px_rgba(37,99,235,0.45)] md:gap-5 md:p-7">
+    <article className="group flex flex-row items-start gap-4 rounded-2xl border border-slate-200/90 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-300/80 hover:bg-gradient-to-br hover:from-white hover:via-blue-50/35 hover:to-cyan-50/40 hover:shadow-[0_26px_78px_-22px_rgba(37,99,235,0.55)] hover:ring-1 hover:ring-blue-500/20 md:gap-5 md:p-7">
       {icon ? (
-        <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 text-lg ring-1 ring-blue-100/80 transition-all duration-300 group-hover:from-blue-600 group-hover:to-cyan-500 group-hover:text-white group-hover:ring-blue-500/40 group-hover:shadow-[0_10px_24px_-8px_rgba(37,99,235,0.55)]">
+        <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 text-lg ring-1 ring-blue-100/80 transition-all duration-300 group-hover:from-blue-600 group-hover:to-cyan-500 group-hover:text-white group-hover:ring-blue-500/40 group-hover:shadow-[0_18px_46px_-14px_rgba(37,99,235,0.7)]">
           {icon}
         </span>
       ) : null}
@@ -85,6 +85,7 @@ export function FourCardFramework({
   ctaFooterNote,
   children,
   pillarTitles,
+  pillarIcons,
   betweenCardsAndCta,
   cardsCenterOverlay,
   belowCardsContent,
@@ -94,17 +95,18 @@ export function FourCardFramework({
 
   return (
     <>
-      <div className="mx-auto max-w-7xl px-6">
+      <div className="mx-auto max-w-7xl">
         <div className="relative">
-          <div className="grid gap-5 md:grid-cols-2">
+          <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 md:gap-5">
             {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
               const title = pillarTitles?.[i] ?? defaultTitle;
+              const PillarIcon = pillarIcons?.[i] ?? Icon;
               return (
                 <Card
                   key={`${i}-${title}`}
                   icon={
-                    <Icon
-                    className="h-5 w-5 text-blue-600 transition-colors duration-300 group-hover:text-white"
+                    <PillarIcon
+                      className="h-5 w-5 text-blue-600 transition-colors duration-300 group-hover:text-white"
                       strokeWidth={2.2}
                       aria-hidden
                     />

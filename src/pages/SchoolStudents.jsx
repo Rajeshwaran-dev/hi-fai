@@ -1,22 +1,42 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Play, X } from "lucide-react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
 import enThiranDemoSrc from "../assets/videos/enthiran.mp4?url";
+import { GetStartedFormModal } from "./GetStarted.jsx";
 import { FourCardFramework } from "./subpageShared.jsx";
 
 function CenterPlayTrigger({ onClick }) {
+  const textPathId = useId();
+
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="group inline-flex h-16 w-16 items-center justify-center rounded-full border border-blue-200/70 bg-white/95 text-blue-600 shadow-[0_12px_28px_rgba(15,23,42,0.2)] transition hover:scale-105 hover:border-blue-300 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70"
-      aria-label="Play En-Thiran demo video"
-    >
-      <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] text-white transition group-hover:shadow-[0_8px_22px_rgba(20,131,255,0.45)]">
-        <Play className="ml-0.5 h-5 w-5" fill="currentColor" />
-      </span>
-    </button>
+    <div className="relative inline-flex h-24 w-24 items-center justify-center">
+      <svg
+        className="pointer-events-none absolute inset-0 h-full w-full text-blue-700/80 motion-safe:animate-[spin_10s_linear_infinite]"
+        viewBox="0 0 100 100"
+        aria-hidden
+      >
+        <defs>
+          <path id={textPathId} d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0" />
+        </defs>
+        <text className="fill-current text-[14px] font-semibold uppercase tracking-[1.7px]">
+          <textPath href={`#${textPathId}`} startOffset="50%" textAnchor="middle">
+            Try our HIFAi Experience
+          </textPath>
+        </text>
+      </svg>
+
+      <button
+        type="button"
+        onClick={onClick}
+        className="group relative z-10 inline-flex h-16 w-16 items-center justify-center rounded-full border border-blue-200/70 bg-white/95 text-blue-600 shadow-[0_12px_28px_rgba(15,23,42,0.2)] transition hover:scale-105 hover:border-blue-300 hover:text-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/70"
+        aria-label="Play En-Thiran demo video"
+      >
+        <span className="inline-flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] text-white transition group-hover:shadow-[0_8px_22px_rgba(20,131,255,0.45)]">
+          <Play className="ml-0.5 h-5 w-5" fill="currentColor" />
+        </span>
+      </button>
+    </div>
   );
 }
 
@@ -117,6 +137,7 @@ function SchoolStudentVideoModal({ isOpen, onClose }) {
 
 export function SchoolStudentsBody() {
   const [isVideoOpen, setIsVideoOpen] = useState(false);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   return (
     <>
@@ -138,12 +159,13 @@ export function SchoolStudentsBody() {
           </div>
         }
       >
-        <InnerPageLink
-          to="/get-started"
+        <button
+          type="button"
+          onClick={() => setIsFormOpen(true)}
           className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
         >
           Start your journey
-        </InnerPageLink>
+        </button>
         <InnerPageLink
           to="/learning-hub"
           className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
@@ -152,6 +174,11 @@ export function SchoolStudentsBody() {
         </InnerPageLink>
       </FourCardFramework>
       <SchoolStudentVideoModal isOpen={isVideoOpen} onClose={() => setIsVideoOpen(false)} />
+      <GetStartedFormModal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        initialTab="school-student"
+      />
     </>
   );
 }

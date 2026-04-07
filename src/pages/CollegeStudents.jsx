@@ -1,4 +1,6 @@
 import InnerPageLink from "../components/InnerPageLink.jsx";
+import { useState } from "react";
+import { GetStartedFormModal } from "./GetStarted.jsx";
 import { FourCardFramework, SectionLabel } from "./subpageShared.jsx";
 
 function CollegeProjectDetails() {
@@ -50,41 +52,51 @@ function CollegeProjectDetails() {
 }
 
 export function CollegeStudentsBody() {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+
   return (
-    <FourCardFramework
-      ctaBelowCards
-      pillarTitles={["Discover", "Build", "Apply", "Validate"]}
-      copy={[
-        "It starts with awareness. Explore possibilities, understand your strengths, and begin shaping a direction that feels truly yours.",
-        "This is where skills take form. Engage with real-time technologies, collaborate, and build projects that are designed around your strengths and thinking.",
-        "Step into real execution. Work on live project tasks, apply what you've learned, and start solving problems in a structured, real-time project environment.",
-        "Watch your progress turn into something real. With continuous evaluation and mentorship, every step is guided and helping you improve, refine, and grow with clarity.",
-      ]}
-      betweenCardsAndCta={
-        <>
-          <p className="mx-auto mb-10 max-w-4xl text-center text-base leading-relaxed text-slate-700 md:text-lg">
-            Your project is supported throughout by the HIfAi IT Tech Head, with structured reviews by the Director
-            of Kanavoogle every two weeks, followed by a final in-person review in Dindigul. And at the end—your work
-            doesn&apos;t just stay as experience. It gets recognized with certification that reflects what you&apos;ve
-            built and achieved.
-          </p>
-          <CollegeProjectDetails />
-        </>
-      }
-      ctaTitle="Start building your real-world experience"
-    >
-      <a
-        href="mailto:innovate@hifai.io?subject=College%20student%20project%20%28limited%20slots%29"
-        className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
+    <>
+      <FourCardFramework
+        ctaBelowCards
+        pillarTitles={["Discover", "Build", "Apply", "Validate"]}
+        copy={[
+          "It starts with awareness. Explore possibilities, understand your strengths, and begin shaping a direction that feels truly yours.",
+          "This is where skills take form. Engage with real-time technologies, collaborate, and build projects that are designed around your strengths and thinking.",
+          "Step into real execution. Work on live project tasks, apply what you've learned, and start solving problems in a structured, real-time project environment.",
+          "Watch your progress turn into something real. With continuous evaluation and mentorship, every step is guided and helping you improve, refine, and grow with clarity.",
+        ]}
+        betweenCardsAndCta={
+          <>
+            <p className="mx-auto mb-10 max-w-4xl text-center text-base leading-relaxed text-slate-700 md:text-lg">
+              Your project is supported throughout by the HIfAi IT Tech Head, with structured reviews by the Director
+              of Kanavoogle every two weeks, followed by a final in-person review in Dindigul. And at the end—your work
+              doesn&apos;t just stay as experience. It gets recognized with certification that reflects what you&apos;ve
+              built and achieved.
+            </p>
+            <CollegeProjectDetails />
+          </>
+        }
+        ctaTitle="Start building your real-world experience"
       >
-        Limited team slots available
-      </a>
-      <InnerPageLink
-        to="/get-started"
-        className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
-      >
-        Register and Join Now
-      </InnerPageLink>
-    </FourCardFramework>
+        <a
+          href="mailto:innovate@hifai.io?subject=College%20student%20project%20%28limited%20slots%29"
+          className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
+        >
+          Limited team slots available
+        </a>
+        <button
+          type="button"
+          onClick={() => setIsFormOpen(true)}
+          className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+        >
+          Register and Join Now
+        </button>
+      </FourCardFramework>
+      <GetStartedFormModal
+        isOpen={isFormOpen}
+        onClose={() => setIsFormOpen(false)}
+        initialTab="college-student"
+      />
+    </>
   );
 }

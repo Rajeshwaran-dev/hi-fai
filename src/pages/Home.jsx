@@ -2,6 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import {
+  ChevronLeft,
+  ChevronRight,
   Award,
   BrainCircuit,
   Briefcase,
@@ -24,9 +26,64 @@ import universityConsultingImg from "../assets/images/university-consulting-serv
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HERO_HOOK_LINES = ["Marks matter...", "but what is being unseen?"];
+const HERO_HOOK_POINTS = [
+  {
+    label: "Short Term",
+    title: "MARKS",
+    text: "Help you for your next steps",
+  },
+  {
+    label: "Long Term",
+    title: "SKILLS",
+    text: "Help you to achieve your goals",
+  },
+];
 const HERO_SUBTEXT =
   "There's a side of you beyond marks that remains undiscovered and HIfAi got you discover it differently.";
+
+const HOW_CAN_HIFAI_IMAGE_URLS = {
+  enthiranApp:
+    "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1600&q=80",
+  digitalAbcdProjects:
+    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80",
+  highSchools:
+    "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=80",
+  engineeringColleges:
+    "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1600&q=80",
+};
+
+const HOW_CAN_HIFAI_SLIDES = [
+  {
+    title: "EN-THIRAN APP",
+    image: HOW_CAN_HIFAI_IMAGE_URLS.enthiranApp,
+    points: [
+      "Explore, evaluate, extend, and excel in the 21st century skills.",
+      "For 9, 10, 11 and 12 standards.",
+    ],
+  },
+  {
+    title: "Digital ABCD Projects",
+    image: HOW_CAN_HIFAI_IMAGE_URLS.digitalAbcdProjects,
+    points: [
+      "Learn and use Agile Time and Team management.",
+      "Make novel use of Digital ABCD technologies.",
+      "Solve futuristic problems in Finance, Education, Health, and Energy domains.",
+    ],
+  },
+  {
+    title: "High Schools",
+    image: HOW_CAN_HIFAI_IMAGE_URLS.highSchools,
+    points: [
+      "Consulting and implementation services.",
+      "Measure and deliver learning outcomes to year 9, 10, 11 and 12.",
+    ],
+  },
+  {
+    title: "Engineering Colleges",
+    image: HOW_CAN_HIFAI_IMAGE_URLS.engineeringColleges,
+    points: ["Authentic assessment consulting and implementation services."],
+  },
+];
 
 export function Hero({ reducedMotion, isMobile }) {
   const rootRef = useRef(null);
@@ -155,7 +212,7 @@ export function Hero({ reducedMotion, isMobile }) {
     <section
       id="hero"
       ref={rootRef}
-      className="relative flex min-h-[90dvh] flex-col items-center justify-center overflow-x-hidden bg-slate-950 px-4 pt-32 pb-20 md:pb-16"
+      className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-x-hidden bg-slate-950 px-4 pt-40 pb-20 md:pt-44 md:pb-16"
     >
       <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
         <div
@@ -186,11 +243,25 @@ export function Hero({ reducedMotion, isMobile }) {
             <h1
               ref={headlineRef}
               data-tilt-ignore
-              className="font-display text-[clamp(1.85rem,6.5vw,3.35rem)] font-normal leading-[1.5] tracking-[-0.02em] text-white"
+              className="mx-auto flex max-w-3xl flex-col gap-3 text-left md:gap-4"
             >
-              {HERO_HOOK_LINES.map((line, i) => (
-                <span key={i} className="hero-line block">
-                  {line}
+              {HERO_HOOK_POINTS.map((item) => (
+                <span
+                  key={item.title}
+                  className="hero-line block rounded-2xl border border-white/20 bg-white/[0.07] px-4 py-3 backdrop-blur-sm md:px-5 md:py-4"
+                >
+                  <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-200/95 md:text-xs">
+                    {item.label}
+                  </span>
+                  <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1 font-display text-white">
+                    <span className="text-[clamp(1.25rem,3.2vw,2.05rem)] leading-[1.1] tracking-[-0.015em]">
+                      {item.title}
+                      <span className="ml-2 text-white/85">-</span>
+                    </span>
+                    <span className="text-[clamp(0.95rem,2.4vw,1.35rem)] font-medium leading-[1.25] text-white/90">
+                      {item.text}
+                    </span>
+                  </span>
                 </span>
               ))}
             </h1>
@@ -244,8 +315,7 @@ const PARTNER_SITE_DISPLAY = "kanavoogle.com";
 const kanavoogleLinkClass =
   "font-medium text-blue-700 no-underline rounded-md px-1.5 py-0.5 transition-colors hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
 
-const hifaiHighlightClass =
-  "font-semibold text-blue-700";
+const hifaiHighlightClass = "font-semibold text-blue-700";
 
 /** Partnership column: year — linked title — issuing body / program (external sources). */
 const PARTNERSHIP_RECOGNITION_AWARDS = [
@@ -477,10 +547,7 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
       />
 
       <div className="relative mx-auto max-w-7xl">
-        <div ref={headerRef} className="mx-auto max-w-3xl text-center">
-          <p className="text-sm font-bold uppercase tracking-[0.2em] text-blue-600">
-            Partnership
-          </p>
+        <div ref={headerRef} className="mx-auto max-w-5xl text-center">
           <h2
             id="kanavoogle-partnership-heading"
             className="mt-3 font-geom-heading text-[clamp(1.75rem,3.8vw,2.5rem)] font-normal leading-[1.2] tracking-[-0.02em] text-ink"
@@ -551,28 +618,29 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                     Recognition & Grants
                   </h3>
                   <p className="relative text-sm leading-relaxed text-slate-700 md:text-[18px]">
-              Together, <span className={hifaiHighlightClass}>HIfAi</span> and{" "}
-              <a
-                href={PARTNER_SITE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={kanavoogleLinkClass} 
-              >
-                Kanavoogle
-              </a>{" "}
-              bridge innovation in Australia with programs that make skills and
-              human intelligence easier to see and act on. For partnership
-              context, research, and networks, visit{" "}
-              <a
-                href={PARTNER_SITE_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className={kanavoogleLinkClass}
-              >
-                {PARTNER_SITE_DISPLAY}
-              </a>
-              .
-            </p>
+                    Together, <span className={hifaiHighlightClass}>HIfAi</span>{" "}
+                    and{" "}
+                    <a
+                      href={PARTNER_SITE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={kanavoogleLinkClass}
+                    >
+                      Kanavoogle
+                    </a>{" "}
+                    bridge innovation in Australia with programs that make
+                    skills and human intelligence easier to see and act on. For
+                    partnership context, research, and networks, visit{" "}
+                    <a
+                      href={PARTNER_SITE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className={kanavoogleLinkClass}
+                    >
+                      {PARTNER_SITE_DISPLAY}
+                    </a>
+                    .
+                  </p>
                 </div>
               </div>
             </div>
@@ -619,7 +687,7 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
             className="relative overflow-hidden rounded-[1.35rem] border border-slate-200/90 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_24px_64px_-16px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/[0.03]"
             aria-labelledby="partnership-team-heading"
           >
-            <div className="relative overflow-hidden bg-gradient-to-br from-[#0a1628] via-[#0f2844] to-[#143d62] px-6 py-11 md:px-10 md:py-14">
+            <div className="relative overflow-hidden bg-gradient-to-br from-[#0a1628] via-[#0f2844] to-[#143d62] px-6 py-11 md:px-10 md:py-8 lg:px-12 lg:py-10">
               <div
                 className="pointer-events-none absolute inset-0 opacity-[0.35]"
                 aria-hidden
@@ -633,13 +701,10 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                 className="pointer-events-none absolute -right-20 top-1/2 h-72 w-72 -translate-y-1/2 rounded-full bg-blue-500/20 blur-3xl"
                 aria-hidden
               />
-              <div className="relative mx-auto max-w-2xl text-center">
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-sky-300/95 md:text-base md:tracking-[0.22em]">
-                  Meet our team
-                </p>
+              <div className="relative mx-auto max-w-4xl text-center">
                 <h3
                   id="partnership-team-heading"
-                  className="mt-4 font-geom-heading text-[clamp(1.75rem,3.8vw,2.35rem)] font-normal leading-snug tracking-[-0.02em] text-white md:mt-5"
+                  className="font-geom-heading text-[clamp(1.75rem,3.8vw,2.35rem)] font-normal leading-snug tracking-[-0.02em] text-white"
                 >
                   People powering the partnership
                 </h3>
@@ -776,6 +841,145 @@ export function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
   );
 }
 
+export function HowCanHiFAISection() {
+  const [activeStart, setActiveStart] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragX, setDragX] = useState(0);
+  const viewportRef = useRef(null);
+  const dragStartXRef = useRef(0);
+
+  const maxStart = Math.max(0, HOW_CAN_HIFAI_SLIDES.length - 2);
+
+  const goTo = (nextStart) => {
+    const clamped = Math.max(0, Math.min(nextStart, maxStart));
+    setActiveStart(clamped);
+  };
+
+  const goPrev = () => goTo(activeStart - 1);
+  const goNext = () => goTo(activeStart + 1);
+
+  const onPointerDown = (event) => {
+    dragStartXRef.current = event.clientX;
+    setIsDragging(true);
+    setDragX(0);
+  };
+
+  const onPointerMove = (event) => {
+    if (!isDragging) return;
+    setDragX(event.clientX - dragStartXRef.current);
+  };
+
+  const onPointerUp = () => {
+    if (!isDragging) return;
+    const viewportWidth = viewportRef.current?.clientWidth ?? 1;
+    const swipeThreshold = viewportWidth * 0.12;
+
+    if (dragX <= -swipeThreshold) goNext();
+    else if (dragX >= swipeThreshold) goPrev();
+
+    setIsDragging(false);
+    setDragX(0);
+  };
+
+  return (
+    <section
+      className="relative border-t border-slate-200/80 bg-white px-4 py-10 md:px-8 md:py-12"
+      aria-labelledby="how-can-hifai-heading"
+    >
+      <div className="mx-auto max-w-7xl">
+        <div className="text-center">
+          <h2
+            id="how-can-hifai-heading"
+            className="font-geom-heading text-[clamp(1.45rem,3vw,2rem)] font-normal tracking-[-0.02em] text-ink"
+          >
+            How can I <span className="text-blue-700">HiFAI?</span>
+          </h2>
+        </div>
+
+        <div
+          ref={viewportRef}
+          className="mt-5 overflow-hidden rounded-2xl border border-slate-200/85 bg-white shadow-[0_18px_48px_-28px_rgba(15,23,42,0.45)]"
+        >
+          <div
+            className={`flex touch-pan-y ${isDragging ? "cursor-grabbing select-none" : "cursor-grab"} ${
+              isDragging ? "" : "transition-transform duration-300 ease-out"
+            }`}
+            style={{ transform: `translateX(calc(${-activeStart * 50}% + ${dragX}px))` }}
+            onPointerDown={onPointerDown}
+            onPointerMove={onPointerMove}
+            onPointerUp={onPointerUp}
+            onPointerCancel={onPointerUp}
+            onPointerLeave={onPointerUp}
+          >
+            {HOW_CAN_HIFAI_SLIDES.map((slide) => (
+              <article key={slide.title} className="w-1/2 shrink-0 p-2 md:p-3">
+                <div className="h-full overflow-hidden rounded-xl shadow-[0_10px_28px_-18px_rgba(15,23,42,0.45)]">
+                  <div className="relative bg-slate-950">
+                    <img
+                      src={slide.image}
+                      alt={slide.title}
+                      className="h-44 w-full object-cover md:h-52"
+                      loading="lazy"
+                      decoding="async"
+                      draggable={false}
+                    />
+                    <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" aria-hidden />
+                  </div>
+
+                  <div className="border-t border-slate-200/80 bg-gradient-to-br from-white via-slate-50 to-blue-50/45 p-4 md:p-5">
+                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-blue-600/90">Program</p>
+                    <h3 className="mt-1.5 text-lg font-bold tracking-tight text-slate-900 md:text-xl">{slide.title}</h3>
+                    <ul className="mt-3 space-y-2.5" role="list">
+                      {slide.points.map((point) => (
+                        <li key={point} className="flex items-start gap-2.5 text-sm leading-relaxed text-slate-700">
+                          <span
+                            className="mt-1.5 inline-flex h-2.5 w-2.5 shrink-0 rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 shadow-[0_0_0_4px_rgba(59,130,246,0.12)]"
+                            aria-hidden
+                          />
+                          <span>{point}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+
+        <div className="mt-4 flex items-center justify-center gap-3">
+          <button
+            type="button"
+            onClick={goPrev}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 transition hover:border-blue-300 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+            aria-label="Previous slide"
+            disabled={activeStart === 0}
+          >
+            <ChevronLeft className="h-5 w-5" aria-hidden />
+          </button>
+          <div className="flex items-center gap-1.5" aria-hidden>
+            {Array.from({ length: maxStart + 1 }).map((_, index) => (
+              <span
+                key={index}
+                className={`h-1.5 rounded-full transition-all ${index === activeStart ? "w-6 bg-blue-600" : "w-2 bg-slate-300"}`}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            onClick={goNext}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 transition hover:border-blue-300 hover:text-blue-700 disabled:cursor-not-allowed disabled:opacity-40"
+            aria-label="Next slide"
+            disabled={activeStart >= maxStart}
+          >
+            <ChevronRight className="h-5 w-5" aria-hidden />
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 const WHY_HIFAI_INSIGHTS = [
   "Your real potential often stays unnoticed.",
   "One system measures everyone, but each of us is unique.",
@@ -837,7 +1041,7 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
       />
 
       <div className="relative mx-auto max-w-7xl">
-        <div className="mx-auto max-w-4xl overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_36px_-12px_rgba(15,23,42,0.1),0_0_0_1px_rgba(15,23,42,0.02)] ring-1 ring-slate-900/[0.02]">
+        <div className="mx-auto max-w-7xl overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_4px_36px_-12px_rgba(15,23,42,0.1),0_0_0_1px_rgba(15,23,42,0.02)] ring-1 ring-slate-900/[0.02]">
           <div className="relative overflow-hidden">
             <div
               className="pointer-events-none absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-blue-600 via-blue-500 to-blue-400/40"
@@ -856,7 +1060,7 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
               ref={whyRef}
               className="relative flex flex-col px-5 py-8 sm:px-8 sm:py-10 md:px-10 md:py-11"
             >
-              <p className="inline-flex w-fit items-center gap-2 rounded-full border border-blue-200/90 bg-blue-50/90 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
+              <p className="inline-flex w-fit items-center gap-2 rounded-full border border-blue-200/90 bg-blue-50/90 px-3 py-1 text-[16px] font-bold uppercase tracking-[0.18em] text-blue-700 shadow-sm">
                 <span
                   className="h-1.5 w-1.5 rounded-full bg-blue-600"
                   aria-hidden
@@ -889,21 +1093,24 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
               </p>
 
               <ul
-                className="relative mt-8 space-y-2 rounded-xl border border-slate-200/70 bg-slate-50/40 p-2.5 sm:p-3"
+                className="relative mt-8 grid gap-3 rounded-xl border border-slate-200/70 bg-slate-50/40 p-2.5 sm:grid-cols-2 sm:p-3 lg:grid-cols-3"
                 role="list"
               >
                 {WHY_HIFAI_INSIGHTS.map((text, i) => (
                   <li
                     key={i}
-                    className="flex gap-3.5 rounded-lg border border-blue-200/50 bg-gradient-to-r from-blue-50/80 to-white/70 px-3 py-3.5 transition-colors hover:from-blue-50 hover:to-white md:gap-4 md:px-3.5 md:py-3.5"
+                    className="group relative overflow-hidden rounded-lg border border-blue-200/55 bg-white px-3.5 py-3.5 shadow-[0_8px_26px_-20px_rgba(15,23,42,0.45)] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-300/70"
                   >
                     <span
-                      className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-blue-600 shadow-[0_0_0_3px_rgba(37,99,235,0.15)]"
+                      className="pointer-events-none absolute -right-8 -top-8 h-20 w-20 rounded-full bg-blue-500/[0.08] blur-xl transition-opacity duration-300 group-hover:opacity-100"
                       aria-hidden
                     />
-                    <span className="text-[18px] font-medium leading-relaxed text-ink">
-                      {text}
-                    </span>
+                    <div className="relative flex items-start gap-3">
+                      <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-blue-600 text-[11px] font-bold text-white shadow-[0_0_0_3px_rgba(37,99,235,0.15)]">
+                        {i + 1}
+                      </span>
+                      <span className="text-base font-medium leading-relaxed text-ink">{text}</span>
+                    </div>
                   </li>
                 ))}
               </ul>
@@ -923,7 +1130,6 @@ function WhatIsHoverCard({
   reducedMotion,
   cardRef,
   icon,
-  chip,
   title,
   acronym,
   body,
@@ -956,7 +1162,7 @@ function WhatIsHoverCard({
       const py = (e.clientY - r.top) / r.height - 0.5;
       const nx = ((e.clientX - r.left) / r.width) * 100;
       const ny = ((e.clientY - r.top) / r.height) * 100;
-      
+
       el.style.setProperty("--x", `${nx}%`);
       el.style.setProperty("--y", `${ny}%`);
 
@@ -997,7 +1203,8 @@ function WhatIsHoverCard({
       <div
         className={`relative flex h-full flex-col border border-white/40 bg-white/60 backdrop-blur-md shadow-[0_8px_32px_rgba(31,38,135,0.07)] transition-all duration-700 ease-out group-hover/card:border-blue-400/50 group-hover/card:shadow-[0_20px_50px_rgba(31,38,135,0.12)] ${shellRadius}`}
         style={{
-          background: "linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%)",
+          background:
+            "linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.3) 100%)",
         }}
       >
         <div
@@ -1006,11 +1213,11 @@ function WhatIsHoverCard({
           style={{ transformStyle: "preserve-3d" }}
         >
           {/* Animated Gradient Background */}
-          <div 
+          <div
             className="absolute inset-0 opacity-0 transition-opacity duration-700 group-hover/card:opacity-100 bg-[radial-gradient(circle_at_var(--x,50%)_var(--y,50%),rgba(59,130,246,0.08),transparent_70%)]"
             aria-hidden
           />
-          
+
           <div
             ref={glowRef}
             className={`pointer-events-none absolute -translate-x-1/2 -translate-y-1/2 rounded-full bg-blue-500/20 blur-[80px] opacity-0 transition-opacity duration-300 ${compact ? "h-40 w-40" : "h-60 w-60"}`}
@@ -1021,77 +1228,95 @@ function WhatIsHoverCard({
           <div
             className={`relative z-10 flex min-h-0 flex-1 flex-col ${compact ? "p-6 sm:p-7" : "h-full p-8 md:p-10"}`}
           >
-            <div className="flex items-center justify-between gap-4 mb-6">
-              <div
-                className={`relative flex shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-[0_10px_20px_-5px_rgba(37,99,235,0.3)] transition-all duration-500 group-hover/card:scale-110 group-hover/card:rotate-3 ${compact ? "h-12 w-12" : "h-16 w-16"}`}
-              >
-                <div className="absolute inset-0 rounded-2xl bg-white/20 blur-[1px] opacity-0 group-hover/card:opacity-100 transition-opacity" />
-                {icon}
+            <div
+              className={`flex min-h-0 flex-1 items-start ${compact ? "gap-5" : "gap-6"} `}
+            >
+              <div className="flex w-[4.25rem] shrink-0 justify-center sm:w-20">
+                <div
+                  className={`relative flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-700 text-white shadow-[0_10px_20px_-5px_rgba(37,99,235,0.3)] transition-all duration-500 group-hover/card:scale-[1.06] group-hover/card:rotate-2 ${compact ? "h-12 w-12" : "h-14 w-14 sm:h-16 sm:w-16"}`}
+                >
+                  <div className="absolute inset-0 rounded-2xl bg-white/20 blur-[1px] opacity-0 transition-opacity group-hover/card:opacity-100" />
+                  {icon}
+                </div>
               </div>
-              <span
-                className={`rounded-full border border-blue-100 bg-blue-50/50 px-3.5 py-1 text-[10px] font-bold uppercase tracking-[0.2em] text-blue-700 backdrop-blur-sm transition-all duration-500 group-hover/card:bg-blue-600 group-hover/card:text-white group-hover/card:border-transparent ${compact ? "" : "text-[11px]"}`}
-              >
-                {chip}
-              </span>
-            </div>
 
-            <h3
-              className={`font-geom-heading font-normal leading-tight tracking-tight text-slate-900 transition-transform duration-500 group-hover/card:translate-x-1 ${compact ? "text-[1.35rem] md:text-[1.5rem]" : "text-[1.6rem] md:text-[1.85rem]"}`}
-            >
-              {title}
-            </h3>
-            
-            {acronym ? (
-              <p
-                className={`font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent ${compact ? "mt-1.5 text-xs tracking-wide" : "mt-2.5 text-sm tracking-wider"}`}
-              >
-                {acronym}
-              </p>
-            ) : null}
+              <div className="flex min-w-0 flex-1 flex-col">
+                <h3
+                  className={`font-geom-heading font-normal leading-tight tracking-tight text-slate-900 transition-transform duration-500 group-hover/card:translate-x-0.5 ${compact ? "text-[1.35rem] md:text-[1.5rem]" : "text-[1.6rem] md:text-[1.85rem]"}`}
+                >
+                  {title}
+                </h3>
 
-            <p
-              className={`leading-relaxed text-slate-600 font-medium ${compact ? "mt-4 text-sm md:text-[18px]" : "mt-6 text-[16px] md:text-base"}`}
-            >
-              {body}
-            </p>
-
-            {footerTags?.length ? (
-              <div
-                className={`mt-auto flex flex-wrap border-slate-200/60 ${compact ? "gap-2 border-t border-dashed pt-4" : "mt-8 gap-3 border-t pt-6"}`}
-              >
-                {footerTags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-bold rounded-lg bg-slate-100/80 text-slate-600 border border-slate-200 transition-all duration-300 group-hover/card:bg-blue-50 group-hover/card:text-blue-700 group-hover/card:border-blue-100"
+                {acronym ? (
+                  <p
+                    className={`font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent ${compact ? "mt-1.5 text-xs tracking-wide" : "mt-2.5 text-sm tracking-wider"}`}
                   >
-                    {tag}
-                  </span>
-                ))}
+                    {acronym}
+                  </p>
+                ) : null}
+
+                <p
+                  className={`leading-relaxed text-slate-600 font-medium ${compact ? "mt-4 text-sm md:text-[18px]" : "mt-6 text-[16px] md:text-base"}`}
+                >
+                  {body}
+                </p>
+
+                {footerTags?.length ? (
+                  <div
+                    className={`mt-auto flex flex-wrap border-slate-200/60 ${compact ? "gap-2 border-t border-dashed pt-4" : "mt-8 gap-3 border-t pt-6"}`}
+                  >
+                    {footerTags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2.5 py-1 text-[10px] uppercase tracking-wider font-bold rounded-lg bg-slate-100/80 text-slate-600 border border-slate-200 transition-all duration-300 group-hover/card:bg-blue-50 group-hover/card:text-blue-700 group-hover/card:border-blue-100"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                ) : null}
               </div>
-            ) : null}
+            </div>
           </div>
         </div>
-        
+
         {/* Decorative elements */}
         <div className="absolute top-0 right-0 p-4 opacity-10 group-hover/card:opacity-20 transition-opacity">
-          <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="50" cy="50" r="48" stroke="currentColor" strokeWidth="1" strokeDasharray="4 4" />
+          <svg
+            width="40"
+            height="40"
+            viewBox="0 0 100 100"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              cx="50"
+              cy="50"
+              r="48"
+              stroke="currentColor"
+              strokeWidth="1"
+              strokeDasharray="4 4"
+            />
           </svg>
         </div>
       </div>
     </article>
   );
-
 }
 
 const HIFAI_UNIQUE_STEPS = [
   {
-    title: "The Best of Both Worlds (Online & On-site Access)",
+    title: "Explore You with International Experts’ Guidance",
     icon: MonitorSmartphone,
   },
-  { title: "Expert Guidance", icon: UserCheck },
-  { title: "Personalised Skill Development", icon: Sparkles },
-  { title: "Global Level Exposure", icon: Globe2 },
+  { title: "Evaluate your 21st century Skills", icon: UserCheck },
+  { title: "Expand your comfort zone", icon: Sparkles },
+  { title: "Excel in what you can do with Digial ABCD", icon: Globe2 },
+];
+
+const HIFAI_OFFERS_POINTS = [
+  "Explore, evaluate, expand and excel in their unique skills and capabilities.",
+  "With effective and novel use of Digital ABCD (AI, Blockchain, Cloud and Data) technologies.",
 ];
 
 export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
@@ -1199,16 +1424,16 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
       <div className="relative mx-auto max-w-7xl">
         <div
           ref={headerRef}
-          className="mx-auto mb-7 max-w-2xl text-center md:mb-9"
+          className="mx-auto mb-7 max-w-6xl text-center md:mb-9"
         >
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600 md:text-sm">
-            What is <span className={hifaiHighlightClass}>HIfAi</span>?
+            Why, what, how you can use HifAi with Us?
           </p>
           <h2
             id="what-is-hifai-heading"
             className="mt-2 font-geom-heading text-[clamp(1.65rem,4vw,2.45rem)] font-normal leading-[1.15] tracking-[-0.02em] text-ink md:mt-2.5"
           >
-            Human intelligence for <br></br>
+            Human intelligence for {" "}
             <span className="text-blue-700">
               Artificial Intelligence Control
             </span>
@@ -1220,18 +1445,13 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-6xl gap-6 md:grid-cols-2 md:items-stretch lg:gap-8">
+        <div className="mx-auto grid max-w-7xl gap-6 md:grid-cols-2 md:items-stretch lg:gap-8">
           <WhatIsHoverCard
             reducedMotion={reducedMotion}
             cardRef={c0}
-            chip="Platform"
             compact
             icon={
-              <BrainCircuit
-                className="h-6 w-6"
-                strokeWidth={1.5}
-                aria-hidden
-              />
+              <BrainCircuit className="h-6 w-6" strokeWidth={1.5} aria-hidden />
             }
             title="21st Century Skills"
             body="At the core, we focus on creative thinking, problem solving, critical analysis, communication, and digital use - helping individuals understand how they think, respond, and grow"
@@ -1239,14 +1459,12 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
           <WhatIsHoverCard
             reducedMotion={reducedMotion}
             cardRef={c1}
-            chip="Digital ABCD"
             compact
             icon={<Orbit className="h-6 w-6" strokeWidth={1.5} aria-hidden />}
             title="Digital ABCD Model"
             body="Building on that, Al, Blockchain, Cloud, and Data Analysis create the space where these abilities are applied, explored, and shaped into real-world outcomes."
           />
         </div>
-
 
         <div
           ref={uniqueBlockRef}
@@ -1257,9 +1475,6 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
             ref={uniqueHeaderRef}
             className="mx-auto mb-6 max-w-xl text-center md:mb-8"
           >
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-blue-600 md:text-sm">
-              Differentiators
-            </p>
             <h2
               id="what-makes-unique-heading"
               className="mt-2 font-geom-heading text-[clamp(1.5rem,3.4vw,2.15rem)] font-normal leading-tight tracking-[-0.02em] text-ink md:mt-2.5"
@@ -1274,37 +1489,31 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
 
           <div className="relative mx-auto max-w-5xl px-1 sm:px-2">
             <div
-              className="pointer-events-none absolute left-1/2 top-[46%] z-0 hidden aspect-square h-[min(78vw,22rem)] w-[min(78vw,22rem)] -translate-x-1/2 -translate-y-1/2 rounded-full border border-blue-300/60 bg-gradient-to-br from-blue-100/50 via-white/55 to-sky-100/45 shadow-[0_0_0_1px_rgba(37,99,235,0.16),0_12px_48px_-12px_rgba(37,99,235,0.32),0_32px_80px_-24px_rgba(15,23,42,0.14),inset_0_0_80px_rgba(37,99,235,0.16),inset_0_3px_28px_rgba(255,255,255,0.92)] md:block lg:h-[min(72vw,24rem)] lg:w-[min(72vw,24rem)]"
-              aria-hidden
-            />
-            <div
-              className="pointer-events-none relative z-[1] mx-auto mb-5 flex h-[min(28vw,7.25rem)] w-[min(28vw,7.25rem)] max-w-[8.75rem] items-center justify-center sm:h-32 sm:w-32 md:absolute md:left-1/2 md:top-[52%] md:mb-0 md:h-[min(32vw,9.25rem)] md:w-[min(32vw,9.25rem)] md:max-w-none md:-translate-x-1/2 md:-translate-y-1/2 lg:h-[min(28vw,10rem)] lg:w-[min(28vw,10rem)]"
+              className="pointer-events-none relative z-[1] mx-auto mb-5 h-[min(52vw,12rem)] w-[min(52vw,12rem)] max-w-[13rem] overflow-hidden rounded-full ring-2 ring-cyan-300/55 shadow-[0_0_0_1px_rgba(59,130,246,0.24),0_28px_86px_-22px_rgba(37,99,235,0.72),0_0_80px_rgba(34,211,238,0.24)] sm:h-[14rem] sm:w-[14rem] md:absolute md:left-1/2 md:top-[50%] md:mb-0 md:h-[min(72vw,20rem)] md:w-[min(72vw,20rem)] md:max-w-none md:-translate-x-1/2 md:-translate-y-1/2 lg:h-[min(66vw,22rem)] lg:w-[min(66vw,22rem)]"
               aria-hidden
             >
-              <div
-                className={`flex h-full w-full items-center justify-center will-change-transform ${reducedMotion ? "" : "motion-safe:animate-brainBeat"}`}
-              >
+              <div className="flex h-full w-full items-center justify-center will-change-transform">
                 <img
                   src={BRAIN_IMAGE_URL}
                   alt=""
-                  className="h-full w-full max-h-[10rem] object-contain drop-shadow-[0_10px_32px_rgba(37,99,235,0.22)] md:max-h-[11rem]"
+                  className="h-full w-full object-cover"
                   decoding="async"
                   loading="lazy"
                 />
               </div>
             </div>
             <ul
-              className="relative z-[2] mx-auto flex list-none flex-col gap-3 p-0 md:grid md:max-w-4xl md:grid-cols-3 md:grid-rows-[auto_auto_auto] md:items-center md:gap-x-5 md:gap-y-4 lg:max-w-5xl lg:gap-x-8 lg:gap-y-6"
+              className="relative z-[2] mx-auto flex list-none flex-col gap-3 p-0 md:grid md:max-w-5xl md:grid-cols-3 md:grid-rows-[auto_auto_auto] md:items-center md:gap-x-6 md:gap-y-14 lg:max-w-6xl lg:gap-x-10 lg:gap-y-16"
               role="list"
             >
               {HIFAI_UNIQUE_STEPS.map((step, index) => {
                 const Icon = step.icon;
                 const refs = [u0, u1, u2, u3];
                 const diamondPlacement = [
-                  "md:col-start-2 md:row-start-1 md:justify-self-center md:w-full md:max-w-sm",
-                  "md:col-start-1 md:row-start-2 md:justify-self-end md:w-full md:max-w-[17.5rem] lg:max-w-sm",
-                  "md:col-start-3 md:row-start-2 md:justify-self-start md:w-full md:max-w-[17.5rem] lg:max-w-sm",
-                  "md:col-start-2 md:row-start-3 md:justify-self-center md:w-full md:max-w-sm",
+                  "md:col-start-2 md:row-start-1 md:justify-self-center md:w-full md:max-w-[18.75rem]",
+                  "md:col-start-3 md:row-start-2 md:justify-self-start md:w-full md:max-w-[16.5rem] lg:max-w-[17.5rem]",
+                  "md:col-start-2 md:row-start-3 md:justify-self-center md:w-full md:max-w-[18.75rem]",
+                  "md:col-start-1 md:row-start-2 md:justify-self-end md:w-full md:max-w-[16.5rem] lg:max-w-[17.5rem]",
                 ][index];
                 return (
                   <li
@@ -1347,6 +1556,53 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
                 );
               })}
             </ul>
+          </div>
+        </div>
+
+        <div className="mt-10 md:mt-12">
+          <div className="relative overflow-hidden rounded-[1.6rem] border border-blue-100/80 bg-white/80 px-4 py-5 shadow-[0_16px_42px_-24px_rgba(37,99,235,0.38)] backdrop-blur-xl md:px-6 md:py-6">
+            <span
+              className="pointer-events-none absolute -left-10 -top-10 h-28 w-28 rounded-full bg-blue-300/20 blur-2xl"
+              aria-hidden
+            />
+            <span
+              className="pointer-events-none absolute -bottom-12 -right-10 h-32 w-32 rounded-full bg-cyan-300/20 blur-2xl"
+              aria-hidden
+            />
+
+            <div className="relative mx-auto mb-5 max-w-xl text-center md:mb-6">
+              <h2
+                id="what-makes-unique-heading"
+                className="mt-2 font-geom-heading text-[clamp(1.5rem,3.4vw,2.15rem)] font-normal leading-tight tracking-[-0.02em] text-ink md:mt-2.5"
+              >
+                What HIfAI offers?
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-ink/60 md:text-[18px]">
+                HIfAI offers students and education institutions to:
+              </p>
+            </div>
+
+            <div className="relative">
+              <ul
+                className="grid list-none gap-3 p-0 md:grid-cols-2 md:gap-4"
+                role="list"
+              >
+                {HIFAI_OFFERS_POINTS.map((point, idx) => (
+                  <li
+                    key={point}
+                    className="group flex items-start gap-3 rounded-2xl border border-slate-200/85 bg-gradient-to-br from-white via-white to-blue-50/40 px-4 py-3.5 text-sm leading-relaxed text-slate-700 shadow-[0_8px_26px_-18px_rgba(15,23,42,0.4)] transition-all duration-300 hover:-translate-y-0.5 hover:border-blue-200/85 hover:shadow-[0_16px_36px_-20px_rgba(37,99,235,0.45)] md:text-[15px]"
+                  >
+                    <span
+                      className="mt-0.5 inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-blue-600 to-cyan-500 text-[11px] font-bold text-white shadow-[0_10px_24px_-12px_rgba(37,99,235,0.75)]"
+                      aria-hidden
+                    >
+                      {idx + 1}
+                    </span>
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -3602,7 +3858,7 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative px-4 py-20 md:px-8 md:py-24"
+      className="relative py-20 image.pngmd:py-24"
     >
       <div className="mx-auto max-w-7xl">
         <div ref={introRef} className="mb-12 max-w-3xl md:mb-16">

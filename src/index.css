@@ -12,7 +12,8 @@
 
   html {
     scroll-behavior: auto;
-    scroll-padding-top: 90px;
+    /* Navbar sub-header + main pill (~sub 40px + spacing + nav) */
+    scroll-padding-top: 140px;
   }
   body {
     margin: 0;
