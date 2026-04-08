@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Compass, Hammer, Rocket, TrendingUp } from "lucide-react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
 import { useReducedMotion, useIsMobile } from "../hooks/useReducedMotion.js";
 import { GetStartedFormModal } from "./GetStarted.jsx";
@@ -27,8 +26,7 @@ export function CollegeOrganizationsBody() {
       <div className="mt-2 md:mt-6">
         <FourCardFramework
           ctaBelowCards
-          pillarTitles={["Align", "Develop", "Execute", "Advance"]}
-          pillarIcons={[Compass, Hammer, Rocket, TrendingUp]}
+          pillarTitles={["Discover", "Build", "Apply", "Validate"]}
           copy={[
             "Identify your career direction by connecting your skills, interests, and industry demands to make smarter and more focused decisions.",
             "Work on practical skills through real-time learning experiences, collaborative tasks, and hands-on exposure tailored to your career goals.",

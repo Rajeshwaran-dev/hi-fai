@@ -36,15 +36,28 @@ export function Lead({ children, className = "" }) {
   );
 }
 
-export function Card({ icon, title, children }) {
+export function Card({ icon, title, children, className = "", layout = "row" }) {
+  const isOrbit = layout === "stacked";
+  const base =
+    "group rounded-2xl border border-slate-200/90 bg-white/80 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-300/80 hover:bg-gradient-to-br hover:from-white hover:via-blue-50/35 hover:to-cyan-50/40 hover:shadow-[0_26px_78px_-22px_rgba(37,99,235,0.55)] hover:ring-1 hover:ring-blue-500/20";
   return (
-    <article className="group flex flex-row items-start gap-4 rounded-2xl border border-slate-200/90 bg-white/80 p-6 shadow-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-300/80 hover:bg-gradient-to-br hover:from-white hover:via-blue-50/35 hover:to-cyan-50/40 hover:shadow-[0_26px_78px_-22px_rgba(37,99,235,0.55)] hover:ring-1 hover:ring-blue-500/20 md:gap-5 md:p-7">
+    <article
+      className={`${base} ${
+        isOrbit
+          ? "flex h-full w-full flex-col items-center justify-start p-7 text-center md:p-8"
+          : "flex flex-row items-start gap-4 p-6 md:gap-5 md:p-7"
+      } ${className}`}
+    >
       {icon ? (
-        <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-blue-50 to-cyan-50 text-lg ring-1 ring-blue-100/80 transition-all duration-300 group-hover:from-blue-600 group-hover:to-cyan-500 group-hover:text-white group-hover:ring-blue-500/40 group-hover:shadow-[0_18px_46px_-14px_rgba(37,99,235,0.7)]">
+        <span
+          className={`inline-flex shrink-0 items-center justify-center bg-gradient-to-br from-blue-50 to-cyan-50 text-lg ring-1 ring-blue-100/80 transition-all duration-300 group-hover:from-blue-600 group-hover:to-cyan-500 group-hover:text-white group-hover:ring-blue-500/40 group-hover:shadow-[0_18px_46px_-14px_rgba(37,99,235,0.7)] ${
+            isOrbit ? "h-14 w-14 rounded-2xl" : "h-11 w-11 rounded-xl"
+          }`}
+        >
           {icon}
         </span>
       ) : null}
-      <div className="min-w-0 flex-1">
+      <div className={`${isOrbit ? "mt-4 w-full max-w-[20rem]" : "min-w-0 flex-1"}`}>
         <h3 className="text-lg font-bold text-slate-900 transition-colors duration-300 group-hover:text-blue-900">
           {title}
         </h3>
@@ -89,35 +102,98 @@ export function FourCardFramework({
   betweenCardsAndCta,
   cardsCenterOverlay,
   belowCardsContent,
+  layoutMode = "default",
   ctaBelowCards = false,
 }) {
   const bodies = copy;
+  const orbitMode = layoutMode === "orbit";
+  // Anti-clockwise order around center: Explore (top-left), Expand (bottom-left), Evaluate (bottom-right), Excel (top-right)
+  const orbitAngles = ["135deg", "225deg", "315deg", "45deg"];
 
   return (
     <>
       <div className="mx-auto max-w-7xl">
         <div className="relative">
-          <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 md:gap-5">
-            {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
-              const title = pillarTitles?.[i] ?? defaultTitle;
-              const PillarIcon = pillarIcons?.[i] ?? Icon;
-              return (
-                <Card
-                  key={`${i}-${title}`}
-                  icon={
-                    <PillarIcon
-                      className="h-5 w-5 text-blue-600 transition-colors duration-300 group-hover:text-white"
-                      strokeWidth={2.2}
-                      aria-hidden
-                    />
-                  }
-                  title={title}
-                >
-                  {bodies[i]}
-                </Card>
-              );
-            })}
-          </div>
+          {!orbitMode ? (
+            <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 md:gap-5">
+              {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
+                const title = pillarTitles?.[i] ?? defaultTitle;
+                const PillarIcon = pillarIcons?.[i] ?? Icon;
+                return (
+                  <Card
+                    key={`${i}-${title}`}
+                    icon={
+                      <PillarIcon
+                        className="h-5 w-5 text-blue-600 transition-colors duration-300 group-hover:text-white"
+                        strokeWidth={2.2}
+                        aria-hidden
+                      />
+                    }
+                    title={title}
+                  >
+                    {bodies[i]}
+                  </Card>
+                );
+              })}
+            </div>
+          ) : (
+            <>
+              {/* Mobile: keep readable grid */} 
+              <div className="mx-auto grid max-w-7xl gap-4 md:hidden">
+                {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
+                  const title = pillarTitles?.[i] ?? defaultTitle;
+                  const PillarIcon = pillarIcons?.[i] ?? Icon;
+                  return (
+                    <Card
+                      key={`${i}-${title}`}
+                      icon={
+                        <PillarIcon
+                          className="h-5 w-5 text-blue-600 transition-colors duration-300 group-hover:text-white"
+                          strokeWidth={2.2}
+                          aria-hidden
+                        />
+                      }
+                      title={title}
+                    >
+                      {bodies[i]}
+                    </Card>
+                  );
+                })}
+              </div>
+
+              {/* Desktop: true orbit */} 
+              <div className="orbit-mode mx-auto hidden max-w-6xl md:block">
+                <div className="orbit-rotor" aria-hidden={false}>
+                  {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
+                    const title = pillarTitles?.[i] ?? defaultTitle;
+                    const PillarIcon = pillarIcons?.[i] ?? Icon;
+                    return (
+                      <div
+                        key={`${i}-${title}`}
+                        className="orbit-card"
+                        style={{ "--orbit-angle": orbitAngles[i] }}
+                      >
+                        <Card
+                          layout="stacked"
+                          className="orbit-card__inner rounded-[999px]"
+                          icon={
+                            <PillarIcon
+                              className="h-6 w-6 text-blue-600 transition-colors duration-300 group-hover:text-white"
+                              strokeWidth={2.2}
+                              aria-hidden
+                            />
+                          }
+                          title={title}
+                        >
+                          {bodies[i]}
+                        </Card>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          )}
           {cardsCenterOverlay ? (
             <div className="pointer-events-none absolute left-1/2 top-1/2 z-20 hidden -translate-x-1/2 -translate-y-1/2 md:block">
               <div className="pointer-events-auto">{cardsCenterOverlay}</div>

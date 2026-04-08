@@ -11,8 +11,9 @@ gsap.registerPlugin(ScrollTrigger);
 /** Matches primary header navigation routes */
 const FOOTER_NAV_LINKS = [
   { label: "Home", to: "/" },
-  { label: "Students (Grades 9–12)", to: "/students/school-students" },
-  { label: "Students (College)", to: "/students/college-students" },
+  { label: "About Us", to: "/about" },
+  { label: "Grades 9th – 12th", to: "/students/school-students" },
+  { label: "College Students", to: "/students/college-students" },
   { label: "Schools", to: "/school-organizations" },
   { label: "Universities", to: "/college-organizations" },
   { label: "Learning Hub", to: "/learning-hub" },

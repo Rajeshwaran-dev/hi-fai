@@ -1,6 +1,5 @@
 import { useState } from "react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
-import { Compass, Flame, ShieldCheck, Trophy } from "lucide-react";
 import { GetStartedFormModal } from "./GetStarted.jsx";
 import { FourCardFramework } from "./subpageShared.jsx";
 
@@ -11,8 +10,7 @@ export function SchoolOrganizationsBody() {
     <>
       <FourCardFramework
         ctaBelowCards
-        pillarTitles={["Awaken", "Explore", "Assess", "Achieve"]}
-        pillarIcons={[Flame, Compass, ShieldCheck, Trophy]}
+        pillarTitles={["Explore", "Expand", "Evaluate", "Excel"]}
         copy={[
           "Discover your hidden talents and interests through guided activities designed to help you understand what truly excites and motivates you at an early stage.",
           "Step into different domains and skills with interactive experiences that allow you to experiment, learn, and find the paths that suit you best.",

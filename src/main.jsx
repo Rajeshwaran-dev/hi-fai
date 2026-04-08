@@ -31,6 +31,7 @@ import { SchoolOrganizationsBody } from "./pages/SchoolOrganizations.jsx";
 import { CollegeOrganizationsBody } from "./pages/CollegeOrganizations.jsx";
 import { LearningHubBody } from "./pages/LearningHub.jsx";
 import { GetStartedBody } from "./pages/GetStarted.jsx";
+import { AboutBody } from "./pages/About.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -44,7 +45,7 @@ createRoot(document.getElementById("root")).render(
             path="/students/school-students"
             element={
               <BreadcrumbPage
-                title="School Student (Grades 9–12)"
+                title="Grades 9th – 12th"
               >
                 <SchoolStudentsBody />
               </BreadcrumbPage>
@@ -54,7 +55,7 @@ createRoot(document.getElementById("root")).render(
             path="/students/college-students"
             element={
               <BreadcrumbPage
-                title="College Student (3rd & Final Year Students)"
+                title="College Students"
               >
                 <CollegeStudentsBody />
               </BreadcrumbPage>
@@ -97,6 +98,14 @@ createRoot(document.getElementById("root")).render(
                 title="Let's Hi-fAi"
               >
                 <GetStartedBody />
+              </BreadcrumbPage>
+            }
+          />
+          <Route
+            path="/about"
+            element={
+              <BreadcrumbPage title="About Us">
+                <AboutBody />
               </BreadcrumbPage>
             }
           />

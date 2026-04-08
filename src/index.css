@@ -440,3 +440,71 @@
     animation: none !important;
   }
 }
+
+/* Orbit layout (School Students) — circular card rotation around center */
+@keyframes orbit-card-spin-anticlockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+.orbit-mode {
+  position: relative;
+  height: 520px;
+}
+
+@media (min-width: 1024px) {
+  .orbit-mode {
+    height: 560px;
+  }
+}
+
+.orbit-rotor {
+  position: absolute;
+  inset: 0;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  animation: orbit-card-spin-anticlockwise 22s linear infinite;
+  will-change: transform;
+}
+
+.orbit-card {
+  position: absolute;
+  left: 0;
+  top: 0;
+  --orbit-radius: 240px;
+  transform: rotate(var(--orbit-angle)) translateX(var(--orbit-radius))
+    rotate(calc(-1 * var(--orbit-angle)));
+}
+
+@media (min-width: 1024px) {
+  .orbit-card {
+    --orbit-radius: 275px;
+  }
+}
+
+.orbit-card__inner {
+  width: 260px;
+  height: 260px;
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .orbit-card__inner {
+    width: 285px;
+    height: 285px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-rotor {
+    animation: none !important;
+  }
+}
+

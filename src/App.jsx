@@ -7,8 +7,6 @@ import Navbar from "./components/Navbar.jsx";
 import {
   Hero,
   HowCanHiFAISection,
-  KanavooglePartnershipSection,
-  WhyHifaiMissingLinkSection,
   WhatIsHifaiSection,
 } from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
@@ -56,12 +54,7 @@ export default function App() {
       <main>
         <Hero reducedMotion={reducedMotion} isMobile={isMobile} />
         <WhatIsHifaiSection reducedMotion={reducedMotion} isMobile={isMobile} />
-        <WhyHifaiMissingLinkSection
-          reducedMotion={reducedMotion}
-          isMobile={isMobile}
-        />
         <HowCanHiFAISection />
-        <KanavooglePartnershipSection reducedMotion={reducedMotion} isMobile={isMobile} />
       </main>
       <Footer reducedMotion={reducedMotion} />
     </div>

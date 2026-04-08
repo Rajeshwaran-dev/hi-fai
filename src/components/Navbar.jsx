@@ -15,17 +15,18 @@ const TOP_BAR_INSTAGRAM_URL =
   "https://www.instagram.com/hifai2026?igsh=MXJzODhuemU5ZHFiMQ==";
 
 const navItems = [
+  { label: "About Us", to: "/about" },
   {
     label: "Students",
     submenu: [
       {
-        label: "Students (Grades 9–12)",
+        label: "Grades 9th – 12th",
         to: "/students/school-students",
         description: "Discover your potential beyond marks with En-Thiran",
         icon: "school",
       },
       {
-        label: "Students (College)",
+        label: "College Students",
         to: "/students/college-students",
         description: "Build real-world solutions through global, project-based learning",
         icon: "college",
