@@ -51,8 +51,7 @@ export function GetStartedFormPanel({
 }) {
   const [tab, setTab] = useState(initialTab);
   const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
+    fullName: "",
     gradeOrProgram: "",
     institution: "",
     role: "",
@@ -94,8 +93,7 @@ export function GetStartedFormPanel({
     const activeStudents = studentEntries.slice(0, studentCount);
 
     if (!isCollegeStudent) {
-      if (!formData.firstName.trim()) nextErrors.firstName = "First name is required.";
-      if (!formData.lastName.trim()) nextErrors.lastName = "Last name is required.";
+      if (!formData.fullName.trim()) nextErrors.fullName = "Full name is required.";
     }
     if (!formData.gradeOrProgram) nextErrors.gradeOrProgram = "Please select an option.";
     if (!formData.institution.trim()) nextErrors.institution = "This field is required.";
@@ -148,7 +146,7 @@ export function GetStartedFormPanel({
       const firstStudent = studentEntries[0];
       const fullName = tab === "college-student"
         ? firstStudent.name.trim()
-        : `${formData.firstName} ${formData.lastName}`.trim();
+        : formData.fullName.trim();
       const paymentEmail = tab === "college-student"
         ? firstStudent.email.trim()
         : formData.email;
@@ -234,27 +232,16 @@ export function GetStartedFormPanel({
           <div className="grid gap-4 md:grid-cols-2">
             {tab !== "college-student" ? (
               <>
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-slate-800">First name</span>
+                <label className="block md:col-span-2">
+                  <span className="mb-2 block text-sm font-semibold text-slate-800">Full name</span>
                   <input
                     type="text"
-                    placeholder="Jane"
-                    value={formData.firstName}
-                    onChange={(e) => setField("firstName", e.target.value)}
+                    placeholder="Jane Doe"
+                    value={formData.fullName}
+                    onChange={(e) => setField("fullName", e.target.value)}
                     className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
                   />
-                  {errors.firstName ? <span className="mt-1 block text-xs text-red-600">{errors.firstName}</span> : null}
-                </label>
-                <label className="block">
-                  <span className="mb-2 block text-sm font-semibold text-slate-800">Last name</span>
-                  <input
-                    type="text"
-                    placeholder="Doe"
-                    value={formData.lastName}
-                    onChange={(e) => setField("lastName", e.target.value)}
-                    className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
-                  />
-                  {errors.lastName ? <span className="mt-1 block text-xs text-red-600">{errors.lastName}</span> : null}
+                  {errors.fullName ? <span className="mt-1 block text-xs text-red-600">{errors.fullName}</span> : null}
                 </label>
               </>
             ) : (

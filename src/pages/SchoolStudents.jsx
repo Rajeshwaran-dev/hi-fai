@@ -612,7 +612,7 @@ export function SchoolStudentsBody() {
 
   return (
     <>
-      <section className="flex w-full flex-col items-center overflow-hidden px-4 py-12 sm:px-6">
+      <section className="flex w-full flex-col items-center overflow-hidden px-6 py-12 sm:px-6">
         <OrbitCards onPlayClick={() => setIsVideoOpen(true)} />
         <CTABlock onStartClick={() => setIsFormOpen(true)} />
       </section>

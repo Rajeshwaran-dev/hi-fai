@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
+  AppWindow,
   Award,
   Briefcase,
   ExternalLink,
@@ -48,7 +49,13 @@ const STATIC_ASSET_BASE = import.meta.env.BASE_URL;
 const FEMALE_AVATAR_URL = `${STATIC_ASSET_BASE}human.png`;
 const MALE_AVATAR_URL = `${STATIC_ASSET_BASE}man.png`;
 
+function isTeamEntry(member) {
+  const text = `${member?.name ?? ""} ${member?.role ?? ""}`.toLowerCase();
+  return Boolean(member?.isGroup) || /(^|\W)team(\W|$)/i.test(text);
+}
+
 function getMemberAvatar(member) {
+  if (isTeamEntry(member)) return null;
   if (member.gender === "female") return FEMALE_AVATAR_URL;
   if (member.gender === "male") return MALE_AVATAR_URL;
   return /^ms\.|^mrs\./i.test(member.name.trim())
@@ -58,8 +65,8 @@ function getMemberAvatar(member) {
 
 const PARTNERSHIP_TEAM_GROUPS = [
   {
-    title: "Leadership",
-    subtitle: "Strategy & governance",
+    title: "HIFAi Team",
+    subtitle: "Core team & delivery",
     icon: Landmark,
     index: "01",
     theme: {
@@ -87,11 +94,19 @@ const PARTNERSHIP_TEAM_GROUPS = [
         gender: "male",
         orgKind: "hifai",
       },
+      {
+        name: "Mr. Saravanan",
+        role: "",
+        org: "HIfAi",
+        initials: "MS",
+        gender: "male",
+        orgKind: "hifai",
+      },
     ],
   },
   {
-    title: "Operations",
-    subtitle: "Outreach & analysis",
+    title: "Kanavoogle",
+    subtitle: "Partner collaboration",
     icon: Briefcase,
     index: "02",
     theme: {
@@ -106,29 +121,29 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr. G. Saravana Sundar",
         role: "Public Relations Officer",
-        org: "HIfAi",
+        org: "Kanavoogle",
         initials: "GS",
         gender: "male",
-        orgKind: "hifai",
+        orgKind: "partner",
       },
       {
-        name: "Mrs. M. Sayee Baggiyalakshmi",
-        role: "Critical Analyst",
-        org: "HIfAi",
-        initials: "SB",
-        gender: "female",
-        orgKind: "hifai",
+        name: "?",
+        role: "",
+        org: "Kanavoogle",
+        initials: "?",
+        gender: "male",
+        orgKind: "partner",
       },
     ],
   },
   {
-    title: "Support",
-    subtitle: "Growth & learning depth",
+    title: "Netzy",
+    subtitle: "Growth & support",
     icon: Users,
     index: "03",
     theme: {
       bar: "from-sky-800 via-cyan-700 to-teal-600",
-      icon: "bg-cyan-600/14 text-cyan-950 ring-1 ring-inset ring-cyan-600/20 shadow-sm",
+      icon: "bg-cyan-600/18 text-cyan-900 ring-1 ring-inset ring-cyan-600/30 shadow-sm",
       avatar:
         "border-cyan-200/80 bg-gradient-to-br from-white via-cyan-50/35 to-teal-50/30 text-teal-950 shadow-sm",
       cardHover:
@@ -136,20 +151,38 @@ const PARTNERSHIP_TEAM_GROUPS = [
     },
     members: [
       {
-        name: "Ms. S. Sayee Skantha Varshini",
-        role: "Marketing Lead",
-        org: "HIfAi",
-        initials: "SV",
-        gender: "female",
-        orgKind: "hifai",
+        name: "Safi & Team",
+        role: "",
+        org: "Netzy",
+        initials: "NT",
+        gender: "male",
+        orgKind: "neutral",
+        isGroup: true,
       },
+    ],
+  },
+  {
+    title: "A3 Application",
+    subtitle: "Platform enablement",
+    icon: AppWindow,
+    index: "04",
+    theme: {
+      bar: "from-emerald-800 via-emerald-600 to-teal-500",
+      icon: "bg-emerald-600/18 text-emerald-900 ring-1 ring-inset ring-emerald-600/30 shadow-sm",
+      avatar:
+        "border-emerald-200/80 bg-gradient-to-br from-white via-emerald-50/35 to-teal-50/30 text-emerald-950 shadow-sm",
+      cardHover:
+        "hover:border-emerald-200/90 hover:shadow-md hover:shadow-emerald-900/[0.06]",
+    },
+    members: [
       {
-        name: "Mrs. N. Mythili",
-        role: "Academic Expert",
-        org: "HIfAi",
-        initials: "NM",
-        gender: "female",
-        orgKind: "hifai",
+        name: "Appication Development Name",
+        role: "",
+        org: "A3 Application",
+        initials: "A3",
+        gender: "male",
+        orgKind: "neutral",
+        isGroup: true,
       },
     ],
   },
@@ -231,7 +264,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-10 md:px-8 md:py-12"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white py-10 md:py-12"
       aria-labelledby="kanavoogle-partnership-heading"
     >
       <div
@@ -408,7 +441,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                   id="partnership-team-heading"
                   className="font-geom-heading text-[clamp(1.75rem,3.8vw,2.35rem)] font-normal leading-snug tracking-[-0.02em] text-white"
                 >
-                  People powering the partnership
+                  HIFAi Eco System
                 </h3>
                 <p className="mt-4 text-base leading-relaxed text-slate-300/95 md:mt-5 md:text-lg">
                   Leadership, operations, and support working together across{" "}
@@ -439,7 +472,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
               />
               <div
                 ref={teamRef}
-                className="relative grid gap-5 sm:gap-6 lg:grid-cols-3"
+                className="relative grid gap-5 sm:gap-6 lg:grid-cols-4"
               >
                 {PARTNERSHIP_TEAM_GROUPS.map((group) => {
                   const Icon = group.icon;
@@ -466,15 +499,9 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                           </span>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-baseline justify-between gap-2">
-                              <p className="font-geom-heading text-lg font-normal tracking-[-0.02em] text-slate-900 md:text-xl">
+                              <p className="font-geom-heading text-sm font-normal tracking-[-0.02em] text-slate-900 md:text-sm">
                                 {group.title}
                               </p>
-                              <span
-                                className="font-geom-heading text-2xl font-light tabular-nums leading-none text-slate-200 md:text-[1.65rem]"
-                                aria-hidden
-                              >
-                                {group.index}
-                              </span>
                             </div>
                             <p className="mt-1.5 text-sm leading-snug text-slate-600">
                               {group.subtitle}
@@ -492,21 +519,27 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                                   className={`flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-xl border text-[10px] font-bold uppercase tracking-[0.1em] ${theme.avatar}`}
                                   aria-hidden
                                 >
-                                  <img
-                                    src={getMemberAvatar(m)}
-                                    alt=""
-                                    className="h-full w-full rounded-[0.65rem] object-cover"
-                                    loading="lazy"
-                                    decoding="async"
-                                  />
+                                  {isTeamEntry(m) ? (
+                                    <Users className="h-6 w-6 text-emerald-700" strokeWidth={2} />
+                                  ) : (
+                                    <img
+                                      src={getMemberAvatar(m)}
+                                      alt=""
+                                      className="h-full w-full rounded-[0.65rem] object-cover"
+                                      loading="lazy"
+                                      decoding="async"
+                                    />
+                                  )}
                                 </div>
                                 <div className="min-w-0 flex-1">
                                   <p className="text-[16px] font-semibold leading-snug tracking-tight text-slate-900">
                                     {m.name}
                                   </p>
-                                  <p className="mt-1 text-sm leading-relaxed text-slate-600">
-                                    {m.role}
-                                  </p>
+                                  {m.role ? (
+                                    <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                                      {m.role}
+                                    </p>
+                                  ) : null}
                                   <div className="mt-3 flex flex-wrap items-center gap-2">
                                     <span
                                       className={
@@ -534,6 +567,36 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                     </div>
                   );
                 })}
+              </div>
+
+              <div className="relative mt-8 flex justify-center md:mt-10">
+                <a
+                  href="https://anba.tv/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative inline-flex min-w-[min(100%,29rem)] max-w-[36rem] items-center justify-center gap-3 overflow-hidden rounded-2xl border border-blue-300/70 bg-gradient-to-r from-[#eff6ff] via-[#ecfeff] to-[#eef2ff] px-5 py-4 text-center shadow-[0_14px_34px_rgba(37,99,235,0.16)] ring-1 ring-blue-200/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_42px_rgba(37,99,235,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  aria-label="Open Anba TV in a new tab"
+                >
+                  <span
+                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    aria-hidden
+                    style={{
+                      background:
+                        "linear-gradient(120deg, rgba(59,130,246,0.12), rgba(34,211,238,0.12), rgba(99,102,241,0.14))",
+                    }}
+                  />
+                  <span className="relative text-[15px] font-semibold leading-tight tracking-tight text-blue-950 md:text-base">
+                    Brand Ambassador Alex
+                    <span className="mx-1.5 text-blue-300">|</span>
+                    <span className="underline decoration-blue-400/80 underline-offset-2 transition-colors group-hover:text-blue-700">
+                      Anba TV
+                    </span>
+                  </span>
+                  <ExternalLink
+                    className="relative h-4 w-4 shrink-0 text-blue-700 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    aria-hidden
+                  />
+                </a>
               </div>
             </div>
           </div>

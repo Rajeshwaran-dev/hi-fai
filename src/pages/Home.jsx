@@ -38,11 +38,11 @@ const HERO_SUBTEXT =
 const HOW_CAN_HIFAI_IMAGE_URLS = {
   enthiranApp: "/enthiran.jpeg",
   digitalAbcdProjects:
-    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80",
+    "/abcd.jpeg",
   highSchools:
     "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=80",
   engineeringColleges:
-    "https://images.unsplash.com/photo-1581092160562-40aa08e78837?auto=format&fit=crop&w=1600&q=80",
+    "engineering-college.jpeg",
 };
 
 const HOW_CAN_HIFAI_SLIDES = [
@@ -2624,7 +2624,7 @@ export function Services({ reducedMotion, isMobile }) {
     <section
       id="services"
       ref={sectionRef}
-      className="relative overflow-hidden px-4 py-20 md:px-8 md:py-24"
+      className="relative overflow-hidden px-4 py-12 md:px-8 md:py-12"
     >
       <div
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.18),rgba(237,247,255,0.38))]"
@@ -2939,7 +2939,7 @@ export function HowItWorks({ reducedMotion, isMobile }) {
     <section
       id="how"
       ref={sectionRef}
-      className="relative bg-white px-4 py-20 md:px-8 md:py-24"
+      className="relative bg-white px-4 py-12 md:px-8 md:py-12"
     >
       <div className="mx-auto max-w-7xl">
         <div ref={headingRef} className="mb-12 md:mb-16">

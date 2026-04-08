@@ -21,10 +21,12 @@ import "./index.css";
   ensureBrandLink("apple-touch-icon");
 })();
 import App from "./App.jsx";
-import BreadcrumbPage from "./components/BreadcrumbPage.jsx";
+import Navbar from "./components/Navbar.jsx";
+import Footer from "./components/Footer.jsx";
 import { RouteTransitionProvider } from "./components/RouteTransitionProvider.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
+import { useReducedMotion } from "./hooks/useReducedMotion.js";
 import { SchoolStudentsBody } from "./pages/SchoolStudents.jsx";
 import { CollegeStudentsBody } from "./pages/CollegeStudents.jsx";
 import { SchoolOrganizationsBody } from "./pages/SchoolOrganizations.jsx";
@@ -32,6 +34,18 @@ import { CollegeOrganizationsBody } from "./pages/CollegeOrganizations.jsx";
 import { LearningHubBody } from "./pages/LearningHub.jsx";
 import { GetStartedBody } from "./pages/GetStarted.jsx";
 import { AboutBody } from "./pages/About.jsx";
+
+function InnerPageLayout({ children }) {
+  const reducedMotion = useReducedMotion();
+
+  return (
+    <div className="relative min-h-screen overflow-x-hidden bg-white">
+      <Navbar reducedMotion={reducedMotion} />
+      <main className="pt-24 md:pt-48">{children}</main>
+      <Footer reducedMotion={reducedMotion} />
+    </div>
+  );
+}
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -44,69 +58,57 @@ createRoot(document.getElementById("root")).render(
           <Route
             path="/students/school-students"
             element={
-              <BreadcrumbPage
-                title="Grades 9th – 12th"
-              >
+              <InnerPageLayout>
                 <SchoolStudentsBody />
-              </BreadcrumbPage>
+              </InnerPageLayout>
             }
           />
           <Route
             path="/students/college-students"
             element={
-              <BreadcrumbPage
-                title="College Students"
-              >
+              <InnerPageLayout>
                 <CollegeStudentsBody />
-              </BreadcrumbPage>
+              </InnerPageLayout>
             }
           />
           <Route
             path="/school-organizations"
             element={
-              <BreadcrumbPage
-                title="Schools"
-              >
+              <InnerPageLayout>
                 <SchoolOrganizationsBody />
-              </BreadcrumbPage>
+              </InnerPageLayout>
             }
           />
           <Route
             path="/college-organizations"
             element={
-              <BreadcrumbPage
-                title="Universities"
-              >
+              <InnerPageLayout>
                 <CollegeOrganizationsBody />
-              </BreadcrumbPage>
+              </InnerPageLayout>
             }
           />
           <Route
             path="/learning-hub"
             element={
-              <BreadcrumbPage
-                title="Learning Hub"
-              >
+              <InnerPageLayout>
                 <LearningHubBody />
-              </BreadcrumbPage>
+              </InnerPageLayout>
             }
           />
           <Route
             path="/get-started"
             element={
-              <BreadcrumbPage
-                title="Let's Hi-fAi"
-              >
+              <InnerPageLayout>
                 <GetStartedBody />
-              </BreadcrumbPage>
+              </InnerPageLayout>
             }
           />
           <Route
             path="/about"
             element={
-              <BreadcrumbPage title="About Us">
+              <InnerPageLayout>
                 <AboutBody />
-              </BreadcrumbPage>
+              </InnerPageLayout>
             }
           />
           <Route path="*" element={<Navigate to="/" replace />} />
