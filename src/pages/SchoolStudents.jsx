@@ -343,6 +343,7 @@ function OrbitCards({ onPlayClick }) {
         <div style={{ marginTop: 14, display: "flex", justifyContent: "center" }}>
           <CenterPlayTrigger onClick={onPlayClick} />
         </div>
+
       </div>
     );
   }
@@ -558,7 +559,7 @@ function OrbitCards({ onPlayClick }) {
         </div>
       )}
 
-      {/* Fixed center button — never participates in the ring's transform */}
+      {/* School Students page: centered video trigger */}
       <div
         style={{
           pointerEvents: "none",
@@ -574,6 +575,7 @@ function OrbitCards({ onPlayClick }) {
           <CenterPlayTrigger onClick={onPlayClick} />
         </div>
       </div>
+
     </div>
   );
 }

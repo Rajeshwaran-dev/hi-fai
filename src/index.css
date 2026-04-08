@@ -447,6 +447,14 @@
     transform: rotate(0deg);
   }
   to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes orbit-card-spin-clockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
     transform: rotate(-360deg);
   }
 }
@@ -495,6 +503,10 @@
   display: flex;
 }
 
+.orbit-card__counter {
+  animation: orbit-card-spin-clockwise 22s linear infinite;
+}
+
 @media (min-width: 1024px) {
   .orbit-card__inner {
     width: 285px;
@@ -504,6 +516,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   .orbit-rotor {
+    animation: none !important;
+  }
+  .orbit-card__counter {
     animation: none !important;
   }
 }

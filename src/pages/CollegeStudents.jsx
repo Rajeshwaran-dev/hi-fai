@@ -58,6 +58,7 @@ export function CollegeStudentsBody() {
     <>
       <FourCardFramework
         ctaBelowCards
+        layoutMode  ="orbit"
         pillarTitles={["Discover", "Build", "Apply", "Validate"]}
         copy={[
           "It starts with awareness. Explore possibilities, understand your strengths, and begin shaping a direction that feels truly yours.",

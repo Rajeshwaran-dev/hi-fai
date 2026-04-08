@@ -22,10 +22,11 @@ export function CollegeOrganizationsBody() {
 
   return (
     <>
-      <ProjectsSection reducedMotion={reducedMotion} isMobile={isMobile} />
+      
       <div className="mt-2 md:mt-6">
         <FourCardFramework
           ctaBelowCards
+          layoutMode="orbit"
           pillarTitles={["Discover", "Build", "Apply", "Validate"]}
           copy={[
             "Identify your career direction by connecting your skills, interests, and industry demands to make smarter and more focused decisions.",
@@ -50,6 +51,7 @@ export function CollegeOrganizationsBody() {
           </InnerPageLink>
         </FourCardFramework>
       </div>
+      <ProjectsSection reducedMotion={reducedMotion} isMobile={isMobile} />
       <GetStartedFormModal
         isOpen={isFormOpen}
         onClose={() => setIsFormOpen(false)}

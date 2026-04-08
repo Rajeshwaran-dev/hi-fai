@@ -36,8 +36,7 @@ const HERO_SUBTEXT =
   "There's a side of you beyond marks that remains undiscovered and HIfAi got you discover it differently.";
 
 const HOW_CAN_HIFAI_IMAGE_URLS = {
-  enthiranApp:
-    "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&w=1600&q=80",
+  enthiranApp: "/enthiran.jpeg",
   digitalAbcdProjects:
     "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80",
   highSchools:

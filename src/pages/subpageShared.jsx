@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { Award, Check, ClipboardCheck, Compass, Maximize2 } from "lucide-react";
 
 /** Fixed 4-pillar titles and icons for inner marketing pages (Explore → Excel). */
@@ -7,6 +8,14 @@ const FOUR_E_META = [
   { title: "Evaluate", Icon: ClipboardCheck },
   { title: "Excel", Icon: Award },
 ];
+const ORBIT_THEMES = [
+  { base: "#73A5CA", light: "#E8F3FC", deep: "#1E3A5F" },
+  { base: "#6E1A37", light: "#F9EEF3", deep: "#3F1224" },
+  { base: "#F08D39", light: "#FFF4E9", deep: "#5A3416" },
+  { base: "#519A66", light: "#EBF8EF", deep: "#1F4A2E" },
+];
+const ORBIT_R_PCT = 33;
+const ORBIT_CARD_SIZE_PCT = 41;
 
 export function SectionLabel({ children }) {
   return (
@@ -107,8 +116,9 @@ export function FourCardFramework({
 }) {
   const bodies = copy;
   const orbitMode = layoutMode === "orbit";
-  // Anti-clockwise order around center: Explore (top-left), Expand (bottom-left), Evaluate (bottom-right), Excel (top-right)
-  const orbitAngles = ["135deg", "225deg", "315deg", "45deg"];
+  const orbitContainerRef = useRef(null);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
+  const [hoverMeta, setHoverMeta] = useState(null);
 
   return (
     <>
@@ -138,59 +148,198 @@ export function FourCardFramework({
             </div>
           ) : (
             <>
-              {/* Mobile: keep readable grid */} 
+              {/* Mobile: keep readable card stack with consistent theme */}
               <div className="mx-auto grid max-w-7xl gap-4 md:hidden">
                 {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
                   const title = pillarTitles?.[i] ?? defaultTitle;
                   const PillarIcon = pillarIcons?.[i] ?? Icon;
+                  const theme = ORBIT_THEMES[i];
                   return (
-                    <Card
+                    <article
                       key={`${i}-${title}`}
-                      icon={
-                        <PillarIcon
-                          className="h-5 w-5 text-blue-600 transition-colors duration-300 group-hover:text-white"
-                          strokeWidth={2.2}
-                          aria-hidden
-                        />
-                      }
-                      title={title}
+                      className="rounded-3xl border p-5 shadow-sm"
+                      style={{
+                        borderColor: theme.base,
+                        background: `linear-gradient(160deg, #ffffff 0%, ${theme.light} 100%)`,
+                        boxShadow: `0 10px 28px color-mix(in srgb, ${theme.base} 20%, transparent)`,
+                      }}
                     >
-                      {bodies[i]}
-                    </Card>
+                      <div className="flex items-start gap-3">
+                        <span
+                          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                          style={{
+                            background: `linear-gradient(135deg, ${theme.base}, color-mix(in srgb, ${theme.base} 74%, #ffffff))`,
+                          }}
+                        >
+                          <PillarIcon className="h-5 w-5 text-white" strokeWidth={2.2} aria-hidden />
+                        </span>
+                        <div>
+                          <h3 className="text-lg font-bold" style={{ color: theme.deep }}>{title}</h3>
+                          <p className="mt-2 text-sm leading-relaxed" style={{ color: "color-mix(in srgb, #334155 55%, #0f172a)" }}>
+                            {bodies[i]}
+                          </p>
+                        </div>
+                      </div>
+                    </article>
                   );
                 })}
               </div>
 
-              {/* Desktop: true orbit */} 
-              <div className="orbit-mode mx-auto hidden max-w-6xl md:block">
-                <div className="orbit-rotor" aria-hidden={false}>
+              {/* Desktop: SchoolStudents-like rounded spinning orbit with hover panel */}
+              <div
+                ref={orbitContainerRef}
+                className="mx-auto hidden w-full max-w-[680px] select-none md:block py-12"
+                style={{ position: "relative", aspectRatio: "1 / 1", marginTop: "30px" }}
+              >
+                <div
+                  style={{
+                    pointerEvents: "none",
+                    position: "absolute",
+                    left: "50%",
+                    top: "50%",
+                    width: `${ORBIT_R_PCT * 2 + ORBIT_CARD_SIZE_PCT}%`,
+                    aspectRatio: "1 / 1",
+                    transform: "translate(-50%, -50%)",
+                    borderRadius: "50%",
+                    border: "1.5px dashed rgba(147,197,253,0.45)",
+                  }}
+                />
+                <div
+                  style={{
+                    position: "absolute",
+                    inset: 0,
+                    animation: "orbit-card-spin-anticlockwise 22s linear infinite",
+                    animationPlayState: hoveredIndex !== null ? "paused" : "running",
+                  }}
+                >
                   {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
                     const title = pillarTitles?.[i] ?? defaultTitle;
                     const PillarIcon = pillarIcons?.[i] ?? Icon;
+                    const theme = ORBIT_THEMES[i];
+                    const angleRad = (i * 90 - 90) * (Math.PI / 180);
+                    const cx = 50 + ORBIT_R_PCT * Math.cos(angleRad);
+                    const cy = 50 + ORBIT_R_PCT * Math.sin(angleRad);
                     return (
                       <div
                         key={`${i}-${title}`}
-                        className="orbit-card"
-                        style={{ "--orbit-angle": orbitAngles[i] }}
+                        style={{
+                          position: "absolute",
+                          width: `${ORBIT_CARD_SIZE_PCT}%`,
+                          aspectRatio: "1 / 1",
+                          left: `${cx}%`,
+                          top: `${cy}%`,
+                          transform: "translate(-50%, -50%)",
+                        }}
                       >
-                        <Card
-                          layout="stacked"
-                          className="orbit-card__inner rounded-[999px]"
-                          icon={
-                            <PillarIcon
-                              className="h-6 w-6 text-blue-600 transition-colors duration-300 group-hover:text-white"
-                              strokeWidth={2.2}
-                              aria-hidden
-                            />
-                          }
-                          title={title}
+                        <article
+                          onMouseEnter={(e) => {
+                            const containerRect = orbitContainerRef.current?.getBoundingClientRect();
+                            const cardRect = e.currentTarget.getBoundingClientRect();
+                            if (!containerRect) return;
+                            const centerX = cardRect.left + cardRect.width / 2;
+                            const centerY = cardRect.top + cardRect.height / 2;
+                            const showOnRight = centerX <= containerRect.left + containerRect.width / 2;
+                            const panelWidth = Math.min(300, containerRect.width * 0.42);
+                            const preferredX = showOnRight
+                              ? cardRect.right - containerRect.left + 14
+                              : cardRect.left - containerRect.left - panelWidth - 14;
+                            const clampedX = Math.max(12, Math.min(preferredX, containerRect.width - panelWidth - 12));
+                            setHoveredIndex(i);
+                            setHoverMeta({
+                              top: centerY - containerRect.top,
+                              left: clampedX,
+                            });
+                          }}
+                          onMouseLeave={() => {
+                            setHoveredIndex(null);
+                            setHoverMeta(null);
+                          }}
+                          style={{
+                            width: "100%",
+                            height: "100%",
+                            borderRadius: "50%",
+                            overflow: "hidden",
+                            animation: "orbit-card-spin-clockwise 22s linear infinite",
+                            animationPlayState: hoveredIndex !== null ? "paused" : "running",
+                            background: `linear-gradient(155deg, ${theme.light} 0%, #ffffff 38%, ${theme.light} 100%)`,
+                            border: `2.5px solid ${theme.base}`,
+                            boxShadow: `0 10px 36px color-mix(in srgb, ${theme.base} 35%, transparent), 0 2px 10px rgba(0,0,0,0.08)`,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            padding: "12%",
+                            textAlign: "center",
+                          }}
                         >
-                          {bodies[i]}
-                        </Card>
+                          <span
+                            className="inline-flex h-14 w-14 items-center justify-center rounded-full"
+                            style={{
+                              background: `linear-gradient(135deg, ${theme.base}, color-mix(in srgb, ${theme.base} 74%, #ffffff))`,
+                              flexShrink: 0,
+                            }}
+                          >
+                            <PillarIcon className="h-6 w-6 text-white" strokeWidth={2.2} aria-hidden />
+                          </span>
+                          <h3
+                            className="mt-4 font-bold leading-tight"
+                            style={{ color: theme.deep, fontSize: "16px" }}
+                          >
+                            {title}
+                          </h3>
+                          <p
+                            className="mt-2 leading-relaxed"
+                            style={{
+                              color: "color-mix(in srgb, #334155 55%, #0f172a)",
+                              fontSize: "16px",
+                              display: "-webkit-box",
+                              WebkitLineClamp: 4,
+                              WebkitBoxOrient: "vertical",
+                              overflow: "hidden",
+                            }}
+                          >
+                            {bodies[i]}
+                          </p>
+                        </article>
                       </div>
                     );
                   })}
                 </div>
+                {hoveredIndex !== null && hoverMeta ? (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: hoverMeta.top,
+                      left: hoverMeta.left,
+                      transform: "translateY(-50%)",
+                      zIndex: 40,
+                      width: "min(300px, 42vw)",
+                      maxWidth: "calc(100% - 24px)",
+                      padding: "14px 16px",
+                      borderRadius: 16,
+                      background: `linear-gradient(135deg, ${ORBIT_THEMES[hoveredIndex].deep} 0%, ${ORBIT_THEMES[hoveredIndex].base} 100%)`,
+                      border: `1px solid color-mix(in srgb, ${ORBIT_THEMES[hoveredIndex].base} 50%, #ffffff)`,
+                      boxShadow: "0 14px 36px rgba(2,6,23,0.35)",
+                      color: "#f8fafc",
+                    }}
+                  >
+                    <p
+                      style={{
+                        margin: 0,
+                        fontSize: 12,
+                        fontWeight: 700,
+                        letterSpacing: "0.08em",
+                        textTransform: "uppercase",
+                        color: "rgba(255,255,255,0.86)",
+                      }}
+                    >
+                      {pillarTitles?.[hoveredIndex] ?? FOUR_E_META[hoveredIndex].title}
+                    </p>
+                    <p style={{ margin: "6px 0 0", fontSize: 14, lineHeight: 1.45 }}>
+                      {bodies[hoveredIndex]}
+                    </p>
+                  </div>
+                ) : null}
               </div>
             </>
           )}

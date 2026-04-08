@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import { Lead, SectionHeading } from "./subpageShared.jsx";
 
 const tabOptions = [
@@ -9,9 +10,19 @@ const tabOptions = [
   { id: "school-student", label: "School Students" },
   { id: "college-student", label: "College Students" },
 ];
+const DEFAULT_TAB = "school-org";
+
+function getInitialTabFromSearch(search) {
+  const requestedTab = new URLSearchParams(search).get("tab");
+  if (!requestedTab) return DEFAULT_TAB;
+  return tabOptions.some((item) => item.id === requestedTab)
+    ? requestedTab
+    : DEFAULT_TAB;
+}
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const PHONE_RE = /^\+?[0-9\s\-()]{8,}$/;
+const SCHOOL_STUDENT_APP_LINK = "/learning-hub";
 
 let razorpayScriptPromise = null;
 
@@ -52,6 +63,13 @@ export function GetStartedFormPanel({
     phone: "",
     email: "",
   });
+  const [studentCount, setStudentCount] = useState(1);
+  const [studentEntries, setStudentEntries] = useState([
+    { name: "", email: "" },
+    { name: "", email: "" },
+    { name: "", email: "" },
+    { name: "", email: "" },
+  ]);
   const [errors, setErrors] = useState({});
   const [isPaying, setIsPaying] = useState(false);
 
@@ -63,19 +81,31 @@ export function GetStartedFormPanel({
     setFormData((prev) => ({ ...prev, [name]: value }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
   };
+  const setStudentField = (index, field, value) => {
+    setStudentEntries((prev) =>
+      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+    );
+    setErrors((prev) => ({ ...prev, [`student-${field}-${index}`]: undefined }));
+  };
 
   const validate = () => {
     const nextErrors = {};
+    const isCollegeStudent = tab === "college-student";
+    const activeStudents = studentEntries.slice(0, studentCount);
 
-    if (!formData.firstName.trim()) nextErrors.firstName = "First name is required.";
-    if (!formData.lastName.trim()) nextErrors.lastName = "Last name is required.";
+    if (!isCollegeStudent) {
+      if (!formData.firstName.trim()) nextErrors.firstName = "First name is required.";
+      if (!formData.lastName.trim()) nextErrors.lastName = "Last name is required.";
+    }
     if (!formData.gradeOrProgram) nextErrors.gradeOrProgram = "Please select an option.";
     if (!formData.institution.trim()) nextErrors.institution = "This field is required.";
     if (!formData.notes.trim()) nextErrors.notes = "Please add your goals / notes.";
     if (!formData.phone.trim()) nextErrors.phone = "Phone is required.";
     else if (!PHONE_RE.test(formData.phone.trim())) nextErrors.phone = "Enter a valid phone number.";
-    if (!formData.email.trim()) nextErrors.email = "Email is required.";
-    else if (!EMAIL_RE.test(formData.email.trim())) nextErrors.email = "Enter a valid email address.";
+    if (!isCollegeStudent) {
+      if (!formData.email.trim()) nextErrors.email = "Email is required.";
+      else if (!EMAIL_RE.test(formData.email.trim())) nextErrors.email = "Enter a valid email address.";
+    }
 
     if (tab === "school-org" && !formData.role) nextErrors.role = "Please select your role.";
     if (tab === "college-org" && !formData.department.trim()) nextErrors.department = "Department / center is required.";
@@ -83,7 +113,14 @@ export function GetStartedFormPanel({
       if (!formData.guardianEmail.trim()) nextErrors.guardianEmail = "Parent/guardian email is required.";
       else if (!EMAIL_RE.test(formData.guardianEmail.trim())) nextErrors.guardianEmail = "Enter a valid parent/guardian email.";
     }
-    if (tab === "college-student" && !formData.major.trim()) nextErrors.major = "Major / focus area is required.";
+    if (tab === "college-student") {
+      if (!formData.major.trim()) nextErrors.major = "Major / focus area is required.";
+      activeStudents.forEach((student, i) => {
+        if (!student.name.trim()) nextErrors[`student-name-${i}`] = "Student name is required.";
+        if (!student.email.trim()) nextErrors[`student-email-${i}`] = "Student email is required.";
+        else if (!EMAIL_RE.test(student.email.trim())) nextErrors[`student-email-${i}`] = "Enter a valid student email.";
+      });
+    }
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -93,7 +130,7 @@ export function GetStartedFormPanel({
     e.preventDefault();
     if (!validate()) return;
 
-    const isStudentFlow = tab === "school-student" || tab === "college-student";
+    const isStudentFlow = tab === "college-student";
     if (!isStudentFlow) {
       window.alert("Enquiry submitted successfully.");
       return;
@@ -108,7 +145,13 @@ export function GetStartedFormPanel({
       }
 
       const key = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_1DP5mmOlF5G5ag";
-      const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+      const firstStudent = studentEntries[0];
+      const fullName = tab === "college-student"
+        ? firstStudent.name.trim()
+        : `${formData.firstName} ${formData.lastName}`.trim();
+      const paymentEmail = tab === "college-student"
+        ? firstStudent.email.trim()
+        : formData.email;
 
       const rzp = new window.Razorpay({
         key,
@@ -118,7 +161,7 @@ export function GetStartedFormPanel({
         description: "Get Started Application",
         prefill: {
           name: fullName,
-          email: formData.email,
+          email: paymentEmail,
           contact: formData.phone,
         },
         notes: {
@@ -172,29 +215,84 @@ export function GetStartedFormPanel({
           className="mt-6 space-y-4"
           onSubmit={handleSubmit}
         >
+          {tab === "college-student" ? (
+            <label className="block">
+              <span className="mb-2 block text-sm font-semibold text-slate-800">How many students</span>
+              <select
+                value={studentCount}
+                onChange={(e) => setStudentCount(Number(e.target.value))}
+                className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 md:max-w-[18rem]"
+              >
+                <option value={1}>1</option>
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+              </select>
+            </label>
+          ) : null}
+
           <div className="grid gap-4 md:grid-cols-2">
-            <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-slate-800">First name</span>
-              <input
-                type="text"
-                placeholder="Jane"
-                value={formData.firstName}
-                onChange={(e) => setField("firstName", e.target.value)}
-                className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
-              />
-              {errors.firstName ? <span className="mt-1 block text-xs text-red-600">{errors.firstName}</span> : null}
-            </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-slate-800">Last name</span>
-              <input
-                type="text"
-                placeholder="Doe"
-                value={formData.lastName}
-                onChange={(e) => setField("lastName", e.target.value)}
-                className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
-              />
-              {errors.lastName ? <span className="mt-1 block text-xs text-red-600">{errors.lastName}</span> : null}
-            </label>
+            {tab !== "college-student" ? (
+              <>
+                <label className="block">
+                  <span className="mb-2 block text-sm font-semibold text-slate-800">First name</span>
+                  <input
+                    type="text"
+                    placeholder="Jane"
+                    value={formData.firstName}
+                    onChange={(e) => setField("firstName", e.target.value)}
+                    className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                  />
+                  {errors.firstName ? <span className="mt-1 block text-xs text-red-600">{errors.firstName}</span> : null}
+                </label>
+                <label className="block">
+                  <span className="mb-2 block text-sm font-semibold text-slate-800">Last name</span>
+                  <input
+                    type="text"
+                    placeholder="Doe"
+                    value={formData.lastName}
+                    onChange={(e) => setField("lastName", e.target.value)}
+                    className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                  />
+                  {errors.lastName ? <span className="mt-1 block text-xs text-red-600">{errors.lastName}</span> : null}
+                </label>
+              </>
+            ) : (
+              Array.from({ length: studentCount }).map((_, i) => (
+                <div key={`student-${i}`} className="contents">
+                  <label className="block">
+                    <span className="mb-2 block text-sm font-semibold text-slate-800">
+                      Student Name {studentCount > 1 ? i + 1 : ""}
+                    </span>
+                    <input
+                      type="text"
+                      placeholder="Student name"
+                      value={studentEntries[i].name}
+                      onChange={(e) => setStudentField(i, "name", e.target.value)}
+                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                    />
+                    {errors[`student-name-${i}`] ? (
+                      <span className="mt-1 block text-xs text-red-600">{errors[`student-name-${i}`]}</span>
+                    ) : null}
+                  </label>
+                  <label className="block">
+                    <span className="mb-2 block text-sm font-semibold text-slate-800">
+                      Student Email ID {studentCount > 1 ? i + 1 : ""}
+                    </span>
+                    <input
+                      type="email"
+                      placeholder="student@email.com"
+                      value={studentEntries[i].email}
+                      onChange={(e) => setStudentField(i, "email", e.target.value)}
+                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                    />
+                    {errors[`student-email-${i}`] ? (
+                      <span className="mt-1 block text-xs text-red-600">{errors[`student-email-${i}`]}</span>
+                    ) : null}
+                  </label>
+                </div>
+              ))
+            )}
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-slate-800">
                 {tab === "school-org"
@@ -358,17 +456,19 @@ export function GetStartedFormPanel({
               />
               {errors.phone ? <span className="mt-1 block text-xs text-red-600">{errors.phone}</span> : null}
             </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-slate-800">Email</span>
-              <input
-                type="email"
-                placeholder="you@school.edu"
-                value={formData.email}
-                onChange={(e) => setField("email", e.target.value)}
-                className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
-              />
-              {errors.email ? <span className="mt-1 block text-xs text-red-600">{errors.email}</span> : null}
-            </label>
+            {tab !== "college-student" ? (
+              <label className="block">
+                <span className="mb-2 block text-sm font-semibold text-slate-800">Email</span>
+                <input
+                  type="email"
+                  placeholder="you@school.edu"
+                  value={formData.email}
+                  onChange={(e) => setField("email", e.target.value)}
+                  className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                />
+                {errors.email ? <span className="mt-1 block text-xs text-red-600">{errors.email}</span> : null}
+              </label>
+            ) : null}
           </div>
 
           <div className="flex gap-3 pt-2 sm:justify-center sm:gap-4">
@@ -377,12 +477,22 @@ export function GetStartedFormPanel({
               disabled={isPaying}
               className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
             >
-              {tab === "school-org" || tab === "college-org"
+              {tab === "school-org" || tab === "college-org" || tab === "school-student"
                 ? "Enquire Now"
                 : isPaying
                   ? "Processing..."
                   : "Pay Now"}
             </button>
+            {tab === "school-student" ? (
+              <a
+                href={SCHOOL_STUDENT_APP_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
+              >
+                App Link
+              </a>
+            ) : null}
           </div>
         </form>
       </div>
@@ -448,5 +558,6 @@ export function GetStartedFormModal({ isOpen, onClose, initialTab }) {
 }
 
 export function GetStartedBody() {
-  return <GetStartedFormPanel />;
+  const location = useLocation();
+  return <GetStartedFormPanel initialTab={getInitialTabFromSearch(location.search)} />;
 }
