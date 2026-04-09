@@ -26,7 +26,7 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const PHONE_RE = /^\d{10}$/;
 const SCHOOL_STUDENT_APP_LINK = "/learning-hub";
 const API_BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:3003";
 const sanitizeEmailInput = (value = "") =>
   String(value).replace(/[^a-zA-Z0-9@._-]/g, "");
 const sanitizePhoneInput = (value = "") =>

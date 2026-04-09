@@ -14,7 +14,7 @@ import deepseekIcon from "../assets/images/deepseek.png?url";
 gsap.registerPlugin(ScrollTrigger);
 
 const API_BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:3003";
 const sanitizeEmailInput = (value = "") =>
   String(value).replace(/[^a-zA-Z0-9@._-]/g, "");
 const sanitizePhoneInput = (value = "") =>

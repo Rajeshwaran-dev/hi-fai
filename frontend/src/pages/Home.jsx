@@ -80,7 +80,7 @@ const HERO_HOOK_POINTS = [
 const HERO_SUBTEXT =
   "There's a side of you beyond marks that remains undiscovered and HIfAi got you discover it differently.";
 const API_BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:3003";
 
 const HOW_CAN_HIFAI_IMAGE_URLS = {
   enthiranApp: "/enthiran.jpeg",
