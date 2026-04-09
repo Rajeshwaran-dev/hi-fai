@@ -8,10 +8,21 @@ dotenv.config();
 
 const app = express();
 const port = process.env.PORT || 3003;
+const allowedOrigins = [
+  "https://hifai.askeva.net",
+  "https://www.hifai.askeva.net",
+  "http://localhost:3003",
+];
 
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "*",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
   }),
 );
 app.use(express.json());
