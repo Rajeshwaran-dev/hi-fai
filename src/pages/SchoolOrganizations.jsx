@@ -8,7 +8,7 @@ export function SchoolOrganizationsBody() {
 
   return (
     <>
-      <div className="w-full overflow-hidden">
+      <div className="w-full overflow-hidden py-8">
         <FourCardFramework
           ctaBelowCards
           layoutMode="orbit"

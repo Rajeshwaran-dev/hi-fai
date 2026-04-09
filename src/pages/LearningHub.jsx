@@ -1,12 +1,525 @@
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { CalendarClock, MessageCircleHeart, Search, ShieldCheck, Sparkles } from "lucide-react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
 import { useReducedMotion, useIsMobile } from "../hooks/useReducedMotion.js";
-import { HowItWorks, Services } from "./Home.jsx";
-import { FourCardFramework } from "./subpageShared.jsx";
+import { Services } from "./Home.jsx";
+import chatgptIcon from "../assets/images/chatgpt.png?url";
+import claudeIcon from "../assets/images/claude.png?url";
+import grokIcon from "../assets/images/grok.png?url";
+import deepseekIcon from "../assets/images/deepseek.png?url";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const LEARNING_HUB_REQUEST_EMAIL = "innovate@hifaiskills.io";
+const IST_TIMEZONE = "IST (UTC+05:30)";
+
+const GRADE_OPTIONS = ["Kindergarten", "Elementary", "High School"];
+const SUBJECT_OPTIONS = ["Maths", "Science"];
+const DURATION_OPTIONS = [
+  { value: "1", label: "1 hour" },
+  { value: "2", label: "2 hours" },
+  { value: "3", label: "3 hours" },
+];
+const BOARD_OPTIONS = ["State", "CBSE", "ICSE"];
+const AI_REFERENCE_TOOLS = [
+  {
+    name: "ChatGPT",
+    url: "https://chatgpt.com",
+    iconUrl: chatgptIcon,
+    description:
+      "A versatile AI assistant for writing, coding, research, and idea generation. Great for drafting content and solving technical problems quickly.",
+  },
+  {
+    name: "Claude",
+    url: "https://claude.ai",
+    iconUrl: claudeIcon,
+    description:
+      "Known for long-context reasoning and high-quality responses. Useful for structured analysis, deep reading, and thoughtful drafting.",
+  },
+  {
+    name: "Grok",
+    url: "https://grok.com",
+    iconUrl: grokIcon,
+    description:
+      "An AI model designed for fast conversational exploration and current-topic discovery. Helpful for quick brainstorming and trend-focused prompts.",
+  },
+  {
+    name: "DeepSeek",
+    url: "https://chat.deepseek.com",
+    iconUrl: deepseekIcon,
+    description:
+      "A strong coding and reasoning assistant suitable for technical tasks. Often used for problem-solving, debugging, and concise explanations.",
+  },
+];
+
+function getUpcomingDateOptions(totalDays = 14) {
+  const out = [];
+  const today = new Date();
+  for (let i = 1; i <= totalDays; i += 1) {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    const iso = d.toISOString().slice(0, 10);
+    const label = d.toLocaleDateString("en-IN", {
+      weekday: "short",
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+    out.push({ value: iso, label });
+  }
+  return out;
+}
+
+function LearningHubRequestFormSection() {
+  const [form, setForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    grade: "",
+    subject: "",
+    date: "",
+    hour: "",
+    meridiem: "",
+    duration: "",
+    board: "",
+    timezone: IST_TIMEZONE,
+  });
+  const [errors, setErrors] = useState({});
+  const [requested, setRequested] = useState(false);
+
+  const dateOptions = useMemo(() => getUpcomingDateOptions(14), []);
+  const hourOptions = useMemo(
+    () => Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) })),
+    [],
+  );
+
+  const setField = (key, value) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+    setErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  };
+
+  const validate = () => {
+    const next = {};
+    if (!form.name.trim()) next.name = "Name is required.";
+    if (!form.phone.trim()) next.phone = "Phone number is required.";
+    if (!/^\+?\d{10,15}$/.test(form.phone.replace(/\s+/g, ""))) {
+      next.phone = "Enter a valid phone number (10-15 digits).";
+    }
+    if (!form.email.trim()) next.email = "Email is required.";
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(form.email)) {
+      next.email = "Enter a valid email address.";
+    }
+    if (!form.grade) next.grade = "Please select a grade.";
+    if (!form.subject) next.subject = "Please select a subject.";
+    if (!form.date) next.date = "Please select a date.";
+    if (!form.hour) next.hour = "Please select an hour.";
+    if (!form.meridiem) next.meridiem = "Please select AM or PM.";
+    if (!form.duration) next.duration = "Please select a duration.";
+    if (!form.board) next.board = "Please select a board.";
+    if (form.timezone !== IST_TIMEZONE) {
+      next.timezone = "Only IST is allowed currently.";
+    }
+
+    if (form.hour && form.meridiem) {
+      const h = Number(form.hour);
+      // Allowed booking window: 6:00 AM to 9:00 PM (whole-hour start only).
+      const validHour = Number.isInteger(h) && h >= 1 && h <= 12;
+      if (!validHour) next.hour = "Time must start at a whole hour (1-12).";
+      const isDisallowedNight = (form.meridiem === "AM" && h < 6) || (form.meridiem === "PM" && h >= 10);
+      if (isDisallowedNight) {
+        next.hour = "Bookings are allowed only between 6:00 AM and 9:00 PM IST.";
+      }
+    }
+
+    return next;
+  };
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const next = validate();
+    setErrors(next);
+    if (Object.keys(next).length) return;
+
+    const lines = [
+      "New Learning Hub Request",
+      "",
+      `Name: ${form.name}`,
+      `Phone: ${form.phone}`,
+      `Email: ${form.email}`,
+      `Grade: ${form.grade}`,
+      `Subject: ${form.subject}`,
+      `Preferred Date: ${form.date}`,
+      `Preferred Time: ${form.hour} ${form.meridiem}`,
+      `Duration: ${form.duration}`,
+      `Board: ${form.board}`,
+      `Timezone: ${form.timezone}`,
+    ];
+
+    const mailtoUrl = `mailto:${LEARNING_HUB_REQUEST_EMAIL}?subject=${encodeURIComponent("Learning Hub - Request Session")}&body=${encodeURIComponent(lines.join("\n"))}`;
+    window.location.href = mailtoUrl;
+    setRequested(true);
+  };
+
+  const fieldBase =
+    "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-800 shadow-[0_1px_2px_rgba(15,23,42,0.04)] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200";
+
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-b from-white to-blue-50/35 px-4 pt-14 pb-10 md:px-8 md:pt-8 md:pb-12">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-24 top-6 h-72 w-72 rounded-full bg-blue-300/20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 bottom-0 h-72 w-72 rounded-full bg-cyan-300/20 blur-3xl"
+      />
+
+      <div className="relative mx-auto max-w-7xl rounded-[1.7rem] border border-blue-100/80 bg-white/90 p-6 shadow-[0_24px_70px_-36px_rgba(37,99,235,0.45)] backdrop-blur-sm md:p-9">
+        <h2 className="mt-4 text-2xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl">
+          One-to-one tutor specialist support
+        </h2>
+
+        {requested ? (
+          <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
+            Request submitted successfully. We have initiated your email draft and our team will reach out soon.
+          </div>
+        ) : null}
+
+        <form onSubmit={onSubmit} className="mt-7 grid gap-4 md:grid-cols-2 md:gap-5">
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Name *</label>
+            <input
+              type="text"
+              value={form.name}
+              onChange={(e) => setField("name", e.target.value)}
+              className={`${fieldBase} ${errors.name ? "border-red-400 focus:ring-red-200" : ""}`}
+              placeholder="Enter your full name"
+            />
+            {errors.name ? <p className="mt-1.5 text-xs text-red-600">{errors.name}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Phone number *</label>
+            <input
+              type="tel"
+              value={form.phone}
+              onChange={(e) => setField("phone", e.target.value)}
+              className={`${fieldBase} ${errors.phone ? "border-red-400 focus:ring-red-200" : ""}`}
+              placeholder="Enter phone number"
+            />
+            {errors.phone ? <p className="mt-1.5 text-xs text-red-600">{errors.phone}</p> : null}
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Email *</label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => setField("email", e.target.value)}
+              className={`${fieldBase} ${errors.email ? "border-red-400 focus:ring-red-200" : ""}`}
+              placeholder="Enter email address"
+            />
+            {errors.email ? <p className="mt-1.5 text-xs text-red-600">{errors.email}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Grade *</label>
+            <select
+              value={form.grade}
+              onChange={(e) => setField("grade", e.target.value)}
+              className={`${fieldBase} ${errors.grade ? "border-red-400 focus:ring-red-200" : ""}`}
+            >
+              <option value="">Select grade</option>
+              {GRADE_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+            </select>
+            {errors.grade ? <p className="mt-1.5 text-xs text-red-600">{errors.grade}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Subject/s *</label>
+            <select
+              value={form.subject}
+              onChange={(e) => setField("subject", e.target.value)}
+              className={`${fieldBase} ${errors.subject ? "border-red-400 focus:ring-red-200" : ""}`}
+            >
+              <option value="">Select subject</option>
+              {SUBJECT_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+            </select>
+            {errors.subject ? <p className="mt-1.5 text-xs text-red-600">{errors.subject}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Preferred date *</label>
+            <select
+              value={form.date}
+              onChange={(e) => setField("date", e.target.value)}
+              className={`${fieldBase} ${errors.date ? "border-red-400 focus:ring-red-200" : ""}`}
+            >
+              <option value="">Select date</option>
+              {dateOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+            </select>
+            {errors.date ? <p className="mt-1.5 text-xs text-red-600">{errors.date}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Preferred duration *</label>
+            <select
+              value={form.duration}
+              onChange={(e) => setField("duration", e.target.value)}
+              className={`${fieldBase} ${errors.duration ? "border-red-400 focus:ring-red-200" : ""}`}
+            >
+              <option value="">Select duration</option>
+              {DURATION_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+            </select>
+            {errors.duration ? <p className="mt-1.5 text-xs text-red-600">{errors.duration}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Preferred time (hour) *</label>
+            <select
+              value={form.hour}
+              onChange={(e) => setField("hour", e.target.value)}
+              className={`${fieldBase} ${errors.hour ? "border-red-400 focus:ring-red-200" : ""}`}
+            >
+              <option value="">Select hour</option>
+              {hourOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+            </select>
+            {errors.hour ? <p className="mt-1.5 text-xs text-red-600">{errors.hour}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">AM / PM *</label>
+            <select
+              value={form.meridiem}
+              onChange={(e) => setField("meridiem", e.target.value)}
+              className={`${fieldBase} ${errors.meridiem ? "border-red-400 focus:ring-red-200" : ""}`}
+            >
+              <option value="">Select</option>
+              <option value="AM">AM</option>
+              <option value="PM">PM</option>
+            </select>
+            {errors.meridiem ? <p className="mt-1.5 text-xs text-red-600">{errors.meridiem}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Board *</label>
+            <select
+              value={form.board}
+              onChange={(e) => setField("board", e.target.value)}
+              className={`${fieldBase} ${errors.board ? "border-red-400 focus:ring-red-200" : ""}`}
+            >
+              <option value="">Select board</option>
+              {BOARD_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+            </select>
+            {errors.board ? <p className="mt-1.5 text-xs text-red-600">{errors.board}</p> : null}
+          </div>
+
+          <div>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Time zone *</label>
+            <select
+              value={form.timezone}
+              onChange={(e) => setField("timezone", e.target.value)}
+              className={`${fieldBase} ${errors.timezone ? "border-red-400 focus:ring-red-200" : ""}`}
+            >
+              <option value={IST_TIMEZONE}>{IST_TIMEZONE}</option>
+            </select>
+            {errors.timezone ? <p className="mt-1.5 text-xs text-red-600">{errors.timezone}</p> : null}
+          </div>
+
+          <div className="md:col-span-2">
+            <button
+              type="submit"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(20,131,255,0.35)] transition hover:brightness-110 md:text-base"
+            >
+              Request
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+function ExpertGuidanceSection() {
+  return (
+    <section className="relative overflow-hidden bg-gradient-to-b from-white to-blue-50/40 px-4 py-14 md:px-8 md:py-18">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-20 top-8 h-64 w-64 rounded-full bg-blue-300/20 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 bottom-8 h-56 w-56 rounded-full bg-cyan-300/20 blur-3xl"
+      />
+
+      <div className="relative mx-auto grid w-full max-w-7xl gap-6 lg:grid-cols-[1.15fr_0.85fr] lg:items-center">
+        <div className="rounded-[1.7rem] border border-blue-100/80 bg-white/85 p-7 shadow-[0_24px_70px_-36px_rgba(37,99,235,0.45)] backdrop-blur-sm md:p-9">
+          <p className="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-blue-700">
+            <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
+            Learning Hub Support
+          </p>
+
+          <h2 className="mt-4 text-2xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl">
+            Get Our Expert Guidence and Personalized Support
+          </h2>
+
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
+            Plan your next learning steps with one-to-one expert recommendations,
+            personalized mentoring, and focused guidance designed around your goals.
+          </p>
+
+          <div className="mt-6 flex flex-wrap gap-3">
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700">
+              <MessageCircleHeart className="h-4 w-4 text-blue-600" aria-hidden />
+              Personalized consultation
+            </div>
+            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700">
+              <CalendarClock className="h-4 w-4 text-blue-600" aria-hidden />
+              Slot-based pre booking
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-[1.7rem] border border-blue-200/70 bg-gradient-to-br from-slate-900 via-[#0f2b4d] to-[#0b1f38] p-7 text-white shadow-[0_30px_80px_-34px_rgba(15,23,42,0.8)] md:p-9">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200">
+            Pre Book Only
+          </p>
+          <h3 className="mt-3 text-2xl font-bold leading-tight md:text-3xl">
+            Reserve your expert session
+          </h3>
+          <p className="mt-3 text-sm leading-relaxed text-slate-200 md:text-base">
+            Secure your slot in advance to get priority support and a tailored
+            action plan from our team.
+          </p>
+
+          <div className="mt-6">
+            <InnerPageLink
+              to="/get-started"
+              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-blue-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition hover:bg-blue-400 hover:shadow-xl md:text-base"
+            >
+              Pre Book Now
+            </InnerPageLink>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function LearningHubReferencesSection() {
+  const accentStyles = [
+    {
+      chip: "from-emerald-500/15 to-blue-500/15 border-emerald-200/70",
+      glow: "from-emerald-300/25 to-blue-300/20",
+      ring: "group-hover:ring-emerald-300/45",
+      title: "group-hover:text-emerald-700",
+      topBand: "from-emerald-500/90 via-blue-500/80 to-cyan-500/75",
+      cta: "from-emerald-500 to-blue-500",
+    },
+    {
+      chip: "from-orange-500/15 to-violet-500/15 border-orange-200/70",
+      glow: "from-orange-300/25 to-violet-300/20",
+      ring: "group-hover:ring-orange-300/45",
+      title: "group-hover:text-orange-700",
+      topBand: "from-orange-500/90 via-fuchsia-500/80 to-violet-500/75",
+      cta: "from-orange-500 to-violet-500",
+    },
+    {
+      chip: "from-slate-500/15 to-indigo-500/15 border-slate-300/70",
+      glow: "from-slate-300/25 to-indigo-300/20",
+      ring: "group-hover:ring-slate-300/45",
+      title: "group-hover:text-slate-800",
+      topBand: "from-slate-600/90 via-indigo-500/80 to-blue-500/75",
+      cta: "from-slate-700 to-indigo-600",
+    },
+    {
+      chip: "from-blue-500/15 to-cyan-500/15 border-blue-200/70",
+      glow: "from-blue-300/25 to-cyan-300/20",
+      ring: "group-hover:ring-cyan-300/45",
+      title: "group-hover:text-cyan-700",
+      topBand: "from-blue-500/90 via-cyan-500/80 to-sky-500/75",
+      cta: "from-blue-500 to-cyan-500",
+    },
+  ];
+
+  return (
+    <section className="relative overflow-hidden px-4 pb-16 pt-10 md:px-8 md:pb-20">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-16 top-12 h-64 w-64 rounded-full bg-blue-300/15 blur-3xl"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 bottom-2 h-72 w-72 rounded-full bg-cyan-300/15 blur-3xl"
+      />
+      <div className="relative mx-auto max-w-7xl">
+        <div className="mb-7 md:mb-9">
+          <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
+            {/* References placing card holder with link */}
+            Top AI Platforms for Productivity
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+          {AI_REFERENCE_TOOLS.map((tool, idx) => {
+            const accent = accentStyles[idx % accentStyles.length];
+            return (
+            <article
+              key={tool.name}
+              className={`group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.25)] ring-1 ring-transparent transition duration-300 hover:-translate-y-1.5 hover:border-blue-200 ${accent.ring} hover:shadow-[0_28px_65px_-30px_rgba(37,99,235,0.45)]`}
+            >
+              <div
+                aria-hidden
+                className={`pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${accent.topBand}`}
+              />
+              <div
+                aria-hidden
+                className={`pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-br ${accent.glow} blur-2xl`}
+              />
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -left-8 -bottom-8 h-24 w-24 rounded-full bg-gradient-to-br from-blue-100/40 to-cyan-100/20 blur-xl"
+              />
+
+              <div className="flex items-center gap-3">
+                <div className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border bg-gradient-to-br ${accent.chip}`}>
+                  <img
+                    src={tool.iconUrl}
+                    alt={`${tool.name} icon`}
+                    className="h-6 w-6 object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <a
+                  href={tool.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex text-lg font-bold text-slate-900 underline decoration-blue-300 underline-offset-4 transition ${accent.title} hover:decoration-blue-500`}
+                >
+                  {tool.name}
+                </a>
+              </div>
+
+              <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                {tool.description}
+              </p>
+
+              <div className="mt-4 h-px w-full bg-gradient-to-r from-blue-200/80 via-cyan-200/70 to-transparent" />
+            </article>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
+}
 
 export function LearningHubBody() {
   const reducedMotion = useReducedMotion();
@@ -19,33 +532,10 @@ export function LearningHubBody() {
 
   return (
     <>
+      <LearningHubRequestFormSection />
       <Services reducedMotion={reducedMotion} isMobile={isMobile} />
-      <HowItWorks reducedMotion={reducedMotion} isMobile={isMobile} />
-      <div className="mt-2 md:mt-6">
-        <FourCardFramework
-          ctaBelowCards
-          copy={[
-            "Start with readiness checklists, primers, and discussion starters for classrooms, families, and advisors.",
-            "Deploy sprint playbooks, milestone prompts, and facilitation notes that keep studios consistent week to week.",
-            "Adapt policy language, acceptable-use templates, and lightweight evaluation criteria for student AI projects.",
-            "Grow with portfolio guides, partner office hours, and hub updates driven by real cohort requests.",
-          ]}
-          ctaTitle="New to HIfAi? Start with pathways for Students"
-        >
-          <InnerPageLink
-            to="/students/school-students"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
-          >
-            Grades 9th – 12th
-          </InnerPageLink>
-          <InnerPageLink
-            to="/students/college-students"
-            className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
-          >
-            Students (College)
-          </InnerPageLink>
-        </FourCardFramework>
-      </div>
+      <ExpertGuidanceSection />
+      <LearningHubReferencesSection />
     </>
   );
 }

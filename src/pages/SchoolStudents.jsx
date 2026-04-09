@@ -6,18 +6,13 @@ import enThiranDemoSrc from "../assets/videos/enthiran.mp4?url";
 import { GetStartedFormModal } from "./GetStarted.jsx";
 
 // ─── Inject CSS keyframes once ────────────────────────────────────────────────
-// Pure-CSS continuous spin — no JS timers, no pauses, perfectly smooth.
-
-const SPIN_DURATION = 12; // seconds for one full orbit revolution
 
 function injectOrbitStyles() {
   if (document.getElementById("orbit-keyframes")) return;
   const el = document.createElement("style");
   el.id = "orbit-keyframes";
   el.textContent = `
-    @keyframes orbit-ring    { to { transform: rotate(360deg);  } }
-    @keyframes orbit-counter { to { transform: rotate(-360deg); } }
-    @keyframes center-spin   { to { transform: rotate(360deg);  } }
+    @keyframes center-spin { to { transform: rotate(360deg); } }
   `;
   document.head.appendChild(el);
 }
@@ -38,7 +33,7 @@ function CenterPlayTrigger({ onClick }) {
           width: "100%",
           height: "100%",
           color: "rgba(29,78,216,0.8)",
-          animation: `center-spin 10s linear infinite`,
+          animation: "center-spin 10s linear infinite",
         }}
         viewBox="0 0 100 100"
         aria-hidden
@@ -222,28 +217,15 @@ const CARD_THEME = [
 
 // ─── Orbit cards ──────────────────────────────────────────────────────────────
 //
-// KEY DESIGN:
-//   • The ring div uses a pure CSS @keyframes `orbit-ring` — linear, infinite,
-//     NO JS timer. This guarantees zero pausing.
-//   • Each card's inner div runs `orbit-counter` (same duration, reverse) so
-//     text always reads upright.
-//   • Active card detection: rAF reads the ring's current CSS matrix angle and
-//     picks whichever card is nearest the top (12 o'clock). This is purely
-//     cosmetic highlighting — it never touches the animation timing.
-//   • Container is w-full up to 640px so no wasted side space.
-//   • ORBIT_R_PCT = 33% puts card centres at 33% radius; card width = 40% so
-//     card edges nearly reach both the container edge AND the center button.
+// Desktop keeps a static 4-point layout around the center trigger.
+// The card color themes remain unchanged while shape is now rectangular.
 
-const ORBIT_R_PCT = 33;
-const CARD_SIZE_PCT = 41;
+const ORBIT_R_PCT = 36;
+const CARD_SIZE_PCT = 32;
 
 function OrbitCards({ onPlayClick }) {
   useEffect(() => { injectOrbitStyles(); }, []);
 
-  const containerRef = useRef(null);
-  const ringRef = useRef(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [hoverMeta, setHoverMeta] = useState(null);
   const [isMobileView, setIsMobileView] = useState(() => {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(max-width: 767px)").matches;
@@ -350,11 +332,10 @@ function OrbitCards({ onPlayClick }) {
 
   return (
     <div
-      ref={containerRef}
       style={{
         position: "relative",
         width: "100%",
-        maxWidth: 640,
+        maxWidth: 760,
         aspectRatio: "1 / 1",
         margin: "0 auto",
         userSelect: "none",
@@ -367,7 +348,7 @@ function OrbitCards({ onPlayClick }) {
           position: "absolute",
           left: "50%",
           top: "50%",
-          width: `${ORBIT_R_PCT * 2 + CARD_SIZE_PCT}%`,
+          width: `${ORBIT_R_PCT * 2.5}%`,
           aspectRatio: "1/1",
           transform: "translate(-50%, -50%)",
           borderRadius: "50%",
@@ -375,14 +356,23 @@ function OrbitCards({ onPlayClick }) {
         }}
       />
 
-      {/* Continuously rotating ring — pure CSS, no JS timing */}
+      {/* Arrow that travels along the orbit track */}
       <div
-        ref={ringRef}
+        className="orbit-arrow-rotor"
+        style={{
+          width: `${ORBIT_R_PCT * 2.5}%`,
+          aspectRatio: "1/1",
+        }}
+        aria-hidden
+      >
+        <div className="orbit-arrow" />
+      </div>
+
+      <div
         style={{
           position: "absolute",
           inset: 0,
-          animation: `orbit-ring ${SPIN_DURATION}s linear infinite`,
-          animationPlayState: hoveredIndex !== null ? "paused" : "running",
+          zIndex: 2,
         }}
       >
         {CARDS.map(({ label, copy }, i) => {
@@ -406,39 +396,14 @@ function OrbitCards({ onPlayClick }) {
             >
               {/* Counter-rotating card shell */}
               <div
-                onMouseEnter={(e) => {
-                  const containerRect = containerRef.current?.getBoundingClientRect();
-                  const cardRect = e.currentTarget.getBoundingClientRect();
-                  if (!containerRect) return;
-
-                  const centerX = cardRect.left + cardRect.width / 2;
-                  const centerY = cardRect.top + cardRect.height / 2;
-                  const showOnRight = centerX <= containerRect.left + containerRect.width / 2;
-                  setHoveredIndex(i);
-                  setHoverMeta({
-                    top: centerY - containerRect.top,
-                    side: showOnRight ? "right" : "left",
-                    offset: showOnRight
-                      ? cardRect.right - containerRect.left + 14
-                      : containerRect.right - cardRect.left + 14,
-                  });
-                }}
-                onMouseLeave={() => {
-                  setHoveredIndex(null);
-                  setHoverMeta(null);
-                }}
                 style={{
                   width: "100%",
                   height: "100%",
-                  borderRadius: "50%",
+                  borderRadius: 24,
                   overflow: "hidden",
-                  animation: `orbit-counter ${SPIN_DURATION}s linear infinite`,
-                  animationPlayState: hoveredIndex !== null ? "paused" : "running",
                   background: `linear-gradient(155deg, ${theme.light} 0%, #ffffff 38%, ${theme.light} 100%)`,
                   border: `2.5px solid ${theme.base}`,
                   boxShadow: `0 10px 36px color-mix(in srgb, ${theme.base} 40%, transparent), 0 2px 10px rgba(0,0,0,0.08)`,
-                  // Transition only the visual properties, NOT transform (which is animated)
-                  transition: "background 0.35s, border-color 0.35s, box-shadow 0.35s",
                 }}
               >
                 <div
@@ -449,8 +414,8 @@ function OrbitCards({ onPlayClick }) {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    padding: "12%",
-                    gap: 5,
+                    padding: "9.5% 9%",
+                    gap: 6,
                   }}
                 >
                   {/* Icon badge */}
@@ -483,8 +448,8 @@ function OrbitCards({ onPlayClick }) {
                       textAlign: "center",
                       fontWeight: 700,
                       color: theme.deep,
-                      fontSize: "16px",
-                      lineHeight: 1.15,
+                      fontSize: "15px",
+                      lineHeight: 1.12,
                     }}
                   >
                     {label}
@@ -497,12 +462,7 @@ function OrbitCards({ onPlayClick }) {
                       textAlign: "center",
                       color: `color-mix(in srgb, ${theme.deep} 82%, #334155)`,
                       fontSize: "16px",
-                      lineHeight: 1.5,
-                      display: "-webkit-box",
-                      WebkitLineClamp: 4,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                      transition: "color 0.35s",
+                      lineHeight: 1.36,
                     }}
                   >
                     {copy}
@@ -513,51 +473,6 @@ function OrbitCards({ onPlayClick }) {
           );
         })}
       </div>
-
-      {hoveredIndex !== null && hoverMeta && (
-        <div
-          style={{
-            position: "absolute",
-            top: hoverMeta.top,
-            transform: "translateY(-50%)",
-            zIndex: 40,
-            width: "min(300px, 46vw)",
-            maxWidth: "calc(100% - 24px)",
-            ...(hoverMeta.side === "right"
-              ? { left: hoverMeta.offset }
-              : { right: hoverMeta.offset }),
-            padding: "14px 16px",
-            borderRadius: 16,
-            background: `linear-gradient(135deg, ${CARD_THEME[hoveredIndex].deep} 0%, ${CARD_THEME[hoveredIndex].base} 100%)`,
-            border: `1px solid color-mix(in srgb, ${CARD_THEME[hoveredIndex].base} 50%, #ffffff)`,
-            boxShadow: "0 14px 36px rgba(2,6,23,0.35)",
-            color: "#e2e8f0",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontSize: 12,
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.86)",
-            }}
-          >
-            {CARDS[hoveredIndex].label}
-          </p>
-          <p
-            style={{
-              margin: "6px 0 0",
-              fontSize: 14,
-              lineHeight: 1.45,
-              color: "#f8fafc",
-            }}
-          >
-            {CARDS[hoveredIndex].copy}
-          </p>
-        </div>
-      )}
 
       {/* School Students page: centered video trigger */}
       <div

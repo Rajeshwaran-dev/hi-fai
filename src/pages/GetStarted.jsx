@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { Lead, SectionHeading } from "./subpageShared.jsx";
+import sampleQrImage from "../assets/images/qr.png?url";
 
 const tabOptions = [
   { id: "school-org", label: "Schools" },
@@ -21,26 +22,8 @@ function getInitialTabFromSearch(search) {
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-const PHONE_RE = /^\+?[0-9\s\-()]{8,}$/;
+const PHONE_RE = /^\d{10}$/;
 const SCHOOL_STUDENT_APP_LINK = "/learning-hub";
-
-let razorpayScriptPromise = null;
-
-function loadRazorpayScript() {
-  if (window.Razorpay) return Promise.resolve(true);
-  if (razorpayScriptPromise) return razorpayScriptPromise;
-
-  razorpayScriptPromise = new Promise((resolve) => {
-    const script = document.createElement("script");
-    script.src = "https://checkout.razorpay.com/v1/checkout.js";
-    script.async = true;
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
-
-  return razorpayScriptPromise;
-}
 
 export function GetStartedFormPanel({
   initialTab = "school-org",
@@ -71,6 +54,10 @@ export function GetStartedFormPanel({
   ]);
   const [errors, setErrors] = useState({});
   const [isPaying, setIsPaying] = useState(false);
+  const [showGpayQrPopup, setShowGpayQrPopup] = useState(false);
+  const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
+  const [verificationCountdown, setVerificationCountdown] = useState(10);
+  const [showPaymentSuccessPopup, setShowPaymentSuccessPopup] = useState(false);
 
   useEffect(() => {
     setTab(initialTab);
@@ -98,8 +85,9 @@ export function GetStartedFormPanel({
     if (!formData.gradeOrProgram) nextErrors.gradeOrProgram = "Please select an option.";
     if (!formData.institution.trim()) nextErrors.institution = "This field is required.";
     if (!formData.notes.trim()) nextErrors.notes = "Please add your goals / notes.";
-    if (!formData.phone.trim()) nextErrors.phone = "Phone is required.";
-    else if (!PHONE_RE.test(formData.phone.trim())) nextErrors.phone = "Enter a valid phone number.";
+    const phoneDigits = formData.phone.replace(/\D/g, "");
+    if (!phoneDigits) nextErrors.phone = "Phone is required.";
+    else if (!PHONE_RE.test(phoneDigits)) nextErrors.phone = "Phone number must be exactly 10 digits.";
     if (!isCollegeStudent) {
       if (!formData.email.trim()) nextErrors.email = "Email is required.";
       else if (!EMAIL_RE.test(formData.email.trim())) nextErrors.email = "Enter a valid email address.";
@@ -124,7 +112,26 @@ export function GetStartedFormPanel({
     return Object.keys(nextErrors).length === 0;
   };
 
-  const handleSubmit = async (e) => {
+  useEffect(() => {
+    if (!isVerifyingPayment) return undefined;
+    if (verificationCountdown <= 0) return undefined;
+
+    const timerId = window.setInterval(() => {
+      setVerificationCountdown((prev) => {
+        if (prev <= 1) {
+          window.clearInterval(timerId);
+          setIsVerifyingPayment(false);
+          setShowPaymentSuccessPopup(true);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+
+    return () => window.clearInterval(timerId);
+  }, [isVerifyingPayment, verificationCountdown]);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!validate()) return;
 
@@ -134,48 +141,24 @@ export function GetStartedFormPanel({
       return;
     }
 
-    setIsPaying(true);
-    try {
-      const loaded = await loadRazorpayScript();
-      if (!loaded || !window.Razorpay) {
-        window.alert("Unable to load payment gateway. Please try again.");
-        return;
-      }
+    setVerificationCountdown(10);
+    setIsVerifyingPayment(false);
+    setShowPaymentSuccessPopup(false);
+    setShowGpayQrPopup(true);
+  };
 
-      const key = import.meta.env.VITE_RAZORPAY_KEY_ID || "rzp_test_1DP5mmOlF5G5ag";
-      const firstStudent = studentEntries[0];
-      const fullName = tab === "college-student"
-        ? firstStudent.name.trim()
-        : formData.fullName.trim();
-      const paymentEmail = tab === "college-student"
-        ? firstStudent.email.trim()
-        : formData.email;
+  const startPaymentVerification = () => {
+    if (isVerifyingPayment) return;
+    setVerificationCountdown(10);
+    setShowPaymentSuccessPopup(false);
+    setIsVerifyingPayment(true);
+  };
 
-      const rzp = new window.Razorpay({
-        key,
-        amount: 0,
-        currency: "INR",
-        name: "HIfAi Skills",
-        description: "Get Started Application",
-        prefill: {
-          name: fullName,
-          email: paymentEmail,
-          contact: formData.phone,
-        },
-        notes: {
-          formType: tab,
-        },
-        theme: {
-          color: "#1483ff",
-        },
-        handler: () => {},
-      });
-
-      rzp.on("payment.failed", () => {});
-      rzp.open();
-    } finally {
-      setIsPaying(false);
-    }
+  const closePaymentFlow = () => {
+    setShowPaymentSuccessPopup(false);
+    setShowGpayQrPopup(false);
+    setIsVerifyingPayment(false);
+    setVerificationCountdown(10);
   };
 
   return (
@@ -439,6 +422,9 @@ export function GetStartedFormPanel({
                 placeholder="+1 ••• ••• ••••"
                 value={formData.phone}
                 onChange={(e) => setField("phone", e.target.value)}
+                inputMode="numeric"
+                maxLength={10}
+                pattern="[0-9]{10}"
                 className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
               />
               {errors.phone ? <span className="mt-1 block text-xs text-red-600">{errors.phone}</span> : null}
@@ -492,6 +478,119 @@ export function GetStartedFormPanel({
           </a>
           .
         </p>
+      ) : null}
+
+      {showGpayQrPopup ? (
+        <div
+          className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-950/65 p-4 backdrop-blur-[2px]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Google Pay QR popup"
+          onClick={() => {
+            if (showPaymentSuccessPopup) {
+              setShowGpayQrPopup(false);
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-sm rounded-2xl border border-blue-100 bg-white p-5 shadow-[0_28px_70px_-40px_rgba(15,23,42,0.7)]"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="mb-3 flex items-center justify-between">
+              <p className="text-sm font-semibold uppercase tracking-[0.16em] text-blue-700">
+                Payment
+              </p>
+              <button
+                type="button"
+                onClick={() => {
+                  if (showPaymentSuccessPopup) {
+                    setShowGpayQrPopup(false);
+                  }
+                }}
+                disabled={!showPaymentSuccessPopup}
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition hover:bg-slate-50"
+                aria-label="Close QR popup"
+              >
+                ×
+              </button>
+            </div>
+
+            <h3 className="text-xl font-bold text-slate-900">Google Pay QR Scanner</h3>
+            <p className="mt-1 text-sm text-slate-600">
+              Scan this QR using Google Pay to continue checkout.
+            </p>
+
+            <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
+              <img
+                src={sampleQrImage}
+                alt="Google Pay QR code"
+                className="mx-auto aspect-square w-full max-w-[260px] rounded-md border border-slate-200 bg-white object-contain p-1"
+              />
+            </div>
+
+            {isVerifyingPayment ? (
+              <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2">
+                <p className="text-sm font-semibold text-amber-800">
+                  Verifying payment... {verificationCountdown}s
+                </p>
+                <p className="mt-0.5 text-xs text-amber-700">
+                  Your payment is being verified.
+                </p>
+              </div>
+            ) : null}
+
+            <div className="mt-4 flex justify-end gap-2">
+              {!isVerifyingPayment ? (
+                <button
+                  type="button"
+                  onClick={startPaymentVerification}
+                  className="inline-flex min-h-[40px] items-center justify-center rounded-full border border-blue-200 bg-white px-5 py-2 text-sm font-semibold text-blue-700 transition hover:bg-blue-50"
+                >
+                  Complete Payment
+                </button>
+              ) : null}
+              <button
+                type="button"
+                onClick={closePaymentFlow}
+                disabled={!showPaymentSuccessPopup}
+                className="inline-flex min-h-[40px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-5 py-2 text-sm font-semibold text-white shadow-[0_8px_20px_rgba(20,131,255,0.35)] transition hover:brightness-110"
+              >
+                Done
+              </button>
+            </div>
+
+            {showPaymentSuccessPopup ? (
+              <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl p-4">
+                <div className="relative w-full max-w-[320px] rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-center shadow-[0_20px_50px_-30px_rgba(5,150,105,0.55)]">
+                  <button
+                    type="button"
+                    onClick={closePaymentFlow}
+                    className="absolute right-2 top-2 inline-flex h-7 w-7 items-center justify-center rounded-full border border-emerald-200 bg-white/80 text-emerald-700 transition hover:bg-white"
+                    aria-label="Close success popup"
+                  >
+                    ×
+                  </button>
+                  <p className="relative text-sm font-semibold uppercase tracking-[0.14em] text-emerald-700">
+                    Payment Successful
+                  </p>
+                  <h4 className="relative mt-2 text-lg font-bold text-emerald-900">
+                    Check your email ID, we have sent the app link.
+                  </h4>
+                  <p className="relative mt-2 text-sm text-emerald-800">
+                    You can now close this popup.
+                  </p>
+                  <button
+                    type="button"
+                    onClick={closePaymentFlow}
+                    className="relative mt-4 inline-flex min-h-[38px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-4 py-2 text-sm font-semibold text-white"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            ) : null}
+          </div>
+        </div>
       ) : null}
     </div>
   );

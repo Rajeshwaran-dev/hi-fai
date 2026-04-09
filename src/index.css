@@ -523,3 +523,71 @@
   }
 }
 
+/* Orbit arrow indicator — arrow moves along dashed track */
+@keyframes orbit-arrow-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
+.orbit-arrow-rotor {
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbit-arrow-spin 9.5s linear infinite;
+  will-change: transform;
+  z-index: 1;
+}
+
+.orbit-arrow {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translate(-50%, -50%) rotate(360deg);
+  width: 122px;
+  height: 34px;
+}
+
+.orbit-arrow::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 92px;
+  height: 5px;
+  transform: translateY(-50%);
+  border-radius: 999px;
+  background: linear-gradient(
+    90deg,
+    rgba(147, 197, 253, 0.05) 0%,
+    rgba(96, 165, 250, 0.45) 36%,
+    rgba(37, 99, 235, 0.95) 100%
+  );
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.4);
+}
+
+.orbit-arrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform: translateY(-50%);
+  border-left: 24px solid rgba(37, 99, 235, 0.98);
+  border-top: 13px solid transparent;
+  border-bottom: 13px solid transparent;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.55));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-arrow-rotor {
+    animation: none !important;
+  }
+}
+

@@ -2,34 +2,78 @@ import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { Link } from "react-router-dom";
 import {
+  Blocks,
+  Bot,
   BrainCircuit,
+  Cloud,
   Cpu,
+  Database,
   Globe2,
   MonitorSmartphone,
   Sparkles,
+  Target,
   TrendingUp,
   UserCheck,
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import heroBgUrl from "../assets/images/hero-bg.jpg?url";
-import skillDevelopmentImg from "../assets/images/skill-developement.jpg.jpeg?url";
-import abcdProblemImg from "../assets/images/abcd-problem-solving.jpg.jpeg?url";
-import highSchoolImg from "../assets/images/high-school-solution.jpg.jpeg?url";
-import universityConsultingImg from "../assets/images/university-consulting-service.jpg.jpeg?url";
+import skillDevelopmentImg from "../assets/images/ai.jpg?url";
+import abcdProblemImg from "../assets/images/blcok-chain.jpg?url";
+import highSchoolImg from "../assets/images/cloud.jpg?url";
+import universityConsultingImg from "../assets/images/data.jpg?url";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const HERO_HOOK_ACCENTS = {
+  short: {
+    border:
+      "border-amber-400/40 hover:border-amber-300/70 focus-visible:border-amber-300/70",
+    surface:
+      "bg-gradient-to-br from-amber-500/[0.18] via-white/[0.06] to-white/[0.03]",
+    shadow:
+      "shadow-[0_0_0_1px_rgba(251,191,36,0.08),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_20px_50px_-12px_rgba(245,158,11,0.25),inset_0_1px_0_rgba(255,255,255,0.12)]",
+    labelWrap: "bg-amber-400/20 text-amber-100 ring-1 ring-amber-400/35",
+    labelText: "text-amber-50",
+    titleWord: "text-amber-100",
+    iconWrap: "bg-amber-400/25 text-amber-200",
+    descWrap:
+      "rounded-xl border border-amber-200/40 bg-amber-950/70 px-2.5 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:px-3 sm:py-3",
+    descText:
+      "text-[clamp(0.72rem,2.25vw,1.02rem)] font-semibold leading-snug tracking-[-0.01em] text-white",
+  },
+  long: {
+    border:
+      "border-sky-400/40 hover:border-sky-300/70 focus-visible:border-sky-300/70",
+    surface:
+      "bg-gradient-to-br from-sky-500/[0.18] via-white/[0.06] to-white/[0.03]",
+    shadow:
+      "shadow-[0_0_0_1px_rgba(56,189,248,0.08),inset_0_1px_0_rgba(255,255,255,0.1)] hover:shadow-[0_20px_50px_-12px_rgba(14,165,233,0.25),inset_0_1px_0_rgba(255,255,255,0.12)]",
+    labelWrap: "bg-sky-400/20 text-sky-100 ring-1 ring-sky-400/35",
+    labelText: "text-sky-50",
+    titleWord: "text-sky-100",
+    iconWrap: "bg-sky-400/25 text-sky-200",
+    descWrap:
+      "rounded-xl border border-sky-200/40 bg-sky-950/70 px-2.5 py-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:px-3 sm:py-3",
+    descText:
+      "text-[clamp(0.72rem,2.25vw,1.02rem)] font-semibold leading-snug tracking-[-0.01em] text-white",
+  },
+};
+
 const HERO_HOOK_POINTS = [
   {
+    variant: "short",
     label: "Short Term",
     title: "MARKS",
     text: "Help you for your next steps",
+    Icon: Target,
   },
   {
+    variant: "long",
     label: "Long Term",
     title: "SKILLS",
     text: "Help you to achieve your goals",
+    Icon: BrainCircuit,
   },
 ];
 const HERO_SUBTEXT =
@@ -40,7 +84,7 @@ const HOW_CAN_HIFAI_IMAGE_URLS = {
   digitalAbcdProjects:
     "/abcd.jpeg",
   highSchools:
-    "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1600&q=80",
+    "/school.jpeg",
   engineeringColleges:
     "engineering-college.jpeg",
 };
@@ -159,8 +203,8 @@ export function Hero({ reducedMotion, isMobile }) {
       top: "50%",
       xPercent: -50,
       yPercent: -50,
-      width: "120%",
-      height: "120%",
+      width: "108%",
+      height: "105%",
       force3D: true,
     });
 
@@ -224,7 +268,7 @@ export function Hero({ reducedMotion, isMobile }) {
         aria-hidden
       />
 
-      <div ref={parallaxRef} className="relative z-10 mx-auto w-full max-w-4xl">
+      <div ref={parallaxRef} className="relative z-10 mx-auto w-full max-w-5xl">
         <div
           className="rounded-[1.75rem] border border-white/[0.14] bg-white/[0.08] px-7 py-9 shadow-[0_25px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl md:rounded-[2rem] md:px-12 md:py-11"
           style={{
@@ -236,32 +280,41 @@ export function Hero({ reducedMotion, isMobile }) {
             <h1
               ref={headlineRef}
               data-tilt-ignore
-              className="mx-auto flex max-w-3xl flex-col gap-3 text-left md:gap-4"
+              className="mx-auto flex w-full max-w-5xl flex-col gap-3 text-left md:gap-4"
             >
-              {HERO_HOOK_POINTS.map((item) => (
-                <span
-                  key={item.title}
-                  className="hero-line block rounded-2xl border border-white/20 bg-white/[0.07] px-4 py-3 backdrop-blur-sm md:px-5 md:py-4"
-                >
-                  <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.18em] text-blue-200/95 md:text-xs">
-                    {item.label}
-                  </span>
-                  <span className="flex flex-wrap items-baseline gap-x-2 gap-y-1 font-display text-white">
-                    <span className="text-[clamp(1.25rem,3.2vw,2.05rem)] leading-[1.1] tracking-[-0.015em]">
-                      {item.title}
-                      <span className="ml-2 text-white/85">-</span>
-                    </span>
-                    <span className="text-[clamp(0.95rem,2.4vw,1.35rem)] font-medium leading-[1.25] text-white/90">
-                      {item.text}
-                    </span>
-                  </span>
-                </span>
-              ))}
+              {HERO_HOOK_POINTS.map((item) => {
+                const a = HERO_HOOK_ACCENTS[item.variant];
+                return (
+                  <div
+                    key={item.title}
+                    className={`hero-line group relative flex min-h-[86px] min-w-0 flex-col justify-center rounded-2xl border px-4 py-4.5 backdrop-blur-md transition-[transform,box-shadow,border-color] duration-300 sm:min-h-[98px] sm:px-5 sm:py-5 md:min-h-[112px] md:rounded-[1.35rem] md:px-6 md:py-5 ${a.border} ${a.surface} ${a.shadow}`}
+                  >
+                    <div className="flex min-w-0 items-center gap-2 overflow-hidden sm:gap-2.5 md:gap-3">
+                      <span
+                        className={`inline-flex shrink-0 rounded-full border border-white/25 px-2.5 py-1 text-[0.64rem] font-semibold uppercase leading-none tracking-[0.14em] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_6px_20px_-12px_rgba(15,23,42,0.7)] sm:px-3 sm:text-[0.7rem] md:text-[0.78rem] ${a.labelWrap} ${a.labelText}`}
+                      >
+                        {item.label}
+                      </span>
+                      <span
+                        className={`font-display shrink-0 text-[clamp(1.5rem,3.1vw,3rem)] font-bold leading-[1.5] tracking-[-0.025em] ${a.titleWord} whitespace-nowrap`}
+                      >
+                        {item.title}
+                      </span>
+                      <span className="shrink-0 text-[clamp(1.1rem,2.6vw,2.1rem)] font-bold leading-none text-white/95 whitespace-nowrap">
+                        -
+                      </span>
+                      <p className="truncate text-[clamp(0.95rem,2.05vw,1.9rem)] font-semibold leading-tight tracking-[-0.015em] text-white/95 whitespace-nowrap">
+                        {item.text}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
             </h1>
 
             <p
               ref={subRef}
-              className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-white/80 md:mt-7 md:text-lg md:leading-relaxed"
+              className="mx-auto mt-6 max-w-2xl text-[0.95rem] leading-relaxed text-white/80 md:mt-7 md:text-lg md:leading-relaxed"
             >
               {HERO_SUBTEXT}
             </p>
@@ -271,9 +324,9 @@ export function Hero({ reducedMotion, isMobile }) {
               className="mt-9 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4"
             >
               <Link
-                to="/learning-hub"
+                to=""
                 data-magnetic
-                className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 px-8 py-3.5 text-center text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:bg-blue-500 hover:shadow-xl md:text-base"
+                className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 px-8 py-3.5 text-center text-[0.98rem] font-semibold text-white shadow-lg shadow-blue-950/40 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:bg-blue-500 hover:shadow-xl md:text-base"
               >
                 <span className="relative z-10">Explore Services</span>
                 <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
@@ -281,9 +334,10 @@ export function Hero({ reducedMotion, isMobile }) {
               <Link
                 to="/get-started"
                 data-magnetic
-                className="inline-flex min-h-[44px] shrink-0 items-center justify-center rounded-full border border-white/25 bg-white/[0.08] px-8 py-3.5 text-center text-sm font-semibold text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/[0.14] md:text-base"
+                className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-white/12 px-8 py-3.5 text-center text-[0.98rem] font-semibold text-white shadow-lg shadow-black/20 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:bg-white/20 hover:shadow-xl md:text-base"
               >
-                Let's HI-fAi
+                <span className="relative z-10">Let's HI-fAi</span>
+                <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
               </Link>
             </div>
           </div>
@@ -877,125 +931,72 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
 const SERVICE_CARDS = [
   {
     id: "s1",
-    title: "21st Century Skills Development",
+    title: "Artificial Intelligence (AI)",
     image: skillDevelopmentImg,
-    short:
-      "Critical thinking, collaboration, and digital fluency for the modern learner.",
+    short: "Simulation of human intelligence processes by machines and systems.",
     description:
-      "Structured pathways that build creativity, communication, and computational thinking alongside core academics-so learners stay ahead of a changing world.",
-    bullets: [
-      "Creative thinking",
-      "Problem Solving",
-      "Critical Analysis",
-      "Communication",
-      "Digital Use",
+      "Artificial Intelligence (AI) refers to the simulation of human intelligence processes by machines and systems. Every day is evolving with something new in the AI world.",
+    details: [
+      "Artificial Intelligence (AI) refers to the simulation of human intelligence processes by machines and systems.",
+      "Data is the raw fuel and foundational experience required for machine learning models to think, act, and generate insights.",
+      "Rules, reasoning, and algorithms define and transform typical human behavior into machine-understandable actions that systems can perform by utilizing logical reasoning.",
+      "Learning means continuous feedback, including error corrections to machine learning architectures, enabling self-learning and helping prevent errors as systems progress through data collection and processing.",
+      "Every day, the AI world evolves with something new.",
     ],
-    icon: (
-      <svg
-        className="h-8 w-8"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-        />
-      </svg>
-    ),
+    icon: <Bot className="h-8 w-8" strokeWidth={1.8} />,
     accentFrom: "from-blue-600/15",
     accentTo: "to-slate-200/20",
   },
   {
     id: "s2",
-    title: "Digital ABCD Problem Solving",
+    title: "Blockchain",
     image: abcdProblemImg,
     short:
-      "Analyze, Build, Connect, and Deliver with structured digital workflows.",
+      "A decentralized, distributed digital ledger that secures records with transparency.",
     description:
-      "Our ABCD framework turns messy challenges into repeatable problem-solving: analyze context, build prototypes, connect data and people, and deliver measurable impact.",
-    bullets: ["AI", "Blockchain", "Cloud", "Data Analysis"],
-    icon: (
-      <svg
-        className="h-8 w-8"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"
-        />
-      </svg>
-    ),
+      "Blockchain technology is a decentralized and distributed digital ledger system that securely records transactions across multiple computers.",
+    details: [
+      "Blockchain technology is a decentralized and distributed digital ledger system that securely records transactions across multiple computers.",
+      "Each block in the chain contains a list of transactions and is cryptographically linked to the previous block, forming a secure and immutable chain. This structure ensures that once data is recorded, it cannot be altered or deleted without the consensus of the network, enhancing transparency and trust. ",
+      "Furthermore, it uses consensus algorithms, such as proof-of-work or proof-of-stake, to validate transactions, maintaining the integrity of the data. ",
+      "Blockchain has diverse applications, including cryptocurrencies, supply chain management, and smart contracts, making it a vital area of study for future engineers in various fields.",
+    ],
+    icon: <Blocks className="h-8 w-8" strokeWidth={1.8} />,
     accentFrom: "from-blue-500/14",
     accentTo: "to-slate-300/12",
   },
   {
     id: "s3",
-    title: "High School Solutions",
+    title: "Cloud",
     image: highSchoolImg,
-    inquiry: "highSchool",
     short:
-      "Programs that align with college readiness and future-of-work skills.",
+      "On-demand delivery of IT resources over the internet as scalable virtualized utility.",
     description:
-      "From elective pathways to capstone experiences, we help high schools offer engaging, industry-aligned learning without overloading staff.",
-    bullets: [
-      "Curriculum mapping support",
-      "Teacher enablement workshops",
-      "Students' project showcases",
+      "Cloud technology delivers servers, storage, databases, networking, and software on-demand, transforming IT from capital-intensive projects into scalable services.",
+    details: [
+      "Cloud technology is the on-demand delivery of IT resources - servers, storage, databases, networking, and software - over the internet, transforming IT projects from a capital-intensive model into a scalable, virtualized utility.",
+      "Instead of provisioning and maintaining physical data centers, engineers leverage remote pooled infrastructure managed by providers like AWS, Azure, or GCP, allowing rapid elasticity during demand spikes without upfront CapEx/OpEx strain.",
+      "Key service models include IaaS for raw virtualized infrastructure, PaaS for streamlined development environments, and SaaS for ready-to-use applications, all enabling modern DevOps, containerization (Kubernetes), and all having Omni presence of AI. ",
+      "For engineers, it means transitioning from designing resilient, secure and distributed sytems to leveraging best that is available in cloud platform and adopt accordingly.",
     ],
-    icon: (
-      <svg
-        className="h-8 w-8"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-        />
-      </svg>
-    ),
+    icon: <Cloud className="h-8 w-8" strokeWidth={1.8} />,
     accentFrom: "from-slate-400/14",
     accentTo: "to-blue-500/10",
   },
   {
     id: "s4",
-    title: "University Consulting Services",
+    title: "Data",
     image: universityConsultingImg,
-    inquiry: "university",
     short:
-      "Innovation labs, digital transformation, and workforce-aligned programs.",
+      "Structured and unstructured data power AI, ML, reasoning, analytics, and insights.",
     description:
-      "Partner with HIfAi to modernize offerings: micro-credentials, industry projects, and research-to-practice pipelines that Students and employers value.",
-    bullets: [
-      "Program design sprints",
-      "Industry advisory loops",
-      "Analytics for learner success",
+      "Data, in both structured and unstructured formats, is essential for ML and AI algorithms to think, act, and generate valuable outcomes.",
+    details: [
+      "Data in either structural or unstrctural formats is a essential for any ML, AI algorithams, analysis machine learning models to think, act, and generate insights. ",
+      "In current world, data is not merely information; it is the raw fuel and foundational experience required not just for AI but not jut for resoning, gerating insights, analysis and so much more..",
+      "Success of A high-performance AI systems lies in robust data pipelines—collecting, cleaning, preprocessing, and transforming raw information into actionable training sets on the quality, quantity",
     ],
-    icon: (
-      <svg
-        className="h-8 w-8"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={1.5}
-          d="M12 14l9-5-9-5-9 5 9 5z M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"
-        />
-      </svg>
-    ),
+    icon: <Database className="h-8 w-8" strokeWidth={1.8} />,
     accentFrom: "from-blue-700/12",
     accentTo: "to-slate-300/12",
   },
@@ -1053,8 +1054,7 @@ function validateInquiryPhone(value) {
   const t = String(value ?? "").trim();
   if (!t) return "Phone number is required.";
   const n = countDigits(t);
-  if (n < 10) return "Enter a valid phone number (at least 10 digits).";
-  if (n > 15) return "Phone number has too many digits.";
+  if (n !== 10) return "Phone number must be exactly 10 digits.";
   return "";
 }
 
@@ -1387,15 +1387,17 @@ function SchoolInquiryForm({
                 id={`${formId}-phone`}
                 name="phone"
                 type="tel"
-                inputMode="tel"
+                inputMode="numeric"
                 autoComplete="tel"
+                maxLength={10}
+                pattern="[0-9]{10}"
                 aria-required="true"
                 aria-invalid={errors.phone ? "true" : "false"}
                 aria-describedby={
                   errors.phone ? `${formId}-phone-err` : undefined
                 }
                 className={inquiryControlClass(variant, !!errors.phone)}
-                placeholder="+1 · · · · · · · · · ·"
+                placeholder="Enter 10-digit phone number"
                 onChange={() => clearErr("phone")}
               />
               <InquiryFieldError
@@ -1761,15 +1763,17 @@ function UniversityInquiryForm({
                 id={`${formId}-phone`}
                 name="phone"
                 type="tel"
-                inputMode="tel"
+                inputMode="numeric"
                 autoComplete="tel"
+                maxLength={10}
+                pattern="[0-9]{10}"
                 aria-required="true"
                 aria-invalid={errors.phone ? "true" : "false"}
                 aria-describedby={
                   errors.phone ? `${formId}-phone-err` : undefined
                 }
                 className={inquiryControlClass(variant, !!errors.phone)}
-                placeholder="+1 · · · · · · · · · ·"
+                placeholder="Enter 10-digit phone number"
                 onChange={() => clearErr("phone")}
               />
               <InquiryFieldError
@@ -2000,10 +2004,6 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
         >
           x
         </button>
-
-        <p className="relative z-10 text-xs font-bold uppercase tracking-widest text-accent">
-          Service Details
-        </p>
         <div className="relative z-10 mt-2 flex items-start justify-between gap-4 pr-12">
           <h2
             id="modal-title"
@@ -2058,22 +2058,16 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
             </div>
           ) : (
             <>
-              <p className="relative z-10 mt-4 leading-relaxed text-ink/75">
-                {service.description}
-              </p>
-              <ul
-                ref={listRef}
-                className="relative z-10 mt-6 space-y-2.5 rounded-2xl border border-accent/15 bg-gradient-to-br from-accent/5 to-accent-cyan/6 p-4 text-sm text-ink/75"
-              >
-                {service.bullets.map((b, i) => (
-                  <li key={i} className="flex items-center gap-3">
-                    <span className="mt-1.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-gradient-to-r from-accent to-accent-cyan text-[10px] font-bold text-white">
-                      {i + 1}
-                    </span>
-                    {b}
-                  </li>
-                ))}
-              </ul>
+              {Array.isArray(service.details) && service.details.length ? (
+                <div
+                  ref={listRef}
+                  className="relative z-10 mt-5 space-y-3 rounded-2xl border border-slate-200/85 bg-white/90 p-4 text-sm leading-relaxed text-ink/80 md:p-5"
+                >
+                  {service.details.map((line, i) => (
+                    <p key={`${service.id}-detail-${i}`}>{line}</p>
+                  ))}
+                </div>
+              ) : null}
             </>
           )}
         </div>
@@ -2225,23 +2219,6 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
       style={{ transformStyle: "preserve-3d" }}
       className="service-card group relative w-full cursor-pointer overflow-hidden rounded-[1.6rem] border border-white/80 text-left shadow-[0_18px_48px_rgba(9,15,26,0.16)] transition-[transform,box-shadow,border-color] duration-300 hover:border-blue-300/50 hover:shadow-[0_22px_58px_rgba(37,99,235,0.24)]"
     >
-      <img
-        src={card.image}
-        alt={card.title}
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-black/45"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#030b1f]/92 via-[#0a1f44]/70 to-[#071634]/36"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[62%] bg-gradient-to-t from-[#020817]/90 via-[#091a36]/62 to-transparent"
-        aria-hidden
-      />
       <div
         className="pointer-events-none absolute inset-x-0 top-0 h-1 bg-blue-500/90"
         aria-hidden
@@ -2259,33 +2236,54 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
         aria-hidden
       />
 
-      <div className="relative flex min-h-[380px] h-full flex-col gap-4 p-6 md:min-h-[380px] md:p-7">
-        <div
-          ref={iconRef}
-          className="inline-flex h-14 w-14 items-center justify-center rounded-2xl border border-white/50 bg-white/85 text-blue-700 shadow-sm"
-        >
-          {card.icon}
-        </div>
-
-        <span className="absolute right-1 top-1 select-none font-display text-[3.4rem] font-bold leading-none text-white/25">
-          0{index + 1}
+      <div className="relative flex min-h-[420px] h-full flex-col p-5 md:min-h-[430px] md:p-6">
+        <span className="absolute right-3 top-1 select-none font-display text-[3rem] font-bold leading-none text-blue-600/20">
+          {String.fromCharCode(65 + index)}
         </span>
 
-        <h3 className="font-geom-heading text-[1.12rem] font-normal leading-[1.2] tracking-[-0.008em] text-white md:text-[1.35rem]">
-          {card.title}
-        </h3>
-        <p className="text-sm leading-relaxed text-white/85 md:text-base">
-          {card.short}
-        </p>
+        <div className="flex items-start gap-3 pr-8">
+          <div
+            ref={iconRef}
+            className="mt-0.5 inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-white text-blue-700 shadow-sm"
+          >
+            {card.icon}
+          </div>
+          <div className="min-w-0">
+            <h3 className="font-geom-heading text-[1.12rem] font-normal leading-[1.2] tracking-[-0.008em] text-slate-900 md:text-[1.28rem]">
+              {card.title}
+            </h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-slate-600 md:text-[0.95rem]">
+              {card.short}
+            </p>
+          </div>
+        </div>
 
-        <div className="mt-auto flex items-center justify-between border-t border-white/25 pt-4">
-          <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-100 transition-all duration-300 group-hover:gap-3">
-            {card.inquiry ? "Open inquiry form" : "View More"}
+        <div className="mt-3 rounded-xl border border-blue-100/90 bg-blue-50/60 p-3">
+          <p className="line-clamp-3 text-xs leading-relaxed text-slate-700 md:text-sm">
+            {card.description}
+          </p>
+        </div>
+
+        <div className="relative mt-4 h-36 overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 md:h-40">
+          <img
+            src={card.image}
+            alt={card.title}
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+          <div
+            className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#020817]/72 via-[#061733]/22 to-transparent"
+            aria-hidden
+          />
+        </div>
+
+        <div className="mt-auto flex items-center justify-between border-t border-slate-200 pt-4">
+          <span className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 transition-all duration-300 group-hover:gap-3">
+            View Full Content
             <span className="inline-block transition-transform duration-300 group-hover:translate-x-1.5">
               →
             </span>
           </span>
-          <span className="rounded-full bg-white/20 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-white">
+          <span className="rounded-full bg-blue-600/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-700">
             HIFAI
           </span>
         </div>
@@ -2299,236 +2297,17 @@ export function Services({ reducedMotion, isMobile }) {
   const introRef = useRef(null);
   const decorARef = useRef(null);
   const decorBRef = useRef(null);
-  const sliderWrapRef = useRef(null);
-  const trackRef = useRef(null);
-  const cardRefs = useRef([]);
+  const gridRef = useRef(null);
   const [active, setActive] = useState(null);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const isAnimating = useRef(false);
-  const [slidesPerView, setSlidesPerView] = useState(1);
-  const touchStartX = useRef(null);
-
-  const totalCards = SERVICE_CARDS.length;
-  const hasDragged = useRef(false);
-
-  // Ref-mirrors so the drag handler always reads fresh values without stale closures
-  const currentIndexRef = useRef(0);
-  const slidesPerViewRef = useRef(1);
-  const maxIndexRef = useRef(0);
-
-  /* ── Responsive slides-per-view ── */
-  useEffect(() => {
-    const update = () => setSlidesPerView(window.innerWidth >= 768 ? 2 : 1);
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  const maxIndex = Math.max(0, totalCards - slidesPerView);
-
-  // Keep ref-mirrors in sync
-  useEffect(() => {
-    currentIndexRef.current = currentIndex;
-  }, [currentIndex]);
-  useEffect(() => {
-    slidesPerViewRef.current = slidesPerView;
-  }, [slidesPerView]);
-  useEffect(() => {
-    maxIndexRef.current = maxIndex;
-  }, [maxIndex]);
-
-  /* ── Sync track position on resize / slidesPerView change ── */
-  useEffect(() => {
-    const clamped = Math.min(currentIndex, maxIndex);
-    const track = trackRef.current;
-    const wrap = sliderWrapRef.current;
-    if (!track || !wrap) return;
-    const cardW = wrap.offsetWidth / slidesPerView;
-    gsap.set(track, { x: -clamped * cardW });
-    if (clamped !== currentIndex) setCurrentIndex(clamped);
-  }, [slidesPerView]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  /* ── Navigate to a slide index with GSAP ── */
-  const navigateTo = (newIndex) => {
-    if (isAnimating.current) return;
-    newIndex = Math.max(0, Math.min(newIndex, maxIndex));
-    if (newIndex === currentIndex) return;
-
-    const track = trackRef.current;
-    const wrap = sliderWrapRef.current;
-
-    if (!track || !wrap || reducedMotion) {
-      setCurrentIndex(newIndex);
-      if (track && wrap) {
-        const cardW = wrap.offsetWidth / slidesPerView;
-        gsap.set(track, { x: -newIndex * cardW });
-      }
-      return;
-    }
-
-    isAnimating.current = true;
-    const cardW = wrap.offsetWidth / slidesPerView;
-    const direction = newIndex > currentIndex ? 1 : -1;
-
-    /* Subtle scale/opacity punch on entering cards */
-    const enteringIndices = Array.from(
-      { length: slidesPerView },
-      (_, k) => newIndex + k,
-    );
-    const enteringCards = enteringIndices
-      .map((idx) => cardRefs.current[idx])
-      .filter(Boolean);
-
-    gsap.set(enteringCards, { scale: 0.96, opacity: 0.7 });
-
-    const tl = gsap.timeline({
-      onComplete: () => {
-        isAnimating.current = false;
-        setCurrentIndex(newIndex);
-      },
-    });
-
-    tl.to(track, {
-      x: -newIndex * cardW,
-      duration: 0.65,
-      ease: "power3.inOut",
-    }).to(
-      enteringCards,
-      {
-        scale: 1,
-        opacity: 1,
-        duration: 0.45,
-        ease: "power2.out",
-        stagger: 0.06,
-      },
-      "-=0.3",
-    );
-  };
-
-  /* ── Touch / swipe support ── */
-  const onTouchStart = (e) => {
-    touchStartX.current = e.touches[0].clientX;
-  };
-  const onTouchEnd = (e) => {
-    if (touchStartX.current === null) return;
-    const delta = touchStartX.current - e.changedTouches[0].clientX;
-    if (Math.abs(delta) > 48)
-      navigateTo(delta > 0 ? currentIndex + 1 : currentIndex - 1);
-    touchStartX.current = null;
-  };
-
-  /* ── Mouse drag-to-scroll ── */
-  useEffect(() => {
-    const wrap = sliderWrapRef.current;
-    const track = trackRef.current;
-    if (!wrap || !track) return;
-
-    const setX = gsap.quickSetter(track, "x", "px");
-    let dragging = false;
-    let startX = 0;
-    let startTrackX = 0;
-    let dragDelta = 0;
-
-    const getTrackX = () => Number(gsap.getProperty(track, "x")) || 0;
-
-    const onMouseDown = (e) => {
-      if (e.button !== 0) return;
-      gsap.killTweensOf(track);
-      dragging = true;
-      hasDragged.current = false;
-      startX = e.clientX;
-      startTrackX = getTrackX();
-      dragDelta = 0;
-      wrap.style.cursor = "grabbing";
-      e.preventDefault();
-    };
-
-    const onMouseMove = (e) => {
-      if (!dragging) return;
-      dragDelta = e.clientX - startX;
-      if (Math.abs(dragDelta) > 5) hasDragged.current = true;
-      const spv = slidesPerViewRef.current;
-      const maxI = maxIndexRef.current;
-      const cardW = wrap.offsetWidth / spv;
-      const minX = -maxI * cardW;
-      const rawX = startTrackX + dragDelta;
-      let clampedX;
-      if (rawX > 0) {
-        clampedX = rawX * 0.25;
-      } else if (rawX < minX) {
-        clampedX = minX + (rawX - minX) * 0.25;
-      } else {
-        clampedX = rawX;
-      }
-      setX(clampedX);
-    };
-
-    const onMouseUp = () => {
-      if (!dragging) return;
-      dragging = false;
-      wrap.style.cursor = "grab";
-      const spv = slidesPerViewRef.current;
-      const maxI = maxIndexRef.current;
-      const curI = currentIndexRef.current;
-      const cardW = wrap.offsetWidth / spv;
-      let targetIndex;
-      if (Math.abs(dragDelta) > 48) {
-        targetIndex = dragDelta < 0 ? curI + 1 : curI - 1;
-      } else {
-        const currentX = getTrackX();
-        targetIndex = Math.round(-currentX / cardW);
-      }
-      targetIndex = Math.max(0, Math.min(targetIndex, maxI));
-      const snapX = -targetIndex * cardW;
-      if (targetIndex !== curI) {
-        isAnimating.current = true;
-        gsap.to(track, {
-          x: snapX,
-          duration: 0.45,
-          ease: "power3.out",
-          onComplete: () => {
-            isAnimating.current = false;
-            setCurrentIndex(targetIndex);
-          },
-        });
-      } else {
-        gsap.to(track, { x: snapX, duration: 0.5, ease: "back.out(2)" });
-      }
-    };
-
-    const onClickCapture = (e) => {
-      if (hasDragged.current) {
-        e.stopPropagation();
-        hasDragged.current = false;
-      }
-    };
-
-    wrap.style.cursor = "grab";
-    wrap.style.userSelect = "none";
-    wrap.addEventListener("mousedown", onMouseDown);
-    wrap.addEventListener("click", onClickCapture, true);
-    document.addEventListener("mousemove", onMouseMove);
-    document.addEventListener("mouseup", onMouseUp);
-
-    return () => {
-      wrap.removeEventListener("mousedown", onMouseDown);
-      wrap.removeEventListener("click", onClickCapture, true);
-      document.removeEventListener("mousemove", onMouseMove);
-      document.removeEventListener("mouseup", onMouseUp);
-      wrap.style.cursor = "";
-      wrap.style.userSelect = "";
-    };
-  }, []); // runs once — reads live values via refs
-
   /* ── Scroll-trigger entry animations ── */
   useEffect(() => {
     const section = sectionRef.current;
     if (!section) return;
 
     if (reducedMotion) {
-      cardRefs.current
-        .filter(Boolean)
-        .forEach((c) => gsap.set(c, { clearProps: "all" }));
+      if (gridRef.current) {
+        gsap.set(gridRef.current, { clearProps: "all" });
+      }
       return;
     }
 
@@ -2548,39 +2327,18 @@ export function Services({ reducedMotion, isMobile }) {
         });
       }
 
-      /* Reveal the slider viewport with a clip-path wipe */
-      if (sliderWrapRef.current) {
+      if (gridRef.current) {
         gsap.fromTo(
-          sliderWrapRef.current,
-          { clipPath: "inset(0 100% 0 0 round 24px)" },
+          gridRef.current,
+          { clipPath: "inset(10% 8% 10% 8% round 24px)", opacity: 0.2 },
           {
-            clipPath: "inset(0 0% 0 0 round 24px)",
+            clipPath: "inset(0% 0% 0% 0% round 24px)",
+            opacity: 1,
             duration: isMobile ? 0.7 : 0.95,
             ease: "power4.inOut",
             scrollTrigger: {
               trigger: section,
               start: "top 72%",
-              toggleActions: "play none none none",
-            },
-          },
-        );
-      }
-
-      /* Staggered card reveal inside the track */
-      const cards = cardRefs.current.filter(Boolean);
-      if (cards.length) {
-        gsap.fromTo(
-          cards,
-          { opacity: 0, y: 28 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: isMobile ? 0.55 : 0.7,
-            stagger: isMobile ? 0.08 : 0.12,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: section,
-              start: "top 68%",
               toggleActions: "play none none none",
             },
           },
@@ -2617,8 +2375,6 @@ export function Services({ reducedMotion, isMobile }) {
 
     return () => ctx.revert();
   }, [reducedMotion, isMobile]);
-
-  const dotCount = maxIndex + 1;
 
   return (
     <section
@@ -2659,114 +2415,19 @@ export function Services({ reducedMotion, isMobile }) {
           </h2>
         </div>
 
-        {/* ── Swiper ── */}
-        <div className="relative">
-          {/* Prev arrow */}
-          <button
-            type="button"
-            aria-label="Previous slide"
-            onClick={() => navigateTo(currentIndex - 1)}
-            disabled={currentIndex === 0}
-            className="absolute -left-4 top-1/2 z-10 -translate-y-1/2 md:-left-6 flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/90 text-ink shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-white hover:shadow-lg disabled:pointer-events-none disabled:opacity-30"
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-
-          {/* Next arrow */}
-          <button
-            type="button"
-            aria-label="Next slide"
-            onClick={() => navigateTo(currentIndex + 1)}
-            disabled={currentIndex >= maxIndex}
-            className="absolute -right-4 top-1/2 z-10 -translate-y-1/2 md:-right-6 flex h-11 w-11 items-center justify-center rounded-full border border-ink/10 bg-white/90 text-ink shadow-md backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-white hover:shadow-lg disabled:pointer-events-none disabled:opacity-30"
-          >
-            <svg
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2.2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-
-          {/* Overflow viewport */}
-          <div
-            ref={sliderWrapRef}
-            className="overflow-hidden"
-            onTouchStart={onTouchStart}
-            onTouchEnd={onTouchEnd}
-          >
-            {/* Sliding track — width = totalCards × cardWidth */}
-            <div
-              ref={trackRef}
-              className="flex will-change-transform"
-              style={{ width: `${(totalCards / slidesPerView) * 100}%` }}
-            >
-              {SERVICE_CARDS.map((card, i) => (
-                <div
-                  key={card.id}
-                  ref={(el) => {
-                    cardRefs.current[i] = el;
-                  }}
-                  className="flex-shrink-0 px-3"
-                  style={{ width: `${100 / totalCards}%` }}
-                >
-                  <TiltCard
-                    card={card}
-                    index={i}
-                    reducedMotion={reducedMotion}
-                    onClick={() => setActive(card)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* ── Dot pagination ── */}
-          <div
-            className="mt-8 flex items-center justify-center gap-2.5"
-            role="tablist"
-            aria-label="Slides"
-          >
-            {Array.from({ length: dotCount }).map((_, i) => (
-              <button
-                key={i}
-                type="button"
-                role="tab"
-                aria-selected={i === currentIndex}
-                aria-label={`Go to slide ${i + 1}`}
-                onClick={() => navigateTo(i)}
-                className={`h-2 rounded-full transition-all duration-350 ease-out focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${
-                  i === currentIndex
-                    ? "w-7 bg-blue-600 shadow-sm"
-                    : "w-2 bg-blue-300/60 hover:bg-blue-400/80"
-                }`}
-              />
-            ))}
-          </div>
-
-          {/* Slide counter (e.g. 1 / 3) */}
-          <p className="mt-3 text-center text-xs font-semibold tabular-nums text-ink/40 tracking-wider select-none">
-            {currentIndex + 1} / {dotCount}
-          </p>
+        <div
+          ref={gridRef}
+          className="grid grid-cols-1 gap-5 md:grid-cols-2 md:gap-6"
+        >
+          {SERVICE_CARDS.map((card, i) => (
+            <TiltCard
+              key={card.id}
+              card={card}
+              index={i}
+              reducedMotion={reducedMotion}
+              onClick={() => setActive(card)}
+            />
+          ))}
         </div>
       </div>
 
@@ -2798,7 +2459,7 @@ const STEPS = [
   },
   {
     n: "04",
-    title: "Grow Career",
+    title: "Grow Future",
     desc: "Portfolios, credentials, and pathways that compound.",
   },
 ];
@@ -3124,7 +2785,7 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
       ref={sectionRef}
       className="relative py-20 image.pngmd:py-24"
     >
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl px-4">
         <div ref={introRef} className="mb-12 max-w-3xl md:mb-16">
           <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
             Projects in action

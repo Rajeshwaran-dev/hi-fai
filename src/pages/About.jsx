@@ -264,7 +264,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-slate-200/80 bg-white py-10 md:py-12"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white py-10 md:py-12 sm:px-2 px-4"
       aria-labelledby="kanavoogle-partnership-heading"
     >
       <div

@@ -346,9 +346,18 @@ export default function Navbar({ reducedMotion }) {
         aria-hidden={!isMobileMenuOpen}
       >
         <div className="mb-6 flex items-center justify-between">
-          <span className="text-xs font-semibold uppercase tracking-[0.22em] text-cyan-100/80">
-            Navigation
-          </span>
+          <Link
+            to="/"
+            className="inline-flex items-center"
+            aria-label="HIfAi home"
+            onClick={(e) => handleNavClick(e, "/")}
+          >
+            <img
+              src={logo1Url}
+              alt="HIfAi logo"
+              className="h-10 w-auto object-contain"
+            />
+          </Link>
           <button
             type="button"
             onClick={() => setIsMobileMenuOpen(false)}

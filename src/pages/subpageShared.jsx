@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+
 import { Award, Check, ClipboardCheck, Compass, Maximize2 } from "lucide-react";
 
 /** Fixed 4-pillar titles and icons for inner marketing pages (Explore → Excel). */
@@ -14,8 +14,8 @@ const ORBIT_THEMES = [
   { base: "#F08D39", light: "#FFF4E9", deep: "#5A3416" },
   { base: "#519A66", light: "#EBF8EF", deep: "#1F4A2E" },
 ];
-const ORBIT_R_PCT = 33;
-const ORBIT_CARD_SIZE_PCT = 41;
+const ORBIT_R_PCT = 36;
+const ORBIT_CARD_SIZE_PCT = 32;
 
 export function SectionLabel({ children }) {
   return (
@@ -116,13 +116,9 @@ export function FourCardFramework({
 }) {
   const bodies = copy;
   const orbitMode = layoutMode === "orbit";
-  const orbitContainerRef = useRef(null);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
-  const [hoverMeta, setHoverMeta] = useState(null);
-
   return (
     <>
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl px-8">
         <div className="relative">
           {!orbitMode ? (
             <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-2 md:gap-5">
@@ -185,10 +181,9 @@ export function FourCardFramework({
                 })}
               </div>
 
-              {/* Desktop: SchoolStudents-like rounded spinning orbit with hover panel */}
+              {/* Desktop: SchoolStudents-like static rectangular orbit layout */}
               <div
-                ref={orbitContainerRef}
-                className="mx-auto hidden w-full max-w-[680px] select-none md:block py-12"
+                className="mx-auto hidden w-full max-w-[760px] select-none py-12 md:block"
                 style={{ position: "relative", aspectRatio: "1 / 1", marginTop: "30px" }}
               >
                 <div
@@ -197,19 +192,30 @@ export function FourCardFramework({
                     position: "absolute",
                     left: "50%",
                     top: "50%",
-                    width: `${ORBIT_R_PCT * 2 + ORBIT_CARD_SIZE_PCT}%`,
+                    width: `${ORBIT_R_PCT * 2.5}%`,
                     aspectRatio: "1 / 1",
                     transform: "translate(-50%, -50%)",
                     borderRadius: "50%",
                     border: "1.5px dashed rgba(147,197,253,0.45)",
                   }}
                 />
+
+                {/* Arrow that travels along the orbit track */}
+                <div
+                  className="orbit-arrow-rotor"
+                  style={{
+                    width: `${ORBIT_R_PCT * 2.5}%`,
+                    aspectRatio: "1 / 1",
+                  }}
+                  aria-hidden
+                >
+                  <div className="orbit-arrow" />
+                </div>
                 <div
                   style={{
                     position: "absolute",
                     inset: 0,
-                    animation: "orbit-card-spin-anticlockwise 22s linear infinite",
-                    animationPlayState: hoveredIndex !== null ? "paused" : "running",
+                    zIndex: 2,
                   }}
                 >
                   {FOUR_E_META.map(({ title: defaultTitle, Icon }, i) => {
@@ -232,35 +238,11 @@ export function FourCardFramework({
                         }}
                       >
                         <article
-                          onMouseEnter={(e) => {
-                            const containerRect = orbitContainerRef.current?.getBoundingClientRect();
-                            const cardRect = e.currentTarget.getBoundingClientRect();
-                            if (!containerRect) return;
-                            const centerX = cardRect.left + cardRect.width / 2;
-                            const centerY = cardRect.top + cardRect.height / 2;
-                            const showOnRight = centerX <= containerRect.left + containerRect.width / 2;
-                            const panelWidth = Math.min(300, containerRect.width * 0.42);
-                            const preferredX = showOnRight
-                              ? cardRect.right - containerRect.left + 14
-                              : cardRect.left - containerRect.left - panelWidth - 14;
-                            const clampedX = Math.max(12, Math.min(preferredX, containerRect.width - panelWidth - 12));
-                            setHoveredIndex(i);
-                            setHoverMeta({
-                              top: centerY - containerRect.top,
-                              left: clampedX,
-                            });
-                          }}
-                          onMouseLeave={() => {
-                            setHoveredIndex(null);
-                            setHoverMeta(null);
-                          }}
                           style={{
                             width: "100%",
                             height: "100%",
-                            borderRadius: "50%",
+                            borderRadius: 24,
                             overflow: "hidden",
-                            animation: "orbit-card-spin-clockwise 22s linear infinite",
-                            animationPlayState: hoveredIndex !== null ? "paused" : "running",
                             background: `linear-gradient(155deg, ${theme.light} 0%, #ffffff 38%, ${theme.light} 100%)`,
                             border: `2.5px solid ${theme.base}`,
                             boxShadow: `0 10px 36px color-mix(in srgb, ${theme.base} 35%, transparent), 0 2px 10px rgba(0,0,0,0.08)`,
@@ -268,7 +250,7 @@ export function FourCardFramework({
                             flexDirection: "column",
                             alignItems: "center",
                             justifyContent: "center",
-                            padding: "12%",
+                            padding: "9.5% 9%",
                             textAlign: "center",
                           }}
                         >
@@ -283,7 +265,7 @@ export function FourCardFramework({
                           </span>
                           <h3
                             className="mt-4 font-bold leading-tight"
-                            style={{ color: theme.deep, fontSize: "16px" }}
+                            style={{ color: theme.deep, fontSize: "15px" }}
                           >
                             {title}
                           </h3>
@@ -292,10 +274,7 @@ export function FourCardFramework({
                             style={{
                               color: "color-mix(in srgb, #334155 55%, #0f172a)",
                               fontSize: "16px",
-                              display: "-webkit-box",
-                              WebkitLineClamp: 4,
-                              WebkitBoxOrient: "vertical",
-                              overflow: "hidden",
+                              lineHeight: 1.36,
                             }}
                           >
                             {bodies[i]}
@@ -305,41 +284,6 @@ export function FourCardFramework({
                     );
                   })}
                 </div>
-                {hoveredIndex !== null && hoverMeta ? (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: hoverMeta.top,
-                      left: hoverMeta.left,
-                      transform: "translateY(-50%)",
-                      zIndex: 40,
-                      width: "min(300px, 42vw)",
-                      maxWidth: "calc(100% - 24px)",
-                      padding: "14px 16px",
-                      borderRadius: 16,
-                      background: `linear-gradient(135deg, ${ORBIT_THEMES[hoveredIndex].deep} 0%, ${ORBIT_THEMES[hoveredIndex].base} 100%)`,
-                      border: `1px solid color-mix(in srgb, ${ORBIT_THEMES[hoveredIndex].base} 50%, #ffffff)`,
-                      boxShadow: "0 14px 36px rgba(2,6,23,0.35)",
-                      color: "#f8fafc",
-                    }}
-                  >
-                    <p
-                      style={{
-                        margin: 0,
-                        fontSize: 12,
-                        fontWeight: 700,
-                        letterSpacing: "0.08em",
-                        textTransform: "uppercase",
-                        color: "rgba(255,255,255,0.86)",
-                      }}
-                    >
-                      {pillarTitles?.[hoveredIndex] ?? FOUR_E_META[hoveredIndex].title}
-                    </p>
-                    <p style={{ margin: "6px 0 0", fontSize: 14, lineHeight: 1.45 }}>
-                      {bodies[hoveredIndex]}
-                    </p>
-                  </div>
-                ) : null}
               </div>
             </>
           )}
@@ -353,7 +297,7 @@ export function FourCardFramework({
           <div className="mt-6 md:mt-8">{belowCardsContent}</div>
         ) : null}
         {ctaBelowCards ? (
-          <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:mt-7 sm:flex-row sm:gap-4">
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-9 sm:flex-row sm:gap-4">
             {children}
           </div>
         ) : null}
