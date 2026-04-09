@@ -9,9 +9,18 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 3003;
 const allowedOrigins = [
+  "https://hifia.askeva.net",
+  "https://www.hifia.askeva.net",
   "https://hifai.askeva.net",
   "https://www.hifai.askeva.net",
+  "https://hifaiskillsai.io",
+  "https://www.hifaiskillsai.io",
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
   "http://localhost:3003",
+  "http://127.0.0.1:3003",
 ];
 
 app.use(
