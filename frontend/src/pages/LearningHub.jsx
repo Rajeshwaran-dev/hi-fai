@@ -3,6 +3,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { CalendarClock, MessageCircleHeart, Search, ShieldCheck, Sparkles } from "lucide-react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
+import SubmissionSuccessModal from "../components/SubmissionSuccessModal.jsx";
 import { useReducedMotion, useIsMobile } from "../hooks/useReducedMotion.js";
 import { Services } from "./Home.jsx";
 import chatgptIcon from "../assets/images/chatgpt.png?url";
@@ -12,15 +13,17 @@ import deepseekIcon from "../assets/images/deepseek.png?url";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const LEARNING_HUB_REQUEST_EMAIL = "innovate@hifaiskills.io";
-const IST_TIMEZONE = "IST (UTC+05:30)";
+const API_BASE_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const sanitizeEmailInput = (value = "") =>
+  String(value).replace(/[^a-zA-Z0-9@._-]/g, "");
+const sanitizePhoneInput = (value = "") =>
+  String(value).replace(/\D/g, "").slice(0, 10);
 
-const GRADE_OPTIONS = ["Kindergarten", "Elementary", "High School"];
-const SUBJECT_OPTIONS = ["Maths", "Science"];
+const GRADE_OPTIONS = ["9th Grade", "10th Grade", "11th Grade", "12th Grade"];
 const DURATION_OPTIONS = [
   { value: "1", label: "1 hour" },
   { value: "2", label: "2 hours" },
-  { value: "3", label: "3 hours" },
 ];
 const BOARD_OPTIONS = ["State", "CBSE", "ICSE"];
 const AI_REFERENCE_TOOLS = [
@@ -78,25 +81,32 @@ function LearningHubRequestFormSection() {
     phone: "",
     email: "",
     grade: "",
-    subject: "",
     date: "",
     hour: "",
-    meridiem: "",
     duration: "",
     board: "",
-    timezone: IST_TIMEZONE,
   });
   const [errors, setErrors] = useState({});
-  const [requested, setRequested] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const dateOptions = useMemo(() => getUpcomingDateOptions(14), []);
   const hourOptions = useMemo(
-    () => Array.from({ length: 12 }, (_, i) => ({ value: String(i + 1), label: String(i + 1) })),
+    () => [
+      { value: "1", label: "1 hour" },
+      { value: "2", label: "2 hours" },
+    ],
     [],
   );
 
   const setField = (key, value) => {
-    setForm((prev) => ({ ...prev, [key]: value }));
+    const nextValue = key === "email"
+      ? sanitizeEmailInput(value)
+      : key === "phone"
+        ? sanitizePhoneInput(value)
+        : value;
+    setForm((prev) => ({ ...prev, [key]: nextValue }));
     setErrors((prev) => {
       if (!prev[key]) return prev;
       const next = { ...prev };
@@ -109,62 +119,74 @@ function LearningHubRequestFormSection() {
     const next = {};
     if (!form.name.trim()) next.name = "Name is required.";
     if (!form.phone.trim()) next.phone = "Phone number is required.";
-    if (!/^\+?\d{10,15}$/.test(form.phone.replace(/\s+/g, ""))) {
-      next.phone = "Enter a valid phone number (10-15 digits).";
+    if (!/^\d{10}$/.test(form.phone)) {
+      next.phone = "Phone number must be exactly 10 digits.";
     }
     if (!form.email.trim()) next.email = "Email is required.";
     if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(form.email)) {
       next.email = "Enter a valid email address.";
     }
     if (!form.grade) next.grade = "Please select a grade.";
-    if (!form.subject) next.subject = "Please select a subject.";
     if (!form.date) next.date = "Please select a date.";
     if (!form.hour) next.hour = "Please select an hour.";
-    if (!form.meridiem) next.meridiem = "Please select AM or PM.";
+    if (form.hour && !["1", "2"].includes(form.hour)) {
+      next.hour = "Only 1 or 2 hours are allowed.";
+    }
     if (!form.duration) next.duration = "Please select a duration.";
     if (!form.board) next.board = "Please select a board.";
-    if (form.timezone !== IST_TIMEZONE) {
-      next.timezone = "Only IST is allowed currently.";
-    }
-
-    if (form.hour && form.meridiem) {
-      const h = Number(form.hour);
-      // Allowed booking window: 6:00 AM to 9:00 PM (whole-hour start only).
-      const validHour = Number.isInteger(h) && h >= 1 && h <= 12;
-      if (!validHour) next.hour = "Time must start at a whole hour (1-12).";
-      const isDisallowedNight = (form.meridiem === "AM" && h < 6) || (form.meridiem === "PM" && h >= 10);
-      if (isDisallowedNight) {
-        next.hour = "Bookings are allowed only between 6:00 AM and 9:00 PM IST.";
-      }
-    }
 
     return next;
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const next = validate();
     setErrors(next);
     if (Object.keys(next).length) return;
 
-    const lines = [
-      "New Learning Hub Request",
-      "",
-      `Name: ${form.name}`,
-      `Phone: ${form.phone}`,
-      `Email: ${form.email}`,
-      `Grade: ${form.grade}`,
-      `Subject: ${form.subject}`,
-      `Preferred Date: ${form.date}`,
-      `Preferred Time: ${form.hour} ${form.meridiem}`,
-      `Duration: ${form.duration}`,
-      `Board: ${form.board}`,
-      `Timezone: ${form.timezone}`,
-    ];
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const payload = {
+        name: form.name.trim(),
+        email: form.email.trim(),
+        subject: "Learning Hub - School Inquiry",
+        message: [
+          `Phone: ${form.phone}`,
+          `Grade: ${form.grade}`,
+          `Preferred Date: ${form.date}`,
+          `Preferred Time: ${form.hour} hour(s)`,
+          `Duration: ${form.duration} hour(s)`,
+          `Board: ${form.board}`,
+        ].join("\n"),
+      };
 
-    const mailtoUrl = `mailto:${LEARNING_HUB_REQUEST_EMAIL}?subject=${encodeURIComponent("Learning Hub - Request Session")}&body=${encodeURIComponent(lines.join("\n"))}`;
-    window.location.href = mailtoUrl;
-    setRequested(true);
+      const response = await fetch(`${API_BASE_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit request");
+      }
+
+      setShowSuccessPopup(true);
+      setForm({
+        name: "",
+        phone: "",
+        email: "",
+        grade: "",
+        date: "",
+        hour: "",
+        duration: "",
+        board: "",
+      });
+    } catch (_error) {
+      setSubmitError("Could not send request right now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const fieldBase =
@@ -182,17 +204,20 @@ function LearningHubRequestFormSection() {
       />
 
       <div className="relative mx-auto max-w-7xl rounded-[1.7rem] border border-blue-100/80 bg-white/90 p-6 shadow-[0_24px_70px_-36px_rgba(37,99,235,0.45)] backdrop-blur-sm md:p-9">
-        <h2 className="mt-4 text-2xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl">
-          One-to-one tutor specialist support
+        <h2 className="mt-4 text-2xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl mb-8">
+          HI I am your personal tutor specialist One-on-One or <br></br>  live via internet Maths Any Time 👋
         </h2>
+        <p className="mt-2 text-base font-semibold text-blue-700 md:text-lg">
+          Ready? Lets look open Slots🔍
+        </p>
 
-        {requested ? (
-          <div className="mt-8 rounded-2xl border border-emerald-200 bg-emerald-50 px-5 py-4 text-emerald-800">
-            Request submitted successfully. We have initiated your email draft and our team will reach out soon.
+        {submitError ? (
+          <div className="mt-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+            {submitError}
           </div>
         ) : null}
 
-        <form onSubmit={onSubmit} className="mt-7 grid gap-4 md:grid-cols-2 md:gap-5">
+        <form onSubmit={onSubmit} className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-5">
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700">Name *</label>
             <input
@@ -211,13 +236,16 @@ function LearningHubRequestFormSection() {
               type="tel"
               value={form.phone}
               onChange={(e) => setField("phone", e.target.value)}
+              inputMode="numeric"
+              maxLength={10}
+              pattern="[0-9]{10}"
               className={`${fieldBase} ${errors.phone ? "border-red-400 focus:ring-red-200" : ""}`}
               placeholder="Enter phone number"
             />
             {errors.phone ? <p className="mt-1.5 text-xs text-red-600">{errors.phone}</p> : null}
           </div>
 
-          <div className="md:col-span-2">
+          <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700">Email *</label>
             <input
               type="email"
@@ -243,20 +271,7 @@ function LearningHubRequestFormSection() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Subject/s *</label>
-            <select
-              value={form.subject}
-              onChange={(e) => setField("subject", e.target.value)}
-              className={`${fieldBase} ${errors.subject ? "border-red-400 focus:ring-red-200" : ""}`}
-            >
-              <option value="">Select subject</option>
-              {SUBJECT_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
-            </select>
-            {errors.subject ? <p className="mt-1.5 text-xs text-red-600">{errors.subject}</p> : null}
-          </div>
-
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Preferred date *</label>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">Available slots *</label>
             <select
               value={form.date}
               onChange={(e) => setField("date", e.target.value)}
@@ -295,20 +310,6 @@ function LearningHubRequestFormSection() {
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">AM / PM *</label>
-            <select
-              value={form.meridiem}
-              onChange={(e) => setField("meridiem", e.target.value)}
-              className={`${fieldBase} ${errors.meridiem ? "border-red-400 focus:ring-red-200" : ""}`}
-            >
-              <option value="">Select</option>
-              <option value="AM">AM</option>
-              <option value="PM">PM</option>
-            </select>
-            {errors.meridiem ? <p className="mt-1.5 text-xs text-red-600">{errors.meridiem}</p> : null}
-          </div>
-
-          <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700">Board *</label>
             <select
               value={form.board}
@@ -321,28 +322,23 @@ function LearningHubRequestFormSection() {
             {errors.board ? <p className="mt-1.5 text-xs text-red-600">{errors.board}</p> : null}
           </div>
 
-          <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Time zone *</label>
-            <select
-              value={form.timezone}
-              onChange={(e) => setField("timezone", e.target.value)}
-              className={`${fieldBase} ${errors.timezone ? "border-red-400 focus:ring-red-200" : ""}`}
-            >
-              <option value={IST_TIMEZONE}>{IST_TIMEZONE}</option>
-            </select>
-            {errors.timezone ? <p className="mt-1.5 text-xs text-red-600">{errors.timezone}</p> : null}
-          </div>
-
-          <div className="md:col-span-2">
+          <div className="md:col-span-2 lg:col-span-3">
             <button
               type="submit"
+              disabled={submitting}
               className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(20,131,255,0.35)] transition hover:brightness-110 md:text-base"
             >
-              Request
+              {submitting ? "Sending..." : "Request"}
             </button>
           </div>
         </form>
       </div>
+      <SubmissionSuccessModal
+        open={showSuccessPopup}
+        title="Request submitted successfully"
+        description="Our learning team will review your details and reach out to you soon."
+        onClose={() => setShowSuccessPopup(false)}
+      />
     </section>
   );
 }

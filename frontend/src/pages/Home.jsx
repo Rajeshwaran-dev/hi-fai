@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SubmissionSuccessModal from "../components/SubmissionSuccessModal.jsx";
 import heroBgUrl from "../assets/images/hero-bg.jpg?url";
 import skillDevelopmentImg from "../assets/images/ai.jpg?url";
 import abcdProblemImg from "../assets/images/blcok-chain.jpg?url";
@@ -78,6 +79,8 @@ const HERO_HOOK_POINTS = [
 ];
 const HERO_SUBTEXT =
   "There's a side of you beyond marks that remains undiscovered and HIfAi got you discover it differently.";
+const API_BASE_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
 const HOW_CAN_HIFAI_IMAGE_URLS = {
   enthiranApp: "/enthiran.jpeg",
@@ -296,7 +299,7 @@ export function Hero({ reducedMotion, isMobile }) {
                         {item.label}
                       </span>
                       <span
-                        className={`font-display shrink-0 text-[clamp(1.5rem,3.1vw,3rem)] font-bold leading-[1.5] tracking-[-0.025em] ${a.titleWord} whitespace-nowrap`}
+                        className={`font-display shrink-0 text-[clamp(1.5rem,3.1vw,2rem)] font-medium leading-[1.5] tracking-[-0.025em] ${a.titleWord} whitespace-nowrap`}
                       >
                         {item.title}
                       </span>
@@ -1038,6 +1041,10 @@ function inquiryFieldGridClass(variant) {
 
 const INQUIRY_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const RESUME_MAX_BYTES = 5 * 1024 * 1024;
+const sanitizeEmailInput = (value = "") =>
+  String(value).replace(/[^a-zA-Z0-9@._-]/g, "");
+const sanitizePhoneInput = (value = "") =>
+  String(value).replace(/\D/g, "").slice(0, 10);
 
 function countDigits(value) {
   return (String(value).match(/\d/g) || []).length;
@@ -1100,7 +1107,9 @@ function SchoolInquiryForm({
   className = "",
   hideSubmit = false,
 }) {
-  const [done, setDone] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState({});
 
   const clearErr = (key) => {
@@ -1112,7 +1121,7 @@ function SchoolInquiryForm({
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const next = {};
@@ -1158,12 +1167,40 @@ function SchoolInquiryForm({
       }
       return;
     }
-    setDone(true);
+
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const payload = {
+        name: `${String(fd.get("firstName") ?? "").trim()} ${String(fd.get("lastName") ?? "").trim()}`.trim(),
+        email: String(fd.get("email") ?? "").trim(),
+        subject: "School Inquiry",
+        message: [
+          `Grade: ${String(fd.get("grade") ?? "").trim()}`,
+          `Institution: ${String(fd.get("institution") ?? "").trim()}`,
+          `Phone: ${String(fd.get("phone") ?? "").trim()}`,
+        ].join("\n"),
+      };
+      const response = await fetch(`${API_BASE_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        throw new Error("Email request failed");
+      }
+      setShowSuccessPopup(true);
+      e.currentTarget.reset();
+    } catch (_error) {
+      setSubmitError("Could not send inquiry now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
     <form id={formId} noValidate onSubmit={onSubmit} className={className}>
-      {done ? (
+      {false ? (
         <div
           className={`relative overflow-hidden rounded-2xl border px-5 py-8 text-center ${
             variant === "dark"
@@ -1282,7 +1319,7 @@ function SchoolInquiryForm({
                   errors.firstName ? `${formId}-fn-err` : undefined
                 }
                 className={inquiryControlClass(variant, !!errors.firstName)}
-                placeholder="Jane"
+                placeholder="Enter Your Full Name"
                 onChange={() => clearErr("firstName")}
               />
               <InquiryFieldError
@@ -1368,7 +1405,7 @@ function SchoolInquiryForm({
                   errors.institution ? `${formId}-school-err` : undefined
                 }
                 className={inquiryControlClass(variant, !!errors.institution)}
-                placeholder="Your high school"
+                placeholder="Enter Your School Name"
                 onChange={() => clearErr("institution")}
               />
               <InquiryFieldError
@@ -1398,6 +1435,9 @@ function SchoolInquiryForm({
                 }
                 className={inquiryControlClass(variant, !!errors.phone)}
                 placeholder="Enter 10-digit phone number"
+                onInput={(e) => {
+                  e.currentTarget.value = sanitizePhoneInput(e.currentTarget.value);
+                }}
                 onChange={() => clearErr("phone")}
               />
               <InquiryFieldError
@@ -1424,7 +1464,10 @@ function SchoolInquiryForm({
                   errors.email ? `${formId}-email-err` : undefined
                 }
                 className={inquiryControlClass(variant, !!errors.email)}
-                placeholder="you@school.edu"
+                placeholder="Enter Your Email ID"
+                onInput={(e) => {
+                  e.currentTarget.value = sanitizeEmailInput(e.currentTarget.value);
+                }}
                 onChange={() => clearErr("email")}
               />
               <InquiryFieldError
@@ -1435,16 +1478,28 @@ function SchoolInquiryForm({
           </div>
           {!hideSubmit && (
             <div className="inquiry-stagger-item mt-5">
+              {submitError ? (
+                <p className="mb-3 text-sm font-medium text-red-600">
+                  {submitError}
+                </p>
+              ) : null}
               <button
                 type="submit"
+                disabled={submitting}
                 className="w-full rounded-full bg-gradient-to-r from-accent to-accent-cyan px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-glow sm:w-auto"
               >
-                Submit inquiry
+                {submitting ? "Sending..." : "Submit inquiry"}
               </button>
             </div>
           )}
         </>
       )}
+      <SubmissionSuccessModal
+        open={showSuccessPopup}
+        title="Inquiry submitted successfully"
+        description="Thank you for submitting your school inquiry. Our team will contact you shortly."
+        onClose={() => setShowSuccessPopup(false)}
+      />
     </form>
   );
 }
@@ -1455,7 +1510,9 @@ function UniversityInquiryForm({
   className = "",
   hideSubmit = false,
 }) {
-  const [done, setDone] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
   const [errors, setErrors] = useState({});
 
   const clearErr = (key) => {
@@ -1467,7 +1524,7 @@ function UniversityInquiryForm({
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     const fd = new FormData(e.currentTarget);
     const next = {};
@@ -1523,7 +1580,43 @@ function UniversityInquiryForm({
       }
       return;
     }
-    setDone(true);
+
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const resume = fd.get("resume");
+      const resumeInfo =
+        resume instanceof File && resume.size > 0
+          ? `${resume.name} (${Math.round(resume.size / 1024)} KB)`
+          : "Not attached";
+
+      const payload = {
+        name: `${String(fd.get("firstName") ?? "").trim()} ${String(fd.get("lastName") ?? "").trim()}`.trim(),
+        email: String(fd.get("email") ?? "").trim(),
+        subject: "University Inquiry",
+        message: [
+          `Department & Year: ${String(fd.get("departmentYear") ?? "").trim()}`,
+          `Institution: ${String(fd.get("institution") ?? "").trim()}`,
+          `Phone: ${String(fd.get("phone") ?? "").trim()}`,
+          `Resume: ${resumeInfo}`,
+        ].join("\n"),
+      };
+
+      const response = await fetch(`${API_BASE_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) {
+        throw new Error("Email request failed");
+      }
+      setShowSuccessPopup(true);
+      e.currentTarget.reset();
+    } catch (_error) {
+      setSubmitError("Could not send inquiry now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const resumeFileClass = () => {
@@ -1545,7 +1638,7 @@ function UniversityInquiryForm({
 
   return (
     <form id={formId} noValidate onSubmit={onSubmit} className={className}>
-      {done ? (
+      {false ? (
         <div
           className={`relative overflow-hidden rounded-2xl border px-5 py-8 text-center ${
             variant === "dark"
@@ -1774,6 +1867,9 @@ function UniversityInquiryForm({
                 }
                 className={inquiryControlClass(variant, !!errors.phone)}
                 placeholder="Enter 10-digit phone number"
+                onInput={(e) => {
+                  e.currentTarget.value = sanitizePhoneInput(e.currentTarget.value);
+                }}
                 onChange={() => clearErr("phone")}
               />
               <InquiryFieldError
@@ -1800,7 +1896,10 @@ function UniversityInquiryForm({
                   errors.email ? `${formId}-email-err` : undefined
                 }
                 className={inquiryControlClass(variant, !!errors.email)}
-                placeholder="you@university.edu"
+                placeholder="Enter Your Email ID"
+                onInput={(e) => {
+                  e.currentTarget.value = sanitizeEmailInput(e.currentTarget.value);
+                }}
                 onChange={() => clearErr("email")}
               />
               <InquiryFieldError
@@ -1860,16 +1959,28 @@ function UniversityInquiryForm({
           </div>
           {!hideSubmit && (
             <div className="inquiry-stagger-item mt-5">
+              {submitError ? (
+                <p className="mb-3 text-sm font-medium text-red-600">
+                  {submitError}
+                </p>
+              ) : null}
               <button
                 type="submit"
+                disabled={submitting}
                 className="w-full rounded-full bg-gradient-to-r from-accent to-accent-cyan px-6 py-3 text-sm font-semibold text-white shadow-lg transition-all duration-300 hover:shadow-glow sm:w-auto"
               >
-                Submit inquiry
+                {submitting ? "Sending..." : "Submit inquiry"}
               </button>
             </div>
           )}
         </>
       )}
+      <SubmissionSuccessModal
+        open={showSuccessPopup}
+        title="Inquiry submitted successfully"
+        description="Thank you for submitting your university inquiry. Our team will contact you shortly."
+        onClose={() => setShowSuccessPopup(false)}
+      />
     </form>
   );
 }
@@ -2399,19 +2510,12 @@ export function Services({ reducedMotion, isMobile }) {
 
       <div className="mx-auto max-w-7xl">
         {/* ── Section heading ── */}
-        <div ref={introRef} className="mb-12 max-w-2xl md:mb-16">
+        <div ref={introRef} className="mb-12 max-w-4xl md:mb-16">
           <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
             What we offer
           </p>
           <h2 className="mt-2 font-geom-heading text-[clamp(1.8rem,4.6vw,3.25rem)] font-normal leading-[1.4] tracking-[-0.012em] text-ink">
-            Services built for{" "}
-            <span className="relative inline-block">
-              <span className="relative z-10">real outcomes</span>
-              <span
-                className="absolute -bottom-1 left-0 h-3 w-full rounded-md bg-blue-600/18"
-                aria-hidden
-              />
-            </span>
+            Services built for real outcomes
           </h2>
         </div>
 

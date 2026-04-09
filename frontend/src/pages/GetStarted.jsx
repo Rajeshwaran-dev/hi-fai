@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import SubmissionSuccessModal from "../components/SubmissionSuccessModal.jsx";
 import { Lead, SectionHeading } from "./subpageShared.jsx";
 import sampleQrImage from "../assets/images/qr.png?url";
 
@@ -24,6 +25,12 @@ function getInitialTabFromSearch(search) {
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const PHONE_RE = /^\d{10}$/;
 const SCHOOL_STUDENT_APP_LINK = "/learning-hub";
+const API_BASE_URL =
+  import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const sanitizeEmailInput = (value = "") =>
+  String(value).replace(/[^a-zA-Z0-9@._-]/g, "");
+const sanitizePhoneInput = (value = "") =>
+  String(value).replace(/\D/g, "").slice(0, 10);
 
 export function GetStartedFormPanel({
   initialTab = "school-org",
@@ -58,20 +65,31 @@ export function GetStartedFormPanel({
   const [isVerifyingPayment, setIsVerifyingPayment] = useState(false);
   const [verificationCountdown, setVerificationCountdown] = useState(10);
   const [showPaymentSuccessPopup, setShowPaymentSuccessPopup] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
   useEffect(() => {
     setTab(initialTab);
   }, [initialTab]);
 
   const setField = (name, value) => {
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    const nextValue = name.toLowerCase().includes("email")
+      ? sanitizeEmailInput(value)
+      : name.toLowerCase().includes("phone")
+        ? sanitizePhoneInput(value)
+        : value;
+    setFormData((prev) => ({ ...prev, [name]: nextValue }));
     setErrors((prev) => ({ ...prev, [name]: undefined }));
+    if (submitError) setSubmitError("");
   };
   const setStudentField = (index, field, value) => {
+    const nextValue = field === "email" ? sanitizeEmailInput(value) : value;
     setStudentEntries((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, [field]: value } : item))
+      prev.map((item, i) => (i === index ? { ...item, [field]: nextValue } : item))
     );
     setErrors((prev) => ({ ...prev, [`student-${field}-${index}`]: undefined }));
+    if (submitError) setSubmitError("");
   };
 
   const validate = () => {
@@ -131,16 +149,68 @@ export function GetStartedFormPanel({
     return () => window.clearInterval(timerId);
   }, [isVerifyingPayment, verificationCountdown]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validate()) return;
 
     const isStudentFlow = tab === "college-student";
     if (!isStudentFlow) {
-      window.alert("Enquiry submitted successfully.");
+      setIsSubmitting(true);
+      setSubmitError("");
+      try {
+        const subjectByTab = {
+          "school-org": "Get Started - School Organization Inquiry",
+          "college-org": "Get Started - University Inquiry",
+          "school-student": "Get Started - School Student Inquiry",
+        };
+
+        const messageLines = [
+          `Tab: ${tab}`,
+          `Full Name: ${formData.fullName}`,
+          `Grade / Program: ${formData.gradeOrProgram}`,
+          `Institution: ${formData.institution}`,
+          `Phone: ${formData.phone}`,
+          `Email: ${formData.email}`,
+          `Notes: ${formData.notes}`,
+        ];
+
+        if (tab === "school-org") {
+          messageLines.push(`Role: ${formData.role}`);
+        }
+        if (tab === "college-org") {
+          messageLines.push(`Department / Center: ${formData.department}`);
+        }
+        if (tab === "school-student") {
+          messageLines.push(`Parent/Guardian Email: ${formData.guardianEmail}`);
+        }
+
+        const payload = {
+          name: formData.fullName.trim(),
+          email: formData.email.trim(),
+          subject: subjectByTab[tab] || "Get Started Inquiry",
+          message: messageLines.join("\n"),
+        };
+
+        const response = await fetch(`${API_BASE_URL}/api/contact`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (!response.ok) {
+          throw new Error("Request failed");
+        }
+
+        setShowSuccessPopup(true);
+      } catch (_error) {
+        setSubmitError("Could not submit inquiry right now. Please try again.");
+      } finally {
+        setIsSubmitting(false);
+      }
       return;
     }
 
+    setSubmitError("");
     setVerificationCountdown(10);
     setIsVerifyingPayment(false);
     setShowPaymentSuccessPopup(false);
@@ -196,6 +266,11 @@ export function GetStartedFormPanel({
           className="mt-6 space-y-4"
           onSubmit={handleSubmit}
         >
+          {submitError ? (
+            <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+              {submitError}
+            </div>
+          ) : null}
           {tab === "college-student" ? (
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-slate-800">How many students</span>
@@ -219,7 +294,7 @@ export function GetStartedFormPanel({
                   <span className="mb-2 block text-sm font-semibold text-slate-800">Full name</span>
                   <input
                     type="text"
-                    placeholder="Jane Doe"
+                    placeholder="Enter Your Full Name"
                     value={formData.fullName}
                     onChange={(e) => setField("fullName", e.target.value)}
                     className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
@@ -329,7 +404,7 @@ export function GetStartedFormPanel({
                 type="text"
                 placeholder={
                   tab === "school-org"
-                    ? "Your high school"
+                    ? "Enter Your School Name"
                     : tab === "college-org"
                       ? "Your institution"
                       : tab === "school-student"
@@ -419,7 +494,7 @@ export function GetStartedFormPanel({
               <span className="mb-2 block text-sm font-semibold text-slate-800">Phone</span>
               <input
                 type="tel"
-                placeholder="+1 ••• ••• ••••"
+                placeholder="Enter Your Phone Number"
                 value={formData.phone}
                 onChange={(e) => setField("phone", e.target.value)}
                 inputMode="numeric"
@@ -434,7 +509,7 @@ export function GetStartedFormPanel({
                 <span className="mb-2 block text-sm font-semibold text-slate-800">Email</span>
                 <input
                   type="email"
-                  placeholder="you@school.edu"
+                  placeholder="Enter Your Email ID"
                   value={formData.email}
                   onChange={(e) => setField("email", e.target.value)}
                   className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
@@ -447,11 +522,13 @@ export function GetStartedFormPanel({
           <div className="flex gap-3 pt-2 sm:justify-center sm:gap-4">
             <button
               type="submit"
-              disabled={isPaying}
+              disabled={isPaying || isSubmitting}
               className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
             >
               {tab === "school-org" || tab === "college-org" || tab === "school-student"
-                ? "Enquire Now"
+                ? isSubmitting
+                  ? "Submitting..."
+                  : "Enquire Now"
                 : isPaying
                   ? "Processing..."
                   : "Pay Now"}
@@ -479,6 +556,12 @@ export function GetStartedFormPanel({
           .
         </p>
       ) : null}
+      <SubmissionSuccessModal
+        open={showSuccessPopup}
+        title="Enquiry submitted successfully"
+        description="Thank you for your interest. Our team will review your details and contact you shortly."
+        onClose={() => setShowSuccessPopup(false)}
+      />
 
       {showGpayQrPopup ? (
         <div

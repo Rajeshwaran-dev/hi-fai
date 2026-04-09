@@ -240,7 +240,7 @@ export function FourCardFramework({
                         <article
                           style={{
                             width: "100%",
-                            height: "100%",
+                            // height: "100%",
                             borderRadius: 24,
                             overflow: "hidden",
                             background: `linear-gradient(155deg, ${theme.light} 0%, #ffffff 38%, ${theme.light} 100%)`,
@@ -297,7 +297,7 @@ export function FourCardFramework({
           <div className="mt-6 md:mt-8">{belowCardsContent}</div>
         ) : null}
         {ctaBelowCards ? (
-          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-9 sm:flex-row sm:gap-4">
+          <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:mt-16 sm:flex-row sm:gap-4">
             {children}
           </div>
         ) : null}
