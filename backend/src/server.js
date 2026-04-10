@@ -14,7 +14,7 @@ const allowedOrigins = [
 
 ];
 
-app.use(cors("*"));
+app.use(cors());
   // cors({
   //   origin: (origin, callback) => {
   //     console.log(origin,"origin");
