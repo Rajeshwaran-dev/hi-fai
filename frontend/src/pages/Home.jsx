@@ -270,7 +270,7 @@ export function Hero({ reducedMotion, isMobile }) {
 
       <div ref={parallaxRef} className="relative z-10 mx-auto w-full max-w-5xl">
         <div
-          className="rounded-[1.75rem] border border-white/[0.14] bg-white/[0.08] px-7 py-9 shadow-[0_25px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl md:rounded-[2rem] md:px-12 md:py-11"
+          className="rounded-[1.75rem] border border-white/[0.14] bg-white/[0.08] px-4 py-7 shadow-[0_25px_80px_rgba(0,0,0,0.35)] backdrop-blur-xl sm:px-6 sm:py-8 md:rounded-[2rem] md:px-12 md:py-11"
           style={{
             boxShadow:
               "0 25px 80px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.12)",
@@ -287,25 +287,30 @@ export function Hero({ reducedMotion, isMobile }) {
                 return (
                   <div
                     key={item.title}
-                    className={`hero-line group relative flex min-h-[86px] min-w-0 flex-col justify-center rounded-2xl border px-4 py-4.5 backdrop-blur-md transition-[transform,box-shadow,border-color] duration-300 sm:min-h-[98px] sm:px-5 sm:py-5 md:min-h-[112px] md:rounded-[1.35rem] md:px-6 md:py-5 ${a.border} ${a.surface} ${a.shadow}`}
+                    className={`hero-line group relative flex min-h-0 min-w-0 flex-col justify-center rounded-2xl border px-3.5 py-4 backdrop-blur-md transition-[transform,box-shadow,border-color] duration-300 sm:min-h-[98px] sm:px-5 sm:py-5 md:min-h-[112px] md:rounded-[1.35rem] md:px-6 md:py-5 ${a.border} ${a.surface} ${a.shadow}`}
                   >
-                    <div className="flex min-w-0 items-center gap-2 overflow-hidden sm:gap-2.5 md:gap-3">
+                    <div className="flex min-w-0 flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-2.5 sm:overflow-hidden md:gap-3">
                       <span
-                        className={`inline-flex shrink-0 rounded-full border border-white/25 px-2.5 py-1 text-[0.64rem] font-semibold uppercase leading-none tracking-[0.14em] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_6px_20px_-12px_rgba(15,23,42,0.7)] sm:px-3 sm:text-[0.7rem] md:text-[0.78rem] ${a.labelWrap} ${a.labelText}`}
+                        className={`inline-flex w-fit shrink-0 rounded-full border border-white/25 px-2.5 py-1 text-[0.64rem] font-semibold uppercase leading-none tracking-[0.14em] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_6px_20px_-12px_rgba(15,23,42,0.7)] sm:px-3 sm:text-[0.7rem] md:text-[0.78rem] ${a.labelWrap} ${a.labelText}`}
                       >
                         {item.label}
                       </span>
-                      <span
-                        className={`font-display shrink-0 text-[clamp(1.5rem,3.1vw,2rem)] font-medium leading-[1.5] tracking-[-0.025em] ${a.titleWord} whitespace-nowrap`}
-                      >
-                        {item.title}
-                      </span>
-                      <span className="shrink-0 text-[clamp(1.1rem,2.6vw,2.1rem)] font-bold leading-none text-white/95 whitespace-nowrap">
-                        -
-                      </span>
-                      <p className="truncate text-[clamp(0.95rem,2.05vw,1.9rem)] font-semibold leading-tight tracking-[-0.015em] text-white/95 whitespace-nowrap">
-                        {item.text}
-                      </p>
+                      <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-1">
+                        <span
+                          className={`font-display text-[clamp(1.2rem,5.2vw,2rem)] font-medium leading-snug tracking-[-0.025em] sm:shrink-0 sm:leading-[1.5] sm:text-[clamp(1.35rem,3.1vw,2rem)] ${a.titleWord}`}
+                        >
+                          {item.title}
+                        </span>
+                        <span
+                          className="hidden font-bold leading-none text-white/80 sm:inline sm:text-[clamp(1rem,2.6vw,2.1rem)]"
+                          aria-hidden
+                        >
+                          –
+                        </span>
+                        <p className="w-full min-w-0 text-[0.92rem] font-semibold leading-snug tracking-[-0.015em] text-white/95 sm:w-auto sm:max-w-none sm:flex-1 sm:text-[clamp(0.9rem,2.05vw,1.9rem)] sm:leading-tight">
+                          {item.text}
+                        </p>
+                      </div>
                     </div>
                   </div>
                 );
