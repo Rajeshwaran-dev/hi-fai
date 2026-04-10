@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import {
+  ArrowRight,
   ClipboardCheck,
   Compass,
   Play,
@@ -30,7 +31,7 @@ function CenterPlayTrigger({ onClick }) {
   const textPathId = useId();
 
   return (
-    <div style={{ position: "relative", display: "inline-flex", width: 128, height: 128, alignItems: "center", justifyContent: "center" }}>
+    <div style={{ position: "relative", display: "inline-flex", width: 146, height: 146, alignItems: "center", justifyContent: "center" }}>
       {/* Spinning text ring */}
       <svg
         style={{
@@ -48,7 +49,7 @@ function CenterPlayTrigger({ onClick }) {
         <defs>
           <path id={textPathId} d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0" />
         </defs>
-        <text fill="currentColor" style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "1.6px" }}>
+        <text fill="currentColor" style={{ fontSize: "14px", fontWeight: 700, letterSpacing: "1.9px" }}>
           <textPath href={`#${textPathId}`} startOffset="50%" textAnchor="middle">
           ✦ CHECKOUT ENTHIRAN APP ✦
           </textPath>
@@ -63,8 +64,8 @@ function CenterPlayTrigger({ onClick }) {
           position: "relative",
           zIndex: 10,
           display: "inline-flex",
-          width: 80,
-          height: 80,
+          width: 94,
+          height: 94,
           alignItems: "center",
           justifyContent: "center",
           borderRadius: "50%",
@@ -82,8 +83,8 @@ function CenterPlayTrigger({ onClick }) {
         <span
           style={{
             display: "inline-flex",
-            width: 56,
-            height: 56,
+          width: 68,
+          height: 68,
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "50%",
@@ -91,7 +92,7 @@ function CenterPlayTrigger({ onClick }) {
             boxShadow: "0 6px 20px rgba(20,131,255,0.45)",
           }}
         >
-          <Play style={{ width: 22, height: 22, marginLeft: 3, color: "#fff" }} fill="currentColor" />
+          <Play style={{ width: 28, height: 28, marginLeft: 3, color: "#fff" }} fill="currentColor" />
         </span>
       </button>
     </div>
@@ -313,7 +314,8 @@ const CARD_THEME = [
 // The card color themes remain unchanged while shape is now rectangular.
 
 const ORBIT_R_PCT = 36;
-const CARD_SIZE_PCT = 32;
+const CARD_WIDTH_PCT = 37;
+const ORBIT_RING_SCALE = 3.2;
 
 function OrbitCards({ onPlayClick }) {
   useEffect(() => { injectOrbitStyles(); }, []);
@@ -451,31 +453,48 @@ function OrbitCards({ onPlayClick }) {
         userSelect: "none",
       }}
     >
-      {/* Faint dashed orbit track */}
       <div
+        className="orbit-progress-shell"
         style={{
-          pointerEvents: "none",
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          width: `${ORBIT_R_PCT * 2.5}%`,
+          width: `${ORBIT_R_PCT * ORBIT_RING_SCALE}%`,
           aspectRatio: "1/1",
-          transform: "translate(-50%, -50%)",
-          borderRadius: "50%",
-          border: "1.5px dashed rgba(147,197,253,0.45)",
         }}
-      />
+        aria-hidden
+      >
+        <svg
+          viewBox="0 0 120 120"
+          className="orbit-progress-svg"
+          focusable="false"
+        >
+          <circle
+            className="orbit-progress-track"
+            cx="60"
+            cy="60"
+            r="48"
+          />
+          <circle
+            className="orbit-progress-ring"
+            cx="60"
+            cy="60"
+            r="48"
+          />
+        </svg>
+      </div>
 
       {/* Arrow that travels along the orbit track */}
       <div
         className="orbit-arrow-rotor"
         style={{
-          width: `${ORBIT_R_PCT * 2.5}%`,
+          width: `${ORBIT_R_PCT * ORBIT_RING_SCALE}%`,
           aspectRatio: "1/1",
         }}
         aria-hidden
       >
-        <div className="orbit-arrow" />
+        <div className="orbit-arrow">
+          <span className="orbit-arrow-icon-shell">
+            <ArrowRight className="orbit-arrow-icon" strokeWidth={2.9} />
+          </span>
+        </div>
       </div>
 
       <div
@@ -545,7 +564,7 @@ function OrbitCards({ onPlayClick }) {
                     textAlign: "center",
                     fontWeight: 700,
                     color: theme.deep,
-                    fontSize: "15px",
+                    fontSize: "22px",
                     lineHeight: 1.12,
                   }}
                 >
@@ -557,7 +576,7 @@ function OrbitCards({ onPlayClick }) {
                     margin: 0,
                     textAlign: "center",
                     color: `color-mix(in srgb, ${theme.deep} 82%, #334155)`,
-                    fontSize: evaluateFlow ? "13px" : "16px",
+                    fontSize: evaluateFlow ? "18px" : "18px",
                     lineHeight: 1.36,
                   }}
                 >
@@ -581,8 +600,8 @@ function OrbitCards({ onPlayClick }) {
               key={`orbit-card-${i}`}
               style={{
                 position: "absolute",
-                width: `${CARD_SIZE_PCT}%`,
-                aspectRatio: "1 / 1",
+                width: `${CARD_WIDTH_PCT}%`,
+                aspectRatio: "1.28 / 1",
                 left: `${cx}%`,
                 top: `${cy}%`,
                 transform: "translate(-50%, -50%)",

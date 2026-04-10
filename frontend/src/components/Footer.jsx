@@ -20,7 +20,7 @@ const FOOTER_NAV_LINKS = [
 ];
 
 const FOOTER_ADDRESS_LINE =
-  "24, Rengadevi Amman Koil Street, Main Road, Dindigul-624001, Tamil Nadu, India";
+  "24, Renuga Devi Amman Koil Street, Main Road, Dindigul-624001, Tamil Nadu, India";
 const FOOTER_PHONE_DISPLAY = "+91 93848 82012";
 const FOOTER_PHONE_TEL = "+919384882012";
 const FOOTER_EMAIL = "innovate@hifaiskills.io";
@@ -116,7 +116,7 @@ export default function Footer({ reducedMotion }) {
                 />
               </a>
               <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/80">
-                <span className="font-semibold text-accent-cyan">HIfAi</span>{" "}
+                <span className="font-semibold text-accent-cyan">HifAi</span>{" "}
                 brings forward what often goes unseen, shaping it into meaningful,
                 real-world impact.
               </p>

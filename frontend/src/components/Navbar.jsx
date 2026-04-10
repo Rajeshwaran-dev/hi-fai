@@ -218,7 +218,7 @@ export default function Navbar({ reducedMotion }) {
       </div>
 
       <div className="px-3 pt-2 md:px-8 md:pt-3 pb-4">
-        <nav className="mx-auto flex w-full max-w-7xl items-center gap-3 rounded-[18px] border border-[#3f5f95]/70 bg-gradient-to-r from-[#0a1734]/95 via-[#0c2244]/90 to-[#102b57]/95 px-3 py-2 shadow-[0_12px_40px_rgba(3,10,30,0.45),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl md:px-6 md:py-2.5">
+        <nav className="mx-auto flex w-full max-w-7xl items-center gap-3 rounded-[18px] border border-[#3f5f95]/70 bg-gradient-to-r from-[#0a1734]/95 via-[#0c2244]/90 to-[#102b57]/95 px-3 py-2 shadow-[0_12px_40px_rgba(3,10,30,0.45),inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-xl md:px-6 md:py-2.5 align-items-center justify-center">
         <Link
           to="/"
           className="inline-flex shrink-0 items-center"

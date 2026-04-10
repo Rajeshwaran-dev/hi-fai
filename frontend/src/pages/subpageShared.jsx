@@ -1,5 +1,6 @@
 
 import {
+  ArrowRight,
   Binoculars,
   Check,
   ClipboardCheck,
@@ -33,17 +34,19 @@ const ORBIT_THEMES = [
   { base: "#519A66", light: "#EBF8EF", deep: "#1F4A2E" },
 ];
 const ORBIT_R_PCT = 36;
-const ORBIT_CARD_SIZE_PCT = 32;
+const ORBIT_CARD_WIDTH_PCT = 40;
+/** Wider than tall so copy fits without the orbit feeling cramped. */
+const ORBIT_CARD_ASPECT = "1.45 / 1";
+const ORBIT_RING_SCALE = 3.2;
 
 /** Center hub for orbit layouts (mirrors the School Students play control footprint). */
-export function OrbitCenterPageTitle({ title, subtitle }) {
-  return (
-    <div
-      className="flex min-h-[5.25rem] min-w-[5.25rem] max-w-[9.5rem] flex-col items-center justify-center rounded-full border-[2.5px] border-sky-300/95 bg-white px-3 py-2 text-center shadow-[0_16px_40px_rgba(15,23,42,0.16)] ring-1 ring-blue-500/[0.08] sm:min-h-[6.5rem] sm:min-w-[6.5rem] sm:max-w-[10rem] sm:px-3.5"
-      role="status"
-      aria-label={subtitle ? `${title} ${subtitle}` : title}
-    >
-      <span className="font-geom-heading text-[14px] font-semibold leading-snug tracking-tight text-blue-950 sm:text-xs md:text-[16px]">
+export function OrbitCenterPageTitle({ title, subtitle, onClick, className = "" }) {
+  const baseClass =
+    "flex min-h-[5.25rem] min-w-[5.25rem] max-w-[9.5rem] flex-col items-center justify-center rounded-full border-[2.5px] border-sky-300/95 bg-white px-3 py-2 text-center shadow-[0_16px_40px_rgba(15,23,42,0.16)] ring-1 ring-blue-500/[0.08] sm:min-h-[8.5rem] sm:min-w-[8.5rem] sm:max-w-[10rem] sm:px-3.5";
+  const label = subtitle ? `${title} ${subtitle}` : title;
+  const inner = (
+    <>
+      <span className="font-geom-heading text-[18px] font-semibold leading-snug tracking-tight text-blue-950 sm:text-xs md:text-[20px]">
         {title}
       </span>
       {subtitle ? (
@@ -51,6 +54,27 @@ export function OrbitCenterPageTitle({ title, subtitle }) {
           {subtitle}
         </span>
       ) : null}
+    </>
+  );
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        className={`${baseClass} cursor-pointer transition hover:border-sky-400 hover:shadow-[0_18px_44px_rgba(15,23,42,0.18)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/50 focus-visible:ring-offset-2 ${className}`}
+        onClick={onClick}
+        aria-label={`${label}. Open details.`}
+      >
+        {inner}
+      </button>
+    );
+  }
+  return (
+    <div
+      className={`${baseClass} ${className}`}
+      role="status"
+      aria-label={label}
+    >
+      {inner}
     </div>
   );
 }
@@ -225,29 +249,47 @@ export function FourCardFramework({
                 style={{ position: "relative", aspectRatio: "1 / 1", marginTop: "30px" }}
               >
                 <div
+                  className="orbit-progress-shell"
                   style={{
-                    pointerEvents: "none",
-                    position: "absolute",
-                    left: "50%",
-                    top: "50%",
-                    width: `${ORBIT_R_PCT * 2.5}%`,
+                    width: `${ORBIT_R_PCT * ORBIT_RING_SCALE}%`,
                     aspectRatio: "1 / 1",
-                    transform: "translate(-50%, -50%)",
-                    borderRadius: "50%",
-                    border: "1.5px dashed rgba(147,197,253,0.45)",
                   }}
-                />
+                  aria-hidden
+                >
+                  <svg
+                    viewBox="0 0 120 120"
+                    className="orbit-progress-svg"
+                    focusable="false"
+                  >
+                    <circle
+                      className="orbit-progress-track"
+                      cx="60"
+                      cy="60"
+                      r="48"
+                    />
+                    <circle
+                      className="orbit-progress-ring"
+                      cx="60"
+                      cy="60"
+                      r="48"
+                    />
+                  </svg>
+                </div>
 
                 {/* Arrow that travels along the orbit track */}
                 <div
                   className="orbit-arrow-rotor"
                   style={{
-                    width: `${ORBIT_R_PCT * 2.5}%`,
+                    width: `${ORBIT_R_PCT * ORBIT_RING_SCALE}%`,
                     aspectRatio: "1 / 1",
                   }}
                   aria-hidden
                 >
-                  <div className="orbit-arrow" />
+                  <div className="orbit-arrow">
+                    <span className="orbit-arrow-icon-shell">
+                      <ArrowRight className="orbit-arrow-icon" strokeWidth={2.9} />
+                    </span>
+                  </div>
                 </div>
                 <div
                   style={{
@@ -268,8 +310,8 @@ export function FourCardFramework({
                         key={`${i}-${title}`}
                         style={{
                           position: "absolute",
-                          width: `${ORBIT_CARD_SIZE_PCT}%`,
-                          aspectRatio: "1 / 1",
+                          width: `${ORBIT_CARD_WIDTH_PCT}%`,
+                          aspectRatio: ORBIT_CARD_ASPECT,
                           left: `${cx}%`,
                           top: `${cy}%`,
                           transform: "translate(-50%, -50%)",
@@ -288,7 +330,7 @@ export function FourCardFramework({
                             flexDirection: "column",
                             alignItems: "center",
                             justifyContent: "center",
-                            padding: "9.5% 9%",
+                            padding: "4% 3%",
                             textAlign: "center",
                           }}
                         >
@@ -303,7 +345,7 @@ export function FourCardFramework({
                           </span>
                           <h3
                             className="mt-4 font-bold leading-tight"
-                            style={{ color: theme.deep, fontSize: "15px" }}
+                            style={{ color: theme.deep, fontSize: "20px" }}
                           >
                             {title}
                           </h3>

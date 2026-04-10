@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import logoPngUrl from "./assets/images/logo.png?url";
 import "./index.css";
+import "antd/dist/reset.css";
 
 (() => {
   const ensureBrandLink = (rel, extra = {}) => {

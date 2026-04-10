@@ -1,5 +1,9 @@
+const path = require("path");
 const dotenv = require("dotenv");
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, ".env") });
+if (!process.env.MONGODB_URI) {
+  dotenv.config({ path: path.resolve(__dirname, "..", ".env") });
+}
 
 const express = require("express");
 const cors = require("cors");
@@ -12,7 +16,7 @@ const port = process.env.PORT || 3003;
 const allowedOrigins = [
   "https://hifai.askeva.net",
   "http://localhost:5173",
-
+  "http://127.0.0.1:5173",
 ];
 
 app.use(

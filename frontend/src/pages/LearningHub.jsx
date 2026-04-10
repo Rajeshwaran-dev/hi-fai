@@ -1,8 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { CalendarClock, MessageCircleHeart, Search, ShieldCheck, Sparkles } from "lucide-react";
-import InnerPageLink from "../components/InnerPageLink.jsx";
+import {
+  CalendarClock,
+  MessageCircleHeart,
+  Search,
+  ShieldCheck,
+  Sparkles,
+} from "lucide-react";
+import { DatePicker } from "antd";
+import dayjs from "dayjs";
 import SubmissionSuccessModal from "../components/SubmissionSuccessModal.jsx";
 import { useReducedMotion, useIsMobile } from "../hooks/useReducedMotion.js";
 import { Services } from "./Home.jsx";
@@ -10,6 +17,9 @@ import chatgptIcon from "../assets/images/chatgpt.png?url";
 import claudeIcon from "../assets/images/claude.png?url";
 import grokIcon from "../assets/images/grok.png?url";
 import deepseekIcon from "../assets/images/deepseek.png?url";
+import hyperledgerIcon from "../assets/images/hyperledger.png?url";
+import ethereumIcon from "../assets/images/ethereum.png?url";
+import rippleIcon from "../assets/images/ripple.png?url";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -21,16 +31,25 @@ const sanitizePhoneInput = (value = "") =>
   String(value).replace(/\D/g, "").slice(0, 10);
 
 const GRADE_OPTIONS = ["9th Grade", "10th Grade", "11th Grade", "12th Grade"];
-const DURATION_OPTIONS = [
-  { value: "1", label: "1 hour" },
-  { value: "2", label: "2 hours" },
-];
 /** Preferred time-of-day slots (Learning Hub tutor request). */
-const PREFERRED_TIME_OPTIONS = [
-  { value: "6-7", label: "6 to 7" },
-  { value: "7-8", label: "7 to 8" },
+const PREFERRED_TIME_OPTIONS = [{ value: "6-8", label: "6 to 8" }];
+const BOARD_OPTIONS = ["State", "CBSE", "ICSE", "Metric"];
+const AVAILABLE_DAY_OPTIONS = [
+  { value: "Monday", label: "Monday" },
+  { value: "Wednesday", label: "Wednesday" },
+  { value: "Friday", label: "Friday" },
 ];
-const BOARD_OPTIONS = ["State", "CBSE", "ICSE"];
+/** dayjs `.day()`: 0 Sun … 6 Sat — only Mon / Wed / Fri are bookable. */
+const ALLOWED_BOOKING_WEEKDAYS = new Set([1, 3, 5]);
+const ALLOWED_SLOT_DAY_VALUES = new Set(
+  AVAILABLE_DAY_OPTIONS.map((o) => o.value),
+);
+
+function isAllowedBookingDate(d) {
+  if (!d || !d.isValid()) return false;
+  if (d.startOf("day").isBefore(dayjs().startOf("day"))) return false;
+  return ALLOWED_BOOKING_WEEKDAYS.has(d.day());
+}
 const AI_REFERENCE_TOOLS = [
   {
     name: "ChatGPT",
@@ -62,26 +81,29 @@ const AI_REFERENCE_TOOLS = [
   },
 ];
 
-/** Next `maxSlots` available dates, Mon / Wed / Fri only (skips today; same as before). */
-function getUpcomingDateOptions(maxSlots = 14) {
-  const out = [];
-  const today = new Date();
-  const allowedWeekday = new Set([1, 3, 5]); // Monday, Wednesday, Friday
-  for (let i = 1; out.length < maxSlots && i <= 120; i += 1) {
-    const d = new Date(today);
-    d.setDate(today.getDate() + i);
-    if (!allowedWeekday.has(d.getDay())) continue;
-    const iso = d.toISOString().slice(0, 10);
-    const label = d.toLocaleDateString("en-IN", {
-      weekday: "short",
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-    out.push({ value: iso, label });
-  }
-  return out;
-}
+const BLOCKCHAIN_REFERENCE_TOOLS = [
+  {
+    name: "Hyperledger (By Linux Foundation)",
+    url: "https://www.hyperledger.org/",
+    iconUrl: hyperledgerIcon,
+    description:
+      "An open ecosystem of enterprise blockchain frameworks and tools stewarded by the Linux Foundation—used to build permissioned networks, digital identity, and trusted record-keeping across industries.",
+  },
+  {
+    name: "Ethereum",
+    url: "https://ethereum.org/",
+    iconUrl: ethereumIcon,
+    description:
+      "A decentralized platform for smart contracts and applications, powering tokens, DeFi, and Web3 with a large global community and the Ethereum Virtual Machine.",
+  },
+  {
+    name: "Ripple",
+    url: "https://ripple.com/",
+    iconUrl: rippleIcon,
+    description:
+      "Payments and settlement technology focused on fast cross-border transfers and liquidity, widely adopted by financial institutions alongside the XRP Ledger ecosystem.",
+  },
+];
 
 function LearningHubRequestFormSection() {
   const [form, setForm] = useState({
@@ -91,7 +113,7 @@ function LearningHubRequestFormSection() {
     grade: "",
     date: "",
     hour: "",
-    duration: "",
+    preferredDate: "",
     board: "",
   });
   const [errors, setErrors] = useState({});
@@ -99,14 +121,29 @@ function LearningHubRequestFormSection() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
 
-  const dateOptions = useMemo(() => getUpcomingDateOptions(14), []);
+  const dayOptions = useMemo(() => AVAILABLE_DAY_OPTIONS, []);
+
+  const preferredDatePickerValue = useMemo(() => {
+    if (!form.preferredDate) return null;
+    const d = dayjs(form.preferredDate, "YYYY-MM-DD", true);
+    return isAllowedBookingDate(d) ? d : null;
+  }, [form.preferredDate]);
+
+  useEffect(() => {
+    if (!form.preferredDate) return;
+    const d = dayjs(form.preferredDate, "YYYY-MM-DD", true);
+    if (!isAllowedBookingDate(d)) {
+      setForm((prev) => ({ ...prev, preferredDate: "" }));
+    }
+  }, [form.preferredDate]);
 
   const setField = (key, value) => {
-    const nextValue = key === "email"
-      ? sanitizeEmailInput(value)
-      : key === "phone"
-        ? sanitizePhoneInput(value)
-        : value;
+    const nextValue =
+      key === "email"
+        ? sanitizeEmailInput(value)
+        : key === "phone"
+          ? sanitizePhoneInput(value)
+          : value;
     setForm((prev) => ({ ...prev, [key]: nextValue }));
     setErrors((prev) => {
       if (!prev[key]) return prev;
@@ -128,12 +165,30 @@ function LearningHubRequestFormSection() {
       next.email = "Enter a valid email address.";
     }
     if (!form.grade) next.grade = "Please select a grade.";
-    if (!form.date) next.date = "Please select a date.";
-    if (!form.hour) next.hour = "Please select a preferred time.";
-    if (form.hour && !PREFERRED_TIME_OPTIONS.some((o) => o.value === form.hour)) {
-      next.hour = "Choose 6 to 7 or 7 to 8.";
+    if (!form.date) next.date = "Please select a day.";
+    if (form.date && !ALLOWED_SLOT_DAY_VALUES.has(form.date)) {
+      next.date = "Choose Monday, Wednesday, or Friday.";
     }
-    if (!form.duration) next.duration = "Please select a duration.";
+    if (!form.hour) next.hour = "Please select a preferred time.";
+    if (
+      form.hour &&
+      !PREFERRED_TIME_OPTIONS.some((o) => o.value === form.hour)
+    ) {
+      next.hour = "Choose 6 to 8.";
+    }
+    if (!form.preferredDate) {
+      next.preferredDate = "Please select a preferred date.";
+    } else {
+      const pd = dayjs(form.preferredDate, "YYYY-MM-DD", true);
+      if (!pd.isValid()) {
+        next.preferredDate = "Please select a valid date.";
+      } else if (!ALLOWED_BOOKING_WEEKDAYS.has(pd.day())) {
+        next.preferredDate =
+          "Only Monday, Wednesday, or Friday can be selected.";
+      } else if (pd.startOf("day").isBefore(dayjs().startOf("day"))) {
+        next.preferredDate = "Choose today or a future date.";
+      }
+    }
     if (!form.board) next.board = "Please select a board.";
 
     return next;
@@ -149,7 +204,8 @@ function LearningHubRequestFormSection() {
     setSubmitError("");
     try {
       const preferredTimeLabel =
-        PREFERRED_TIME_OPTIONS.find((o) => o.value === form.hour)?.label ?? form.hour;
+        PREFERRED_TIME_OPTIONS.find((o) => o.value === form.hour)?.label ??
+        form.hour;
       const payload = {
         name: form.name.trim(),
         email: form.email.trim(),
@@ -157,9 +213,9 @@ function LearningHubRequestFormSection() {
         message: [
           `Phone: ${form.phone}`,
           `Grade: ${form.grade}`,
-          `Preferred Date: ${form.date}`,
+          `Available Day: ${form.date}`,
           `Preferred Time: ${preferredTimeLabel}`,
-          `Duration: ${form.duration} hour(s)`,
+          `Preferred Date: ${form.preferredDate}`,
           `Board: ${form.board}`,
         ].join("\n"),
       };
@@ -182,7 +238,7 @@ function LearningHubRequestFormSection() {
         grade: "",
         date: "",
         hour: "",
-        duration: "",
+        preferredDate: "",
         board: "",
       });
     } catch (_error) {
@@ -207,8 +263,13 @@ function LearningHubRequestFormSection() {
       />
 
       <div className="relative mx-auto max-w-7xl rounded-[1.7rem] border border-blue-100/80 bg-white/90 p-6 shadow-[0_24px_70px_-36px_rgba(37,99,235,0.45)] backdrop-blur-sm md:p-9">
+        <p className="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-blue-700">
+          <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
+          For Students
+        </p>
         <h2 className="mt-4 text-2xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl mb-8">
-          HI I am your personal tutor specialist One-on-One or <br></br>  live via internet Maths Any Time 👋
+          Hi 👋 <br></br> I am your personal tutor specialist One-on-One or{" "}
+          <br></br> live via internet Maths Any Time
         </h2>
         <p className="mt-2 text-base font-semibold text-blue-700 md:text-lg">
           Ready? Lets look open Slots🔍
@@ -220,9 +281,14 @@ function LearningHubRequestFormSection() {
           </div>
         ) : null}
 
-        <form onSubmit={onSubmit} className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-5">
+        <form
+          onSubmit={onSubmit}
+          className="mt-7 grid gap-4 md:grid-cols-2 lg:grid-cols-3 md:gap-5"
+        >
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Name *</label>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              Name *
+            </label>
             <input
               type="text"
               value={form.name}
@@ -230,11 +296,15 @@ function LearningHubRequestFormSection() {
               className={`${fieldBase} ${errors.name ? "border-red-400 focus:ring-red-200" : ""}`}
               placeholder="Enter your full name"
             />
-            {errors.name ? <p className="mt-1.5 text-xs text-red-600">{errors.name}</p> : null}
+            {errors.name ? (
+              <p className="mt-1.5 text-xs text-red-600">{errors.name}</p>
+            ) : null}
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Phone number *</label>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              Phone number *
+            </label>
             <input
               type="tel"
               value={form.phone}
@@ -245,11 +315,15 @@ function LearningHubRequestFormSection() {
               className={`${fieldBase} ${errors.phone ? "border-red-400 focus:ring-red-200" : ""}`}
               placeholder="Enter phone number"
             />
-            {errors.phone ? <p className="mt-1.5 text-xs text-red-600">{errors.phone}</p> : null}
+            {errors.phone ? (
+              <p className="mt-1.5 text-xs text-red-600">{errors.phone}</p>
+            ) : null}
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Email *</label>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              Email *
+            </label>
             <input
               type="email"
               value={form.email}
@@ -257,50 +331,89 @@ function LearningHubRequestFormSection() {
               className={`${fieldBase} ${errors.email ? "border-red-400 focus:ring-red-200" : ""}`}
               placeholder="Enter email address"
             />
-            {errors.email ? <p className="mt-1.5 text-xs text-red-600">{errors.email}</p> : null}
+            {errors.email ? (
+              <p className="mt-1.5 text-xs text-red-600">{errors.email}</p>
+            ) : null}
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Grade *</label>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              Grade *
+            </label>
             <select
               value={form.grade}
               onChange={(e) => setField("grade", e.target.value)}
               className={`${fieldBase} ${errors.grade ? "border-red-400 focus:ring-red-200" : ""}`}
             >
               <option value="">Select grade</option>
-              {GRADE_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+              {GRADE_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
             </select>
-            {errors.grade ? <p className="mt-1.5 text-xs text-red-600">{errors.grade}</p> : null}
+            {errors.grade ? (
+              <p className="mt-1.5 text-xs text-red-600">{errors.grade}</p>
+            ) : null}
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Available slots *</label>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              Available slots *
+            </label>
             <select
               value={form.date}
               onChange={(e) => setField("date", e.target.value)}
               className={`${fieldBase} ${errors.date ? "border-red-400 focus:ring-red-200" : ""}`}
             >
-              <option value="">Select date</option>
-              {dateOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+              <option value="">Select day</option>
+              {dayOptions.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
             </select>
-            {errors.date ? <p className="mt-1.5 text-xs text-red-600">{errors.date}</p> : null}
+            {errors.date ? (
+              <p className="mt-1.5 text-xs text-red-600">{errors.date}</p>
+            ) : null}
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Preferred duration *</label>
-            <select
-              value={form.duration}
-              onChange={(e) => setField("duration", e.target.value)}
-              className={`${fieldBase} ${errors.duration ? "border-red-400 focus:ring-red-200" : ""}`}
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              Preferred Date *
+            </label>
+            <div
+              className={`rounded-xl border bg-white px-2 py-1.5 shadow-[0_1px_2px_rgba(15,23,42,0.04)] ${
+                errors.preferredDate
+                  ? "border-red-400 focus-within:ring-2 focus-within:ring-red-200"
+                  : "border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-200"
+              }`}
             >
-              <option value="">Select duration</option>
-              {DURATION_OPTIONS.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
-            </select>
-            {errors.duration ? <p className="mt-1.5 text-xs text-red-600">{errors.duration}</p> : null}
+              <DatePicker
+                value={preferredDatePickerValue}
+                onChange={(d) =>
+                  setField("preferredDate", d ? d.format("YYYY-MM-DD") : "")
+                }
+                format="ddd, D MMM YYYY"
+                placeholder="Select preferred date (Mon / Wed / Fri)"
+                className="!w-full"
+                needConfirm={false}
+                disabledDate={(current) =>
+                  current ? !isAllowedBookingDate(current) : false
+                }
+              />
+            </div>
+            {errors.preferredDate ? (
+              <p className="mt-1.5 text-xs text-red-600">
+                {errors.preferredDate}
+              </p>
+            ) : null}
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Preferred time (hour) *</label>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              Preferred time (hour) *
+            </label>
             <select
               value={form.hour}
               onChange={(e) => setField("hour", e.target.value)}
@@ -308,23 +421,35 @@ function LearningHubRequestFormSection() {
             >
               <option value="">Select time slot</option>
               {PREFERRED_TIME_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>{opt.label}</option>
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
               ))}
             </select>
-            {errors.hour ? <p className="mt-1.5 text-xs text-red-600">{errors.hour}</p> : null}
+            {errors.hour ? (
+              <p className="mt-1.5 text-xs text-red-600">{errors.hour}</p>
+            ) : null}
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-slate-700">Board *</label>
+            <label className="mb-1.5 block text-sm font-medium text-slate-700">
+              Board *
+            </label>
             <select
               value={form.board}
               onChange={(e) => setField("board", e.target.value)}
               className={`${fieldBase} ${errors.board ? "border-red-400 focus:ring-red-200" : ""}`}
             >
               <option value="">Select board</option>
-              {BOARD_OPTIONS.map((opt) => <option key={opt} value={opt}>{opt}</option>)}
+              {BOARD_OPTIONS.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
             </select>
-            {errors.board ? <p className="mt-1.5 text-xs text-red-600">{errors.board}</p> : null}
+            {errors.board ? (
+              <p className="mt-1.5 text-xs text-red-600">{errors.board}</p>
+            ) : null}
           </div>
 
           <div className="md:col-span-2 lg:col-span-3 text-center">
@@ -348,6 +473,170 @@ function LearningHubRequestFormSection() {
   );
 }
 
+function ExpertGuidanceQuickForm() {
+  const [form, setForm] = useState({ name: "", email: "", phone: "" });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const setField = (key, value) => {
+    const nextValue =
+      key === "email"
+        ? sanitizeEmailInput(value)
+        : key === "phone"
+          ? sanitizePhoneInput(value)
+          : value;
+    setForm((prev) => ({ ...prev, [key]: nextValue }));
+    setErrors((prev) => {
+      if (!prev[key]) return prev;
+      const next = { ...prev };
+      delete next[key];
+      return next;
+    });
+  };
+
+  const validate = () => {
+    const next = {};
+    if (!form.name.trim()) next.name = "Name is required.";
+    if (!form.email.trim()) next.email = "Email is required.";
+    if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i.test(form.email)) {
+      next.email = "Enter a valid email address.";
+    }
+    if (!form.phone.trim()) next.phone = "Phone number is required.";
+    if (!/^\d{10}$/.test(form.phone)) {
+      next.phone = "Phone number must be exactly 10 digits.";
+    }
+    return next;
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const next = validate();
+    setErrors(next);
+    if (Object.keys(next).length) return;
+
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const payload = {
+        name: form.name.trim(),
+        email: form.email.trim(),
+        subject: "Learning Hub - Expert session callback",
+        message: `Phone: ${form.phone}`,
+      };
+      const response = await fetch(`${API_BASE_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      if (!response.ok) throw new Error("Failed to submit");
+      setShowSuccess(true);
+      setForm({ name: "", email: "", phone: "" });
+    } catch {
+      setSubmitError("Could not send right now. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const inputClass =
+    "w-full rounded-xl border border-white/20 bg-white/10 px-3.5 py-2.5 text-sm text-white placeholder:text-slate-400 backdrop-blur-sm focus:border-cyan-400/80 focus:outline-none focus:ring-2 focus:ring-cyan-400/25";
+
+  return (
+    <div className="min-w-0">
+      <div className="rounded-[1.7rem] border border-blue-200/70 bg-gradient-to-br from-slate-900 via-[#0f2b4d] to-[#0b1f38] p-7 text-white shadow-[0_30px_80px_-34px_rgba(15,23,42,0.8)] md:p-9">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200">
+          Quick contact
+        </p>
+        <h3 className="mt-2 text-xl font-bold leading-tight md:text-2xl">
+          We&apos;ll reach out to you
+        </h3>
+        <p className="mt-2 text-sm leading-relaxed text-slate-200">
+          Share your name, email, and phone — our team will contact you about an
+          expert session.
+        </p>
+
+        {submitError ? (
+          <div className="mt-4 rounded-xl border border-rose-400/40 bg-rose-500/15 px-3 py-2 text-sm text-rose-100">
+            {submitError}
+          </div>
+        ) : null}
+
+        <form onSubmit={onSubmit} className="mt-5 space-y-4">
+          <div>
+            <label htmlFor="expert-callback-name" className="mb-1 block text-xs font-medium text-slate-200">
+              Name *
+            </label>
+            <input
+              id="expert-callback-name"
+              type="text"
+              value={form.name}
+              onChange={(e) => setField("name", e.target.value)}
+              autoComplete="name"
+              className={`${inputClass} ${errors.name ? "border-rose-400/70 ring-1 ring-rose-400/30" : ""}`}
+              placeholder="Your name"
+            />
+            {errors.name ? (
+              <p className="mt-1 text-xs text-rose-300">{errors.name}</p>
+            ) : null}
+          </div>
+          <div>
+            <label htmlFor="expert-callback-email" className="mb-1 block text-xs font-medium text-slate-200">
+              Email *
+            </label>
+            <input
+              id="expert-callback-email"
+              type="email"
+              value={form.email}
+              onChange={(e) => setField("email", e.target.value)}
+              autoComplete="email"
+              className={`${inputClass} ${errors.email ? "border-rose-400/70 ring-1 ring-rose-400/30" : ""}`}
+              placeholder="you@example.com"
+            />
+            {errors.email ? (
+              <p className="mt-1 text-xs text-rose-300">{errors.email}</p>
+            ) : null}
+          </div>
+          <div>
+            <label htmlFor="expert-callback-phone" className="mb-1 block text-xs font-medium text-slate-200">
+              Phone number *
+            </label>
+            <input
+              id="expert-callback-phone"
+              type="tel"
+              value={form.phone}
+              onChange={(e) => setField("phone", e.target.value)}
+              inputMode="numeric"
+              maxLength={10}
+              autoComplete="tel"
+              className={`${inputClass} ${errors.phone ? "border-rose-400/70 ring-1 ring-rose-400/30" : ""}`}
+              placeholder="10-digit mobile number"
+            />
+            {errors.phone ? (
+              <p className="mt-1 text-xs text-rose-300">{errors.phone}</p>
+            ) : null}
+          </div>
+          <button
+            type="submit"
+            disabled={submitting}
+            className="inline-flex min-h-[46px] w-full items-center justify-center rounded-full bg-blue-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition hover:bg-blue-400 hover:shadow-xl disabled:opacity-60 md:text-base"
+          >
+            {submitting ? "Sending…" : "Submit"}
+          </button>
+        </form>
+      </div>
+      <SubmissionSuccessModal
+        open={showSuccess}
+        title="Submitted successfully"
+        description="Thanks — we received your details and will contact you soon."
+        onClose={() => setShowSuccess(false)}
+        refreshOnClose={false}
+      />
+    </div>
+  );
+}
+
 function ExpertGuidanceSection() {
   return (
     <section className="relative overflow-hidden bg-gradient-to-b from-white to-blue-50/40 px-4 py-14 md:px-8 md:py-18">
@@ -364,53 +653,81 @@ function ExpertGuidanceSection() {
         <div className="rounded-[1.7rem] border border-blue-100/80 bg-white/85 p-7 shadow-[0_24px_70px_-36px_rgba(37,99,235,0.45)] backdrop-blur-sm md:p-9">
           <p className="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-blue-700">
             <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
-            Learning Hub Support
+            For Students, Professors and Organizations
           </p>
 
           <h2 className="mt-4 text-2xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl">
-            Get Our Expert Guidence and Personalized Support
+            Get Our Expert Guidence for 21st Century Skills
           </h2>
 
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 md:text-lg">
-            Plan your next learning steps with one-to-one expert recommendations,
-            personalized mentoring, and focused guidance designed around your goals.
+            Plan your next learning steps with one-to-one expert
+            recommendations, personalized mentoring, and focused guidance
+            designed around your goals.
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
             <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700">
-              <MessageCircleHeart className="h-4 w-4 text-blue-600" aria-hidden />
+              <MessageCircleHeart
+                className="h-4 w-4 text-blue-600"
+                aria-hidden
+              />
               Personalized consultation
             </div>
-            <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700">
-              <CalendarClock className="h-4 w-4 text-blue-600" aria-hidden />
-              Slot-based pre booking
-            </div>
           </div>
         </div>
 
-        <div className="rounded-[1.7rem] border border-blue-200/70 bg-gradient-to-br from-slate-900 via-[#0f2b4d] to-[#0b1f38] p-7 text-white shadow-[0_30px_80px_-34px_rgba(15,23,42,0.8)] md:p-9">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-cyan-200">
-            Pre Book Only
-          </p>
-          <h3 className="mt-3 text-2xl font-bold leading-tight md:text-3xl">
-            Reserve your expert session
-          </h3>
-          <p className="mt-3 text-sm leading-relaxed text-slate-200 md:text-base">
-            Secure your slot in advance to get priority support and a tailored
-            action plan from our team.
-          </p>
-
-          <div className="mt-6">
-            <InnerPageLink
-              to="/get-started"
-              className="inline-flex min-h-[46px] items-center justify-center rounded-full bg-blue-500 px-7 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-950/40 transition hover:bg-blue-400 hover:shadow-xl md:text-base"
-            >
-              Pre Book Now
-            </InnerPageLink>
-          </div>
-        </div>
+        <ExpertGuidanceQuickForm />
       </div>
     </section>
+  );
+}
+
+function LearningHubReferenceCard({ tool, accent }) {
+  return (
+    <article
+      className={`group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.25)] ring-1 ring-transparent transition duration-300 hover:-translate-y-1.5 hover:border-blue-200 ${accent.ring} hover:shadow-[0_28px_65px_-30px_rgba(37,99,235,0.45)]`}
+    >
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${accent.topBand}`}
+      />
+      <div
+        aria-hidden
+        className={`pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-br ${accent.glow} blur-2xl`}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-8 -bottom-8 h-24 w-24 rounded-full bg-gradient-to-br from-blue-100/40 to-cyan-100/20 blur-xl"
+      />
+
+      <div className="flex items-start gap-3">
+        <div
+          className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border bg-gradient-to-br ${accent.chip}`}
+        >
+          <img
+            src={tool.iconUrl}
+            alt=""
+            className="h-8 w-8 object-contain"
+            loading="lazy"
+          />
+        </div>
+        <a
+          href={tool.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`min-w-0 text-lg font-bold leading-snug text-slate-900 underline decoration-blue-300 underline-offset-4 transition ${accent.title} hover:decoration-blue-500`}
+        >
+          {tool.name}
+        </a>
+      </div>
+
+      <p className="mt-3 text-sm leading-relaxed text-slate-600">
+        {tool.description}
+      </p>
+
+      <div className="mt-4 h-px w-full bg-gradient-to-r from-blue-200/80 via-cyan-200/70 to-transparent" />
+    </article>
   );
 }
 
@@ -469,53 +786,26 @@ function LearningHubReferencesSection() {
         </div>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-          {AI_REFERENCE_TOOLS.map((tool, idx) => {
-            const accent = accentStyles[idx % accentStyles.length];
-            return (
-            <article
+          {AI_REFERENCE_TOOLS.map((tool, idx) => (
+            <LearningHubReferenceCard
               key={tool.name}
-              className={`group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white/95 p-5 shadow-[0_18px_40px_-28px_rgba(15,23,42,0.25)] ring-1 ring-transparent transition duration-300 hover:-translate-y-1.5 hover:border-blue-200 ${accent.ring} hover:shadow-[0_28px_65px_-30px_rgba(37,99,235,0.45)]`}
-            >
-              <div
-                aria-hidden
-                className={`pointer-events-none absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r ${accent.topBand}`}
-              />
-              <div
-                aria-hidden
-                className={`pointer-events-none absolute -right-10 -top-10 h-24 w-24 rounded-full bg-gradient-to-br ${accent.glow} blur-2xl`}
-              />
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -left-8 -bottom-8 h-24 w-24 rounded-full bg-gradient-to-br from-blue-100/40 to-cyan-100/20 blur-xl"
-              />
+              tool={tool}
+              accent={accentStyles[idx % accentStyles.length]}
+            />
+          ))}
+        </div>
 
-              <div className="flex items-center gap-3">
-                <div className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border bg-gradient-to-br ${accent.chip}`}>
-                  <img
-                    src={tool.iconUrl}
-                    alt={`${tool.name} icon`}
-                    className="h-6 w-6 object-contain"
-                    loading="lazy"
-                  />
-                </div>
-                <a
-                  href={tool.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex text-lg font-bold text-slate-900 underline decoration-blue-300 underline-offset-4 transition ${accent.title} hover:decoration-blue-500`}
-                >
-                  {tool.name}
-                </a>
-              </div>
-
-              <p className="mt-3 text-sm leading-relaxed text-slate-600">
-                {tool.description}
-              </p>
-
-              <div className="mt-4 h-px w-full bg-gradient-to-r from-blue-200/80 via-cyan-200/70 to-transparent" />
-            </article>
-            );
-          })}
+        <h3 className="mb-4 mt-10 text-lg font-bold tracking-tight text-slate-900 md:mb-5 md:mt-12 md:text-xl">
+          Blockchain platforms
+        </h3>
+        <div className="grid max-w-5xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          {BLOCKCHAIN_REFERENCE_TOOLS.map((tool, idx) => (
+            <LearningHubReferenceCard
+              key={tool.name}
+              tool={tool}
+              accent={accentStyles[(idx + 1) % accentStyles.length]}
+            />
+          ))}
         </div>
       </div>
     </section>
@@ -533,9 +823,10 @@ export function LearningHubBody() {
 
   return (
     <>
+      <ExpertGuidanceSection />
       <LearningHubRequestFormSection />
       <Services reducedMotion={reducedMotion} isMobile={isMobile} />
-      <ExpertGuidanceSection />
+
       <LearningHubReferencesSection />
     </>
   );

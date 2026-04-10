@@ -48,6 +48,8 @@ const PARTNERSHIP_RECOGNITION_AWARDS = [
 const STATIC_ASSET_BASE = import.meta.env.BASE_URL;
 const FEMALE_AVATAR_URL = `${STATIC_ASSET_BASE}human.png`;
 const MALE_AVATAR_URL = `${STATIC_ASSET_BASE}man.png`;
+const GROUP_AVATAR_URL = `${STATIC_ASSET_BASE}group.png`;
+const AMBASSADOR_IMAGE_URL = `${STATIC_ASSET_BASE}ambassador.png`;
 
 function isTeamEntry(member) {
   const text = `${member?.name ?? ""} ${member?.role ?? ""}`.toLowerCase();
@@ -55,7 +57,7 @@ function isTeamEntry(member) {
 }
 
 function getMemberAvatar(member) {
-  if (isTeamEntry(member)) return null;
+  if (member.gender === "group" || isTeamEntry(member)) return GROUP_AVATAR_URL;
   if (member.gender === "female") return FEMALE_AVATAR_URL;
   if (member.gender === "male") return MALE_AVATAR_URL;
   return /^ms\.|^mrs\./i.test(member.name.trim())
@@ -65,10 +67,11 @@ function getMemberAvatar(member) {
 
 const PARTNERSHIP_TEAM_GROUPS = [
   {
-    title: "HIFAi Team",
+    title: "HifAi Team",
     subtitle: "Core team & delivery",
     icon: Landmark,
     index: "01",
+    headerHref: "https://hifai.askeva.net/",
     theme: {
       bar: "from-blue-900 via-blue-700 to-blue-600",
       icon: "bg-blue-600/15 text-blue-800 ring-1 ring-inset ring-blue-600/20 shadow-sm",
@@ -81,7 +84,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr G. Saravana Sundar",
         role: "Public Relations Officer",
-        org: "HIFAi",
+        org: "HifAi",
         initials: "GS",
         gender: "male",
         orgKind: "partner",
@@ -89,34 +92,34 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr Madhu Raju",
         role: "Director Digital ABCD",
-        org: "HIFAi",
+        org: "HifAi",
         initials: "MR",
         gender: "male",
         orgKind: "partner",
       },
       {
-        name: "Mrs Sayee Skanth Varshini",
+        name: "Ms. S. Sayee Skantha Varshini ",
         role: "Consultant (Marketing & Sales)",
-        org: "HIfAi",
+        org: "HifAi",
         initials: "MS",
         gender: "female",
-        orgKind: "hifai",
+        orgKind: "HifAi",
       },
       {
-        name: "Mrs. Sayee Baggia Lakshimi",
+        name: "Mrs. M. Sayee Baggialakshmi",
         role: "Finance Officer",
-        org: "HIfAi",
+        org: "HifAi",
         initials: "MS",
         gender: "female",
-        orgKind: "hifai",
+        orgKind: "HifAi",
       },
       {
-        name: "N. Mythili",
+        name: "Mrs. N. Mythili",
         role: "DGL based Expert in Learning Outcomes (Volunteer)",
-        org: "HIfAi",
+        org: "HifAi",
         initials: "MS",
         gender: "female",
-        orgKind: "hifai",
+        orgKind: "HifAi",
       },
     ],
   },
@@ -125,6 +128,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
     subtitle: "Partner collaboration",
     icon: Briefcase,
     index: "02",
+    headerHref: "https://kanavoogle.com/",
     theme: {
       bar: "from-indigo-900 via-indigo-700 to-violet-600",
       icon: "bg-indigo-600/15 text-indigo-900 ring-1 ring-inset ring-indigo-600/20 shadow-sm",
@@ -165,6 +169,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
     subtitle: "Growth & support",
     icon: Users,
     index: "03",
+    headerHref: "https://www.netzytechnosoft.com/",
     theme: {
       bar: "from-sky-800 via-cyan-700 to-teal-600",
       icon: "bg-cyan-600/18 text-cyan-900 ring-1 ring-inset ring-cyan-600/30 shadow-sm",
@@ -175,13 +180,14 @@ const PARTNERSHIP_TEAM_GROUPS = [
     },
     members: [
       {
-        name: "Safi & Team",
-        role: "",
+        name: "Lr Mohamed Safiudin & Team",
+        role: "Executive Director-Business Development",
         org: "Netzy",
         initials: "NT",
-        gender: "male",
+        gender: "group",
         orgKind: "neutral",
         isGroup: true,
+        profileHref: "https://www.linkedin.com/in/safibux/",
       },
     ],
   },
@@ -205,9 +211,34 @@ const PARTNERSHIP_TEAM_GROUPS = [
         role: "",
         org: "A3i Systems",
         initials: "A3",
-        gender: "male",
+        gender: "group",
         orgKind: "neutral",
         isGroup: true,
+      },
+    ],
+  },
+  {
+    title: "Geniebox",
+    subtitle: "Strategic collaboration",
+    icon: Briefcase,
+    index: "05",
+    headerHref: "https://geniebox.io/",
+    theme: {
+      bar: "from-fuchsia-800 via-purple-700 to-violet-600",
+      icon: "bg-fuchsia-600/15 text-fuchsia-900 ring-1 ring-inset ring-fuchsia-600/25 shadow-sm",
+      avatar:
+        "border-fuchsia-200/80 bg-gradient-to-br from-white via-fuchsia-50/35 to-violet-50/30 text-fuchsia-950 shadow-sm",
+      cardHover:
+        "hover:border-fuchsia-200/90 hover:shadow-md hover:shadow-fuchsia-900/[0.06]",
+    },
+    members: [
+      {
+        name: "Mrs. Lekashri",
+        role: "Project Manager",
+        org: "Geniebox",
+        initials: "GL",
+        gender: "female",
+        orgKind: "partner",
       },
     ],
   },
@@ -286,10 +317,170 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
     return () => ctx.revert();
   }, [reducedMotion, isMobile]);
 
+  const featuredGroupTitles = ["HifAi Team", "Kanavoogle", "Netzy"];
+  const featuredGroups = featuredGroupTitles
+    .map((title) =>
+      PARTNERSHIP_TEAM_GROUPS.find((group) => group.title === title),
+    )
+    .filter(Boolean);
+  const extraGroups = PARTNERSHIP_TEAM_GROUPS.filter(
+    (group) => !featuredGroupTitles.includes(group.title),
+  );
+  const primaryGroup = featuredGroups[0];
+  const partnerGroups = [...featuredGroups.slice(1), ...extraGroups];
+  const partnerColumns = [
+    partnerGroups.filter((group) => group.title === "Kanavoogle"),
+    partnerGroups.filter(
+      (group) =>
+        group.title === "Netzy" || group.title === "Geniebox Mrs. Lekashri.",
+    ),
+    partnerGroups.filter(
+      (group) =>
+        group.title !== "Kanavoogle" &&
+        group.title !== "Netzy" &&
+        group.title !== "Geniebox Mrs. Lekashri.",
+    ),
+  ];
+
+  const renderTeamGroupCard = (group, compact = false, rowMembers = false) => {
+    const Icon = group.icon;
+    const { theme } = group;
+    const memberGridCols = rowMembers
+      ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-5"
+      : "grid-cols-1";
+
+    return (
+      <div
+        key={group.title}
+        className="group/col flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_-4px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/[0.025] transition-shadow duration-300 hover:shadow-[0_12px_40px_-8px_rgba(15,23,42,0.12)]"
+      >
+        <div
+          className={`h-1.5 w-full shrink-0 bg-gradient-to-r ${theme.bar}`}
+          aria-hidden
+        />
+        <div
+          className={`flex flex-1 flex-col ${compact ? "p-4 md:p-5" : "p-5 md:p-6"}`}
+        >
+          {group.headerHref ? (
+            <a
+              href={group.headerHref}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-start gap-4 rounded-xl border border-transparent px-1 py-1 text-left no-underline outline-offset-2 transition-colors hover:border-slate-200/70 hover:bg-slate-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+              aria-label={`${group.title}: ${group.subtitle} (opens in new tab)`}
+            >
+              <span
+                className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${theme.icon}`}
+                aria-hidden
+              >
+                <Icon className="h-[22px] w-[22px]" strokeWidth={1.65} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <p className="font-geom-heading text-sm font-normal tracking-[-0.02em] text-slate-900 md:text-sm">
+                    {group.title}
+                  </p>
+                  <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] text-slate-500">
+                    {group.index}
+                  </span>
+                </div>
+                <p className="mt-1.5 text-sm leading-snug text-slate-600">
+                  {group.subtitle}
+                </p>
+              </div>
+            </a>
+          ) : (
+            <div className="flex items-start gap-4">
+              <span
+                className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${theme.icon}`}
+                aria-hidden
+              >
+                <Icon className="h-[22px] w-[22px]" strokeWidth={1.65} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <p className="font-geom-heading text-sm font-normal tracking-[-0.02em] text-slate-900 md:text-sm">
+                    {group.title}
+                  </p>
+                  <span className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] text-slate-500">
+                    {group.index}
+                  </span>
+                </div>
+                <p className="mt-1.5 text-sm leading-snug text-slate-600">
+                  {group.subtitle}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <ul className={`mt-5 grid gap-3 ${memberGridCols}`}>
+            {group.members.map((m) => (
+              <li key={m.name}>
+                <div
+                  className={`flex h-full gap-4 rounded-xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/80 p-4 shadow-sm transition-all duration-300 md:p-[1rem] ${theme.cardHover}`}
+                >
+                  <div
+                    className={`flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center rounded-xl border text-[10px] font-bold uppercase tracking-[0.1em] ${theme.avatar}`}
+                    aria-hidden
+                  >
+                    <img
+                      src={getMemberAvatar(m)}
+                      alt=""
+                      className="h-full w-full rounded-[0.65rem] object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    {m.profileHref ? (
+                      <a
+                        href={m.profileHref}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-[16px] font-semibold leading-snug tracking-tight text-slate-900 no-underline transition-colors hover:text-blue-800"
+                        aria-label={`${m.name} (opens in new tab)`}
+                      >
+                        {m.name}
+                      </a>
+                    ) : (
+                      <p className="text-[16px] font-semibold leading-snug tracking-tight text-slate-900">
+                        {m.name}
+                      </p>
+                    )}
+                    {m.role ? (
+                      <p className="mt-1 text-[12px] leading-relaxed text-slate-600">
+                        {m.role}
+                      </p>
+                    ) : null}
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <span
+                        className={
+                          m.orgKind === "partner" || m.org === "HifAi"
+                            ? "inline-flex items-center rounded-md bg-blue-600/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-blue-800 ring-1 ring-blue-600/15"
+                            : "inline-flex items-center rounded-md bg-slate-100/90 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-600 ring-1 ring-slate-200/80"
+                        }
+                      >
+                        {m.org === "HifAi" ? (
+                          <span className="text-blue-800">HifAi</span>
+                        ) : (
+                          m.org
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-slate-200/80 bg-white py-10 md:py-12 sm:px-2 px-4"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white py-8 md:py-8 sm:px-2 px-4"
       aria-labelledby="kanavoogle-partnership-heading"
     >
       <div
@@ -324,7 +515,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
             <span className="text-ink/80">, Australia</span>
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-ink/65 md:text-[18px]">
-            <span className={hifaiHighlightClass}>HIfAi</span> is shaped through
+            <span className={hifaiHighlightClass}>HifAi</span> is shaped through
             an active partnership with{" "}
             <a
               href={PARTNER_SITE_URL}
@@ -378,7 +569,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                     Recognition & Grants
                   </h3>
                   <p className="relative text-sm leading-relaxed text-slate-700 md:text-[18px]">
-                    Together, <span className={hifaiHighlightClass}>HIfAi</span>{" "}
+                    Together, <span className={hifaiHighlightClass}>HifAi</span>{" "}
                     and{" "}
                     <a
                       href={PARTNER_SITE_URL}
@@ -442,7 +633,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
           </div>
         </div>
 
-        <div className="relative mt-10 border-t border-slate-200/90 pt-10 md:mt-12 md:pt-12 lg:mt-14 lg:pt-14">
+        <div className="relative mt-6 border-t border-slate-200/90 pt-6 md:mt-8 md:pt-8 lg:mt-10 lg:pt-10">
           <div
             className="relative overflow-hidden rounded-[1.35rem] border border-slate-200/90 bg-white shadow-[0_2px_8px_rgba(15,23,42,0.04),0_24px_64px_-16px_rgba(15,23,42,0.12)] ring-1 ring-slate-900/[0.03]"
             aria-labelledby="partnership-team-heading"
@@ -466,11 +657,11 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                   id="partnership-team-heading"
                   className="font-geom-heading text-[clamp(1.75rem,3.8vw,2.35rem)] font-normal leading-snug tracking-[-0.02em] text-white"
                 >
-                  HIFAi Eco System
+                  HifAi Eco System
                 </h3>
                 <p className="mt-4 text-base leading-relaxed text-slate-300/95 md:mt-5 md:text-lg">
                   Leadership, operations, and support working together across{" "}
-                  <span className="font-semibold text-sky-200">HIfAi</span> and
+                  <span className="font-semibold text-sky-200">HifAi</span> and
                   our{" "}
                   <a
                     href={PARTNER_SITE_URL}
@@ -497,164 +688,91 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
               />
               <div
                 ref={teamRef}
-                className="relative grid gap-5 sm:gap-6 lg:grid-cols-4"
+                className="relative flex flex-col gap-5 sm:gap-6"
               >
-                {PARTNERSHIP_TEAM_GROUPS.map((group) => {
-                  const Icon = group.icon;
-                  const { theme } = group;
-                  return (
-                    <div
-                      key={group.title}
-                      className="group/col flex flex-col overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-[0_4px_24px_-4px_rgba(15,23,42,0.08)] ring-1 ring-slate-900/[0.025] transition-shadow duration-300 hover:shadow-[0_12px_40px_-8px_rgba(15,23,42,0.12)]"
-                    >
-                      <div
-                        className={`h-1.5 w-full shrink-0 bg-gradient-to-r ${theme.bar}`}
-                        aria-hidden
-                      />
-                      <div className="flex flex-1 flex-col p-6 md:p-7">
-                        {group.headerHref ? (
-                          <a
-                            href={group.headerHref}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-start gap-4 rounded-xl text-left no-underline outline-offset-2 transition-colors hover:bg-slate-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
-                            aria-label={`${group.title}: ${group.subtitle} (opens in new tab)`}
-                          >
-                            <span
-                              className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${theme.icon}`}
-                              aria-hidden
-                            >
-                              <Icon
-                                className="h-[22px] w-[22px]"
-                                strokeWidth={1.65}
-                              />
-                            </span>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-baseline justify-between gap-2">
-                                <p className="font-geom-heading text-sm font-normal tracking-[-0.02em] text-slate-900 md:text-sm">
-                                  {group.title}
-                                </p>
-                              </div>
-                              <p className="mt-1.5 text-sm leading-snug text-slate-600">
-                                {group.subtitle}
-                              </p>
-                            </div>
-                          </a>
-                        ) : (
-                          <div className="flex items-start gap-4">
-                            <span
-                              className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${theme.icon}`}
-                              aria-hidden
-                            >
-                              <Icon
-                                className="h-[22px] w-[22px]"
-                                strokeWidth={1.65}
-                              />
-                            </span>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-baseline justify-between gap-2">
-                                <p className="font-geom-heading text-sm font-normal tracking-[-0.02em] text-slate-900 md:text-sm">
-                                  {group.title}
-                                </p>
-                              </div>
-                              <p className="mt-1.5 text-sm leading-snug text-slate-600">
-                                {group.subtitle}
-                              </p>
-                            </div>
-                          </div>
-                        )}
+                {primaryGroup
+                  ? renderTeamGroupCard(primaryGroup, false, true)
+                  : null}
 
-                        <ul className="mt-7 flex flex-col gap-3">
-                          {group.members.map((m) => (
-                            <li key={m.name}>
-                              <div
-                                className={`flex gap-4 rounded-xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/80 p-4 shadow-sm transition-all duration-300 md:p-[1rem] ${theme.cardHover}`}
-                              >
-                                <div
-                                  className={`flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center rounded-xl border text-[10px] font-bold uppercase tracking-[0.1em] ${theme.avatar}`}
-                                  aria-hidden
-                                >
-                                  {isTeamEntry(m) ? (
-                                    <Users
-                                      className="h-6 w-6 text-emerald-700"
-                                      strokeWidth={2}
-                                    />
-                                  ) : (
-                                    <img
-                                      src={getMemberAvatar(m)}
-                                      alt=""
-                                      className="h-full w-full rounded-[0.65rem] object-cover"
-                                      loading="lazy"
-                                      decoding="async"
-                                    />
-                                  )}
-                                </div>
-                                <div className="min-w-0 flex-1">
-                                  <p className="text-[16px] font-semibold leading-snug tracking-tight text-slate-900">
-                                    {m.name}
-                                  </p>
-                                  {m.role ? (
-                                    <p className="mt-1 text-[12px] leading-relaxed text-slate-600">
-                                      {m.role}
-                                    </p>
-                                  ) : null}
-                                  <div className="mt-3 flex flex-wrap items-center gap-2">
-                                    <span
-                                      className={
-                                        m.orgKind === "partner" ||
-                                        m.org === "HIfAi"
-                                          ? "inline-flex items-center rounded-md bg-blue-600/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-blue-800 ring-1 ring-blue-600/15"
-                                          : "inline-flex items-center rounded-md bg-slate-100/90 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-600 ring-1 ring-slate-200/80"
-                                      }
-                                    >
-                                      {m.org === "HIfAi" ? (
-                                        <span className="text-blue-800">
-                                          HIfAi
-                                        </span>
-                                      ) : (
-                                        m.org
-                                      )}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                <div className="rounded-2xl border border-slate-200/80 bg-white/70 px-4 py-3 md:px-5 md:py-4">
+                  <h4 className="font-geom-heading text-base font-normal tracking-[-0.01em] text-slate-900 md:text-lg">
+                    HifAi Eco System Partners
+                  </h4>
+                </div>
+
+                <div className="grid gap-5 sm:gap-6 lg:grid-cols-3 lg:items-start">
+                  {partnerColumns.map((columnGroups, columnIndex) => (
+                    <div
+                      key={`partners-column-${columnIndex}`}
+                      className="flex flex-col gap-5"
+                    >
+                      {columnGroups.map((group) =>
+                        renderTeamGroupCard(group, true),
+                      )}
                     </div>
-                  );
-                })}
+                  ))}
+                </div>
               </div>
 
-              <div className="relative mt-10 flex justify-center md:mt-12">
-                <a
-                  href="https://anba.tv/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group relative inline-flex min-w-[min(100%,30rem)] max-w-[40rem] items-center justify-center gap-3 overflow-hidden rounded-full border-2 border-blue-500/90 bg-gradient-to-r from-blue-100 via-sky-100 to-indigo-100 px-7 py-4 text-center shadow-[0_8px_0_rgba(29,78,216,0.12),0_20px_48px_-6px_rgba(37,99,235,0.35),0_0_0_1px_rgba(255,255,255,0.6)_inset] ring-2 ring-blue-400/50 ring-offset-2 ring-offset-slate-50 transition-all duration-300 hover:-translate-y-1 hover:border-blue-600 hover:shadow-[0_10px_0_rgba(29,78,216,0.15),0_28px_56px_-8px_rgba(37,99,235,0.45),0_0_0_1px_rgba(255,255,255,0.7)_inset] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
-                  aria-label="Open Anba TV in a new tab"
-                >
-                  <span
-                    className="pointer-events-none absolute inset-0 opacity-40 transition-opacity duration-300 group-hover:opacity-70"
-                    aria-hidden
-                    style={{
-                      background:
-                        "linear-gradient(120deg, rgba(59,130,246,0.22), rgba(34,211,238,0.18), rgba(99,102,241,0.2))",
-                    }}
-                  />
-                  <span className="relative text-base font-bold leading-tight tracking-tight text-blue-950 drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] md:text-lg">
-                    Brand Ambassador Alex
-                    <span className="mx-2 font-normal text-blue-500/90">|</span>
-                    <span className="font-extrabold text-blue-700 underline decoration-blue-600 decoration-2 underline-offset-[5px] transition-colors group-hover:text-blue-800">
-                      Anba TV
-                    </span>
-                  </span>
-                  <ExternalLink
-                    className="relative h-5 w-5 shrink-0 text-blue-700 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 md:h-[1.35rem] md:w-[1.35rem]"
+              <div className="relative mt-10 md:mt-12">
+                <div className="relative overflow-hidden rounded-3xl border border-slate-200/90 bg-gradient-to-br from-[#08152a] via-[#0d2642] to-[#103760] p-5 shadow-[0_18px_56px_-20px_rgba(15,23,42,0.7)] md:p-7">
+                  <div
+                    className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-cyan-300/20 blur-3xl"
                     aria-hidden
                   />
-                </a>
+                  <div
+                    className="pointer-events-none absolute -bottom-16 left-1/3 h-56 w-56 rounded-full bg-blue-500/25 blur-3xl"
+                    aria-hidden
+                  />
+                  <div className="relative grid items-center gap-5 md:grid-cols-[240px_minmax(0,1fr)] md:gap-8">
+                    <div className="mx-auto w-full max-w-[220px] md:mx-0 md:max-w-[240px]">
+                      <div className="overflow-hidden rounded-2xl border border-white/25 bg-white/10 p-1.5 shadow-[0_16px_42px_-18px_rgba(14,165,233,0.75)] backdrop-blur-sm">
+                        <img
+                          src={AMBASSADOR_IMAGE_URL}
+                          alt="Brand ambassador portrait"
+                          className="h-[220px] w-full rounded-xl object-cover object-top md:h-[270px]"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="text-center md:text-left">
+                      <p className="text-xs font-semibold uppercase tracking-[0.24em] text-sky-200/90">
+                        Ambassador Spotlight
+                      </p>
+                      <h4 className="mt-3 text-2xl font-bold tracking-tight text-white md:text-3xl">
+                        Brand Ambassador Alex
+                      </h4>
+                      <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-200/90 md:text-base">
+                        Follow featured talks, stories, and updates from our
+                        ambassador community on Anba TV.
+                      </p>
+
+                      <a
+                        href="https://anba.tv/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="group relative mt-6 inline-flex items-center justify-center gap-3 overflow-hidden rounded-full border-2 border-blue-300/80 bg-gradient-to-r from-blue-100 via-sky-100 to-indigo-100 px-7 py-3.5 text-center shadow-[0_8px_0_rgba(29,78,216,0.12),0_20px_48px_-6px_rgba(37,99,235,0.35),0_0_0_1px_rgba(255,255,255,0.6)_inset] transition-all duration-300 hover:-translate-y-1 hover:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+                        aria-label="Open Anba TV in a new tab"
+                      >
+                        <span className="relative text-base font-bold leading-tight tracking-tight text-blue-950">
+                          Watch on
+                          <span className="mx-2 font-normal text-blue-500/90">
+                            |
+                          </span>
+                          <span className="font-extrabold text-blue-700 underline decoration-blue-600 decoration-2 underline-offset-[5px] transition-colors group-hover:text-blue-800">
+                            Anba TV
+                          </span>
+                        </span>
+                        <ExternalLink
+                          className="relative h-5 w-5 shrink-0 text-blue-700 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                          aria-hidden
+                        />
+                      </a>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

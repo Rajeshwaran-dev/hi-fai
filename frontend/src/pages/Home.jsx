@@ -78,7 +78,7 @@ const HERO_HOOK_POINTS = [
   },
 ];
 const HERO_SUBTEXT =
-  "There's a side of you beyond marks that remains undiscovered and HIfAi got you discover it differently.";
+  "There's a side of you beyond marks that remains undiscovered and HifAi got you discover it differently.";
 const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:3003";
 
@@ -359,7 +359,7 @@ export function Hero({ reducedMotion, isMobile }) {
 const hifaiHighlightClass = "font-semibold text-blue-700";
 
 const STATIC_ASSET_BASE = import.meta.env.BASE_URL;
-const BRAIN_IMAGE_URL = `${STATIC_ASSET_BASE}brain.png`;
+const BRAIN_IMAGE_URL = `${STATIC_ASSET_BASE}brains.png`;
 
 export function HowCanHiFAISection() {
   return (
@@ -373,7 +373,7 @@ export function HowCanHiFAISection() {
             id="how-can-hifai-heading"
             className="font-geom-heading text-[clamp(1.45rem,3vw,2rem)] font-normal tracking-[-0.02em] text-ink"
           >
-            How can I <span className="text-blue-700">HiFAI?</span>
+            How can I <span className="text-blue-700">HifAi?</span>
           </h2>
         </div>
 
@@ -389,7 +389,7 @@ export function HowCanHiFAISection() {
                     <img
                       src={slide.image}
                       alt={slide.title}
-                      className="h-44 w-full object-cover md:h-52"
+                      className="h-44 w-full object-cover md:h-[280px]"
                       loading="lazy"
                       decoding="async"
                       draggable={false}
@@ -432,7 +432,7 @@ export function HowCanHiFAISection() {
 const WHY_HIFAI_INSIGHTS = [
   "Your real potential often stays unnoticed.",
   "One system measures everyone, but each of us is unique.",
-  "HIfAi changes how this is seen.",
+  "HifAi changes how this is seen.",
 ];
 
 const WHY_HIFAI_CLOSING = "Discover what's hidden within you";
@@ -514,7 +514,7 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
                   className="h-1.5 w-1.5 rounded-full bg-blue-600"
                   aria-hidden
                 />
-                Why <span className={hifaiHighlightClass}>HIfAi</span>?
+                Why <span className={hifaiHighlightClass}>HifAi</span>?
               </p>
               <div className="relative mt-4">
                 <span
@@ -733,7 +733,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
               id="what-makes-unique-heading"
               className="mt-2 font-geom-heading text-[clamp(1.5rem,3.4vw,2.15rem)] font-normal leading-tight tracking-[-0.02em] text-ink md:mt-2.5"
             >
-              Why <span className="text-blue-700">HIfAi</span>
+              Why <span className="text-blue-700">HifAi</span>
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-ink/60 md:text-[18px]">
               Four pillars that separate skill intelligence from
@@ -849,10 +849,10 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
                 id="what-hifai-offers-heading"
                 className="mt-4 font-geom-heading text-[clamp(1.65rem,4vw,2.45rem)] font-normal leading-[1.15] tracking-[-0.02em] text-ink"
               >
-                What <span className="text-blue-700">HIfAI</span> offers?
+                What <span className="text-blue-700">HifAi</span> offers?
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-ink/60 md:text-[18px]">
-                HIfAI offers students and education institutions to:
+              HifAi offers students and education institutions to:
               </p>
             </div>
 
@@ -2401,7 +2401,7 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
             </span>
           </span>
           <span className="rounded-full bg-blue-600/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-700">
-            HIFAI
+          HifAi
           </span>
         </div>
       </div>
