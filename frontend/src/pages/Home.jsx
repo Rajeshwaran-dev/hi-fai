@@ -359,7 +359,7 @@ export function Hero({ reducedMotion, isMobile }) {
 const hifaiHighlightClass = "font-semibold text-blue-700";
 
 const STATIC_ASSET_BASE = import.meta.env.BASE_URL;
-const BRAIN_IMAGE_URL = `${STATIC_ASSET_BASE}brains.png`;
+const BRAIN_IMAGE_URL = `${STATIC_ASSET_BASE}brain.png`;
 
 export function HowCanHiFAISection() {
   return (
