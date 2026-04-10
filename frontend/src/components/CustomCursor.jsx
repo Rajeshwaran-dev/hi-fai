@@ -93,7 +93,10 @@ export default function CustomCursor({ reducedMotion, isMobile }) {
   if (reducedMotion || isMobile) return null;
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[220] hidden md:block" aria-hidden>
+    <div
+      className="pointer-events-none fixed inset-0 z-[10050] hidden md:block"
+      aria-hidden
+    >
       {/* Inner dot */}
       <div
         ref={dotRef}

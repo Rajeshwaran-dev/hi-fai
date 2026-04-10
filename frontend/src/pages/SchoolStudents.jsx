@@ -492,7 +492,7 @@ function OrbitCards({ onPlayClick }) {
       >
         <div className="orbit-arrow">
           <span className="orbit-arrow-icon-shell">
-            <ArrowRight className="orbit-arrow-icon" strokeWidth={2.9} />
+            <ArrowRight className="orbit-arrow-icon" strokeWidth={2.85} aria-hidden />
           </span>
         </div>
       </div>

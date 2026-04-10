@@ -32,8 +32,8 @@ const sanitizePhoneInput = (value = "") =>
 
 const GRADE_OPTIONS = ["9th Grade", "10th Grade", "11th Grade", "12th Grade"];
 /** Preferred time-of-day slots (Learning Hub tutor request). */
-const PREFERRED_TIME_OPTIONS = [{ value: "6-8", label: "6 to 8" }];
-const BOARD_OPTIONS = ["State", "CBSE", "ICSE", "Metric"];
+const PREFERRED_TIME_OPTIONS = [{ value: "6-8", label: "6 AM to 8 PM IST" }];
+const BOARD_OPTIONS = ["State", "CBSE", "ICSE", "Matric"];
 const AVAILABLE_DAY_OPTIONS = [
   { value: "Monday", label: "Monday" },
   { value: "Wednesday", label: "Wednesday" },
@@ -653,7 +653,7 @@ function ExpertGuidanceSection() {
         <div className="rounded-[1.7rem] border border-blue-100/80 bg-white/85 p-7 shadow-[0_24px_70px_-36px_rgba(37,99,235,0.45)] backdrop-blur-sm md:p-9">
           <p className="inline-flex items-center gap-2 rounded-full border border-blue-200/70 bg-blue-50 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-blue-700">
             <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
-            For Students, Professors and Organizations
+            For Teachers, Professors and Organizations
           </p>
 
           <h2 className="mt-4 text-2xl font-extrabold leading-tight tracking-tight text-slate-900 md:text-4xl">

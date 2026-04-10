@@ -67,7 +67,7 @@ function getMemberAvatar(member) {
 
 const PARTNERSHIP_TEAM_GROUPS = [
   {
-    title: "HifAi Team",
+    title: "HIfAi Team",
     subtitle: "Core team & delivery",
     icon: Landmark,
     index: "01",
@@ -84,7 +84,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr G. Saravana Sundar",
         role: "Public Relations Officer",
-        org: "HifAi",
+        org: "HIfAi",
         initials: "GS",
         gender: "male",
         orgKind: "partner",
@@ -92,7 +92,7 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr Madhu Raju",
         role: "Director Digital ABCD",
-        org: "HifAi",
+        org: "HIfAi",
         initials: "MR",
         gender: "male",
         orgKind: "partner",
@@ -100,26 +100,26 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Ms. S. Sayee Skantha Varshini ",
         role: "Consultant (Marketing & Sales)",
-        org: "HifAi",
+        org: "HIfAi",
         initials: "MS",
         gender: "female",
-        orgKind: "HifAi",
+        orgKind: "HIfAi",
       },
       {
         name: "Mrs. M. Sayee Baggialakshmi",
         role: "Finance Officer",
-        org: "HifAi",
+        org: "HIfAi",
         initials: "MS",
         gender: "female",
-        orgKind: "HifAi",
+        orgKind: "HIfAi",
       },
       {
         name: "Mrs. N. Mythili",
         role: "DGL based Expert in Learning Outcomes (Volunteer)",
-        org: "HifAi",
+        org: "HIfAi",
         initials: "MS",
         gender: "female",
-        orgKind: "HifAi",
+        orgKind: "HIfAi",
       },
     ],
   },
@@ -317,7 +317,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
     return () => ctx.revert();
   }, [reducedMotion, isMobile]);
 
-  const featuredGroupTitles = ["HifAi Team", "Kanavoogle", "Netzy"];
+  const featuredGroupTitles = ["HIfAi Team", "Kanavoogle", "Netzy"];
   const featuredGroups = featuredGroupTitles
     .map((title) =>
       PARTNERSHIP_TEAM_GROUPS.find((group) => group.title === title),
@@ -455,13 +455,13 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                     <div className="mt-3 flex flex-wrap items-center gap-2">
                       <span
                         className={
-                          m.orgKind === "partner" || m.org === "HifAi"
+                          m.orgKind === "partner" || m.org === "HIfAi"
                             ? "inline-flex items-center rounded-md bg-blue-600/10 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-blue-800 ring-1 ring-blue-600/15"
                             : "inline-flex items-center rounded-md bg-slate-100/90 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-slate-600 ring-1 ring-slate-200/80"
                         }
                       >
-                        {m.org === "HifAi" ? (
-                          <span className="text-blue-800">HifAi</span>
+                        {m.org === "HIfAi" ? (
+                          <span className="text-blue-800">HIfAi</span>
                         ) : (
                           m.org
                         )}
@@ -515,7 +515,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
             <span className="text-ink/80">, Australia</span>
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-ink/65 md:text-[18px]">
-            <span className={hifaiHighlightClass}>HifAi</span> is shaped through
+            <span className={hifaiHighlightClass}>HIfAi</span> is shaped through
             an active partnership with{" "}
             <a
               href={PARTNER_SITE_URL}
@@ -569,7 +569,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                     Recognition & Grants
                   </h3>
                   <p className="relative text-sm leading-relaxed text-slate-700 md:text-[18px]">
-                    Together, <span className={hifaiHighlightClass}>HifAi</span>{" "}
+                    Together, <span className={hifaiHighlightClass}>HIfAi</span>{" "}
                     and{" "}
                     <a
                       href={PARTNER_SITE_URL}
@@ -657,11 +657,11 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                   id="partnership-team-heading"
                   className="font-geom-heading text-[clamp(1.75rem,3.8vw,2.35rem)] font-normal leading-snug tracking-[-0.02em] text-white"
                 >
-                  HifAi Eco System
+                  HIfAi Eco System
                 </h3>
                 <p className="mt-4 text-base leading-relaxed text-slate-300/95 md:mt-5 md:text-lg">
                   Leadership, operations, and support working together across{" "}
-                  <span className="font-semibold text-sky-200">HifAi</span> and
+                  <span className="font-semibold text-sky-200">HIfAi</span> and
                   our{" "}
                   <a
                     href={PARTNER_SITE_URL}
@@ -696,7 +696,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
 
                 <div className="rounded-2xl border border-slate-200/80 bg-white/70 px-4 py-3 md:px-5 md:py-4">
                   <h4 className="font-geom-heading text-base font-normal tracking-[-0.01em] text-slate-900 md:text-lg">
-                    HifAi Eco System Partners
+                  HIfAi Eco System Partners
                   </h4>
                 </div>
 

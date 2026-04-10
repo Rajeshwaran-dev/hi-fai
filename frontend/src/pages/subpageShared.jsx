@@ -293,7 +293,7 @@ export function FourCardFramework({
                 >
                   <div className="orbit-arrow">
                     <span className="orbit-arrow-icon-shell">
-                      <ArrowRight className="orbit-arrow-icon" strokeWidth={2.9} />
+                      <ArrowRight className="orbit-arrow-icon" strokeWidth={3} />
                     </span>
                   </div>
                 </div>

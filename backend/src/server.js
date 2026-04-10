@@ -13,16 +13,28 @@ const { useSendPulse, sendViaSendPulse } = require("./sendPulseMail");
 
 const app = express();
 const port = process.env.PORT || 3003;
-const allowedOrigins = [
+
+/** Browser origins allowed to call this API (production + local dev). */
+const defaultAllowedOrigins = [
+  "https://hifaiskills.io",
+  "https://www.hifaiskills.io",
   "https://hifai.askeva.net",
   "http://localhost:5173",
   "http://127.0.0.1:5173",
+  "http://localhost:4173",
+  "http://127.0.0.1:4173",
 ];
+
+const envOrigins = (process.env.CORS_ALLOWED_ORIGINS || "")
+  .split(",")
+  .map((s) => s.trim())
+  .filter(Boolean);
+
+const allowedOrigins = [...new Set([...defaultAllowedOrigins, ...envOrigins])];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      console.log(origin,"origin");
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
         return;

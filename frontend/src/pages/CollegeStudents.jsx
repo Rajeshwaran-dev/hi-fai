@@ -108,7 +108,7 @@ function DigitalAbcdProjectsModal({ isOpen, onClose }) {
         <div className="mt-4 min-h-0 flex-1 space-y-5 overflow-y-auto overscroll-contain pr-1 text-sm leading-relaxed text-slate-700">
           <p className="text-slate-600">
             HIfAI&apos;s projects are designed to provide all students with a unique opportunity to
-            apply their skills to solve real problems. The experienced HiFAI team will guide the
+            apply their skills to solve real problems. The experienced HIfAi team will guide the
             student teams to make effective and novel use of Digital ABCD (AI, Blockchain, Cloud
             and Data) technologies in their solutions. All projects will have the following
             characteristics.
@@ -167,7 +167,7 @@ function DigitalAbcdProjectsModal({ isOpen, onClose }) {
                 <span className="font-semibold text-slate-800">Week two to week 10:</span>
                 <ul className="mt-1.5 list-[circle] space-y-1 pl-5">
                   <li>
-                    A 2-hour guidance session from the HiFAI team every week.
+                    A 2-hour guidance session from the HIfAi team every week.
                     <ul className="mt-1 list-[square] space-y-1 pl-5 text-slate-600">
                       <li>
                         1 hour for helping your team plan roles, responsibilities, scope, and
@@ -193,7 +193,7 @@ function DigitalAbcdProjectsModal({ isOpen, onClose }) {
               </li>
               <li>
                 <span className="font-semibold text-slate-800">Week 16 –</span> A customized
-                experience letter for each student signed by Kanavoogle and HiFAI directors.
+                experience letter for each student signed by Kanavoogle and HIfAi directors.
               </li>
             </ul>
           </div>

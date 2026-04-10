@@ -10,6 +10,10 @@
     box-sizing: border-box;
   }
 
+  p, ul, ol, dl {
+    margin-bottom: 0em !important;
+  }
+
   html {
     scroll-behavior: auto;
     /* Navbar sub-header + main pill (~sub 40px + spacing + nav) */
@@ -20,6 +24,15 @@
     font-family: "League Spartan", system-ui, sans-serif;
     @apply bg-cream text-ink text-base antialiased;
   }
+
+  /* Preflight zeros margins on flow content; restore spacing between blocks. */
+  p:not(:last-child),
+  ul:not(:last-child),
+  ol:not(:last-child),
+  dl:not(:last-child) {
+    margin-bottom: 0em !important;
+  }
+
   h1,
   h2,
   h3,
@@ -581,21 +594,22 @@
   position: absolute;
   left: 50%;
   top: 50%;
-  transform: translate(-50%, -50%) rotate(calc(-90deg + (1turn * var(--orbit-progress))));
+  /* Child sits at top of square; rotate 0→1turn so arrow follows ring clockwise from 12 o’clock (matches SVG ring start). */
+  transform: translate(-50%, -50%) rotate(calc(1turn * var(--orbit-progress)));
   animation: orbit-progress-sync 9.5s linear infinite;
   will-change: transform;
-  z-index: 3;
+  /* Below orbit cards (z-index: 2) so the marker never sits on top of card copy; it reads on the ring between cards. */
+  z-index: 1;
 }
 
 .orbit-arrow {
   position: absolute;
   left: 50%;
-  top: 50%;
-  width: 28px;
-  height: 28px;
-  --orbit-arrow-radius: 40%;
-  transform: translate(-50%, -50%)
-    translateY(calc(-1 * var(--orbit-arrow-radius)));
+  /* ~10% matches circle top in 120×120 viewBox (r=48, cy=60 → y≈12). */
+  top: 10%;
+  width: 46px;
+  height: 46px;
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -603,22 +617,22 @@
 
 .orbit-arrow-icon-shell {
   display: inline-flex;
-  height: 22px;
-  width: 22px;
+  height: 40px;
+  width: 40px;
   align-items: center;
   justify-content: center;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.98);
   box-shadow:
-    0 0 0 2px rgba(37, 99, 235, 0.14),
-    0 2px 9px rgba(37, 99, 235, 0.34);
+    0 0 0 2.5px rgba(37, 99, 235, 0.16),
+    0 3px 12px rgba(37, 99, 235, 0.32);
 }
 
 .orbit-arrow-icon {
-  height: 14px;
-  width: 14px;
+  height: 20px;
+  width: 20px;
   color: rgba(37, 99, 235, 0.98);
-  filter: drop-shadow(0 0 5px rgba(59, 130, 246, 0.4));
+  filter: drop-shadow(0 0 6px rgba(59, 130, 246, 0.45));
 }
 
 @media (prefers-reduced-motion: reduce) {

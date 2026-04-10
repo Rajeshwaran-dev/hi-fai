@@ -78,7 +78,7 @@ const HERO_HOOK_POINTS = [
   },
 ];
 const HERO_SUBTEXT =
-  "There's a side of you beyond marks that remains undiscovered and HifAi got you discover it differently.";
+  "There's a side of you beyond marks that remains undiscovered and HIfAi got you discover it differently.";
 const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:3003";
 
@@ -307,7 +307,7 @@ export function Hero({ reducedMotion, isMobile }) {
                         >
                           –
                         </span>
-                        <p className="w-full min-w-0 text-[0.92rem] font-semibold leading-snug tracking-[-0.015em] text-white/95 sm:w-auto sm:max-w-none sm:flex-1 sm:text-[clamp(0.9rem,2.05vw,1.9rem)] sm:leading-tight">
+                        <p style={{ marginBottom: "0px" }} className="w-full min-w-0 text-[0.92rem] font-semibold leading-snug tracking-[-0.015em] text-white/95 sm:w-auto sm:max-w-none sm:flex-1 sm:text-[clamp(0.9rem,2.05vw,1.9rem)] sm:leading-tight">
                           {item.text}
                         </p>
                       </div>
@@ -341,7 +341,7 @@ export function Hero({ reducedMotion, isMobile }) {
                 data-magnetic
                 className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full border border-white/25 bg-white/12 px-8 py-3.5 text-center text-[0.98rem] font-semibold text-white shadow-lg shadow-black/20 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:bg-white/20 hover:shadow-xl md:text-base"
               >
-                <span className="relative z-10">Let's HI-fAi</span>
+                <span className="relative z-10">Let'sHIfAi</span>
                 <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
               </Link>
             </div>
@@ -378,7 +378,7 @@ export function HowCanHiFAISection() {
             id="how-can-hifai-heading"
             className="font-geom-heading text-[clamp(1.45rem,3vw,2rem)] font-normal tracking-[-0.02em] text-ink"
           >
-            How can I <span className="text-blue-700">HifAi?</span>
+            How can I <span className="text-blue-700">HIfAi?</span>
           </h2>
         </div>
 
@@ -394,7 +394,7 @@ export function HowCanHiFAISection() {
                     <img
                       src={slide.image}
                       alt={slide.title}
-                      className="h-44 w-full object-cover md:h-[280px]"
+                      className="h-44 w-full object-cover md:h-[380px]"
                       loading="lazy"
                       decoding="async"
                       draggable={false}
@@ -437,7 +437,7 @@ export function HowCanHiFAISection() {
 const WHY_HIFAI_INSIGHTS = [
   "Your real potential often stays unnoticed.",
   "One system measures everyone, but each of us is unique.",
-  "HifAi changes how this is seen.",
+  "HIfAi changes how this is seen.",
 ];
 
 const WHY_HIFAI_CLOSING = "Discover what's hidden within you";
@@ -519,7 +519,7 @@ export function WhyHifaiMissingLinkSection({ reducedMotion, isMobile }) {
                   className="h-1.5 w-1.5 rounded-full bg-blue-600"
                   aria-hidden
                 />
-                Why <span className={hifaiHighlightClass}>HifAi</span>?
+                Why <span className={hifaiHighlightClass}>HIfAi</span>?
               </p>
               <div className="relative mt-4">
                 <span
@@ -738,7 +738,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
               id="what-makes-unique-heading"
               className="mt-2 font-geom-heading text-[clamp(1.5rem,3.4vw,2.15rem)] font-normal leading-tight tracking-[-0.02em] text-ink md:mt-2.5"
             >
-              Why <span className="text-blue-700">HifAi</span>
+              Why <span className="text-blue-700">HIfAi</span>
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-ink/60 md:text-[18px]">
               Four pillars that separate skill intelligence from
@@ -854,10 +854,10 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
                 id="what-hifai-offers-heading"
                 className="mt-4 font-geom-heading text-[clamp(1.65rem,4vw,2.45rem)] font-normal leading-[1.15] tracking-[-0.02em] text-ink"
               >
-                What <span className="text-blue-700">HifAi</span> offers?
+                What <span className="text-blue-700">HIfAi</span> offers?
               </h2>
               <p className="mt-3 text-sm leading-relaxed text-ink/60 md:text-[18px]">
-              HifAi offers students and education institutions to:
+              HIfAi offers students and education institutions to:
               </p>
             </div>
 
@@ -2406,7 +2406,7 @@ function TiltCard({ card, index, reducedMotion, onClick }) {
             </span>
           </span>
           <span className="rounded-full bg-blue-600/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-blue-700">
-          HifAi
+          HIfAi
           </span>
         </div>
       </div>

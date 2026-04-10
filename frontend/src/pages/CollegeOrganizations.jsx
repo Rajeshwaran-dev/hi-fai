@@ -36,11 +36,11 @@ export function CollegeOrganizationsBody() {
           pillarTitles={["Explore", "Evaluate", "Expand", "Excel"]}
           copy={[
             "Discover and get an inventory of what kind of authentic assessments are in your IT course and how many of the make use of Digital ABCD",
-            "In consultation with HifAi Define authentic assessments and relevant 21st century skills measuring rubrics  to measure the learning outcomes  in all your IT courses and units",
+            "In consultation with HIfAi Define authentic assessments and relevant 21st century skills measuring rubrics  to measure the learning outcomes  in all your IT courses and units",
             "Develop evaluation expertise with creative problems design that enables the students to make novel use of Digital ABCD and solve the given problem. Validate the impact with recruitment results",
             "Be the leader in designing and implementing  evaluation process and achieve your students long term success with measurable 21st century skills",
           ]}
-          ctaTitle="Invite HifAi into your next term"
+          ctaTitle="Invite HIfAi into your next term"
         >
           <button
             type="button"

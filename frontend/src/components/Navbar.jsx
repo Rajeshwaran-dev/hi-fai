@@ -311,7 +311,7 @@ export default function Navbar({ reducedMotion }) {
           onClick={() => navigateTo("/get-started")}
           className="ml-auto hidden min-h-[42px] shrink-0 items-center justify-center rounded-full border border-cyan-300/20 bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-5 py-2 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(20,131,255,0.45)] transition-transform duration-200 hover:scale-[1.03] hover:shadow-glow active:scale-[0.98] md:inline-flex md:px-6"
         >
-          Let's Hi-fAi
+          Let's HIfAi
         </button>
         <button
           type="button"
@@ -427,7 +427,7 @@ export default function Navbar({ reducedMotion }) {
           onClick={() => navigateTo("/get-started")}
           className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-5 py-3 text-sm font-semibold text-white shadow-[0_8px_24px_rgba(20,131,255,0.45)]"
         >
-          Let's Hi-fAi
+          Let's HIfAi
         </button>
       </aside>
     </header>
