@@ -14,18 +14,17 @@ const allowedOrigins = [
 
 ];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      console.log(origin,"origin");
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-        return;
-      }
-      callback(new Error("Not allowed by CORS"));
-    },
-  }),
-);
+app.use(cors("*"));
+  // cors({
+  //   origin: (origin, callback) => {
+  //     console.log(origin,"origin");
+  //     if (!origin || allowedOrigins.includes(origin)) {
+  //       callback(null, true);
+  //       return;
+  //     }
+  //     callback(new Error("Not allowed by CORS"));
+  //   },
+  // }),
 app.use(express.json());
 
 const escapeHtml = (value = "") =>
