@@ -1,10 +1,11 @@
+const dotenv = require("dotenv");
+dotenv.config();
+
 const express = require("express");
 const cors = require("cors");
 const nodemailer = require("nodemailer");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-
-dotenv.config();
+const { useSendPulse, sendViaSendPulse } = require("./sendPulseMail");
 
 const app = express();
 const port = process.env.PORT || 3003;
@@ -54,31 +55,74 @@ const parseMessageFields = (message = "") => {
     }, {});
 };
 
-const requiredEnv = [
-  "SMTP_HOST",
-  "SMTP_PORT",
-  "SMTP_USER",
-  "SMTP_PASS",
-  "SENDER_EMAIL",
-  "RECIPIENT_EMAIL",
-  "MONGODB_URI",
-];
-
-for (const key of requiredEnv) {
+const coreRequired = ["MONGODB_URI", "RECIPIENT_EMAIL"];
+for (const key of coreRequired) {
   if (!process.env[key]) {
     console.warn(`[warning] Missing environment variable: ${key}`);
   }
 }
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port: Number(process.env.SMTP_PORT || 587),
-  secure: String(process.env.SMTP_SECURE || "false").toLowerCase() === "true",
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-});
+/** Verified SendPulse “from” address (preferred over SENDER_EMAIL for API sends). */
+function getSendPulseFromEmail() {
+  return (
+    process.env.SENDPULSE_FROM_EMAIL?.trim() ||
+    process.env.SENDER_EMAIL?.trim() ||
+    ""
+  );
+}
+
+function getSendPulseFromName() {
+  return (
+    process.env.SENDPULSE_FROM_NAME?.trim() ||
+    process.env.SENDER_NAME?.trim() ||
+    "Hi Fai"
+  );
+}
+
+if (!useSendPulse() && !process.env.SENDER_EMAIL?.trim()) {
+  console.warn(
+    "[warning] Missing SENDER_EMAIL (required for SMTP; or use SendPulse + FROM vars)",
+  );
+}
+
+if (useSendPulse()) {
+  const hasStatic = Boolean(process.env.SENDPULSE_API_KEY?.trim());
+  const hasOAuth =
+    process.env.SENDPULSE_CLIENT_ID?.trim() &&
+    process.env.SENDPULSE_CLIENT_SECRET?.trim();
+  if (!hasStatic && !hasOAuth) {
+    console.warn(
+      "[warning] SendPulse expected SENDPULSE_API_KEY or CLIENT_ID+SECRET",
+    );
+  }
+  if (!getSendPulseFromEmail()) {
+    console.warn(
+      "[warning] Set SENDPULSE_FROM_EMAIL or SENDER_EMAIL for SendPulse sender",
+    );
+  }
+  console.log("[mail] Using SendPulse API for outbound email");
+} else {
+  ["SMTP_HOST", "SMTP_PORT", "SMTP_USER", "SMTP_PASS"].forEach((key) => {
+    if (!process.env[key]) {
+      console.warn(`[warning] Missing environment variable: ${key} (SMTP)`);
+    }
+  });
+  console.log("[mail] Using SMTP (nodemailer) for outbound email");
+}
+
+const smtpTransporter =
+  !useSendPulse() && process.env.SMTP_HOST
+    ? nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: Number(process.env.SMTP_PORT || 587),
+        secure:
+          String(process.env.SMTP_SECURE || "false").toLowerCase() === "true",
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS,
+        },
+      })
+    : null;
 
 const contactSubmissionSchema = new mongoose.Schema(
   {
@@ -136,8 +180,13 @@ app.post("/api/contact", async (req, res) => {
   const safeSubject = escapeHtml(subject || "N/A");
   const safeMessage = escapeHtml(message).replace(/\n/g, "<br/>");
 
+  const outboundFrom =
+    useSendPulse() && getSendPulseFromEmail()
+      ? getSendPulseFromEmail()
+      : process.env.SENDER_EMAIL;
+
   const mailOptions = {
-    from: process.env.SENDER_EMAIL,
+    from: outboundFrom,
     to: process.env.RECIPIENT_EMAIL,
     replyTo: email,
     subject: subject || `New website enquiry from ${name}`,
@@ -243,11 +292,35 @@ app.post("/api/contact", async (req, res) => {
   };
 
   try {
-    await transporter.sendMail(mailOptions);
+    if (useSendPulse()) {
+      const fromAddr = getSendPulseFromEmail();
+      if (!fromAddr) {
+        throw new Error(
+          "Missing sender: set SENDPULSE_FROM_EMAIL or SENDER_EMAIL in .env",
+        );
+      }
+      await sendViaSendPulse({
+        html: mailOptions.html,
+        text: mailOptions.text,
+        subject: mailOptions.subject,
+        fromEmail: fromAddr,
+        fromName: getSendPulseFromName(),
+        toEmail: process.env.RECIPIENT_EMAIL,
+        toName: process.env.RECIPIENT_NAME || "Hi Fai",
+        replyToEmail: email,
+        replyToName: name,
+      });
+    } else if (smtpTransporter) {
+      await smtpTransporter.sendMail(mailOptions);
+    } else {
+      throw new Error(
+        "No email transport: set SendPulse credentials or SMTP_* variables",
+      );
+    }
     console.log("Email sent successfully");
     return res.json({ ok: true, message: "Submission stored and email sent" });
   } catch (error) {
-    console.error("Email send error:", error);
+    console.error("Email send error:", error?.message || error);
     return res.status(500).json({
       ok: false,
       error: "Failed to send email",
