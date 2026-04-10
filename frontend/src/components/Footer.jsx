@@ -23,7 +23,7 @@ const FOOTER_ADDRESS_LINE =
   "24, Renuga Devi Amman Koil Street, Main Road, Dindigul-624001, Tamil Nadu, India";
 const FOOTER_PHONE_DISPLAY = "+91 93848 82012";
 const FOOTER_PHONE_TEL = "+919384882012";
-const FOOTER_EMAIL = "innovate@hifaiskills.io";
+const FOOTER_EMAIL = "venkat@kanavoo.live";
 const FOOTER_WHATSAPP_URL = "https://wa.me/message/PQNSXRG6VDSCI1";
 const FOOTER_INSTAGRAM_URL =
   "https://www.instagram.com/hifai2026?igsh=MXJzODhuemU5ZHFiMQ==";

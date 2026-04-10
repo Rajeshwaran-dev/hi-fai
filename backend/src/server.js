@@ -64,6 +64,12 @@ function resolveRecipientEmail(recipientRoute) {
   if (r === "learning_hub_maths") {
     return process.env.MAIL_TO_MATHS?.trim() || "tutor@hifaiskills.io";
   }
+  if (r === "learning_hub_expert") {
+    return (
+      process.env.MAIL_TO_LEARNING_HUB_EXPERT?.trim() ||
+      "venkat@kanavoo.live"
+    );
+  }
   return (
     process.env.MAIL_TO_DEFAULT?.trim() ||
     process.env.RECIPIENT_EMAIL?.trim() ||

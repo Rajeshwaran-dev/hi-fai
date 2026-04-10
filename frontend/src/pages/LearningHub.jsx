@@ -525,7 +525,7 @@ function ExpertGuidanceQuickForm() {
         email: form.email.trim(),
         subject: "Learning Hub - Expert session callback",
         message: `Phone: ${form.phone}`,
-        recipientRoute: "default",
+        recipientRoute: "learning_hub_expert",
       };
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: "POST",

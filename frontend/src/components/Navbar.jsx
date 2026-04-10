@@ -6,7 +6,7 @@ import { SiInstagram, SiWhatsapp } from "react-icons/si";
 import { useRouteTransition } from "./RouteTransitionProvider.jsx";
 import logo1Url from "../assets/images/logo-1.png?url";
 
-const TOP_BAR_EMAIL = "innovate@hifaiskills.io";
+const TOP_BAR_EMAIL = "venkat@kanavoo.live";
 const TOP_BAR_PHONE_DISPLAY = "+91 93848 82012";
 const TOP_BAR_PHONE_TEL = "+919384882012";
 const TOP_BAR_MAILTO = `mailto:${TOP_BAR_EMAIL}?subject=${encodeURIComponent("Enquiry — HIfAi")}`;

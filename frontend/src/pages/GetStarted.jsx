@@ -699,8 +699,8 @@ export function GetStartedFormPanel({
       {showEmailHint ? (
         <p className="mx-auto mt-8 max-w-xl text-center text-sm text-slate-500">
           Prefer email? Reach us directly at{" "}
-          <a href="mailto:innovate@hifaiskills.io" className="font-semibold text-blue-600 hover:underline">
-            innovate@hifaiskills.io
+          <a href="mailto:venkat@kanavoo.live" className="font-semibold text-blue-600 hover:underline">
+            venkat@kanavoo.live
           </a>
           .
         </p>
