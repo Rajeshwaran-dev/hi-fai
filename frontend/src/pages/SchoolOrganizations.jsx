@@ -1,7 +1,7 @@
 import { useState } from "react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
 import { GetStartedFormModal } from "./GetStarted.jsx";
-import { FourCardFramework } from "./subpageShared.jsx";
+import { FourCardFramework, OrbitCenterPageTitle } from "./subpageShared.jsx";
 
 export function SchoolOrganizationsBody() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -12,12 +12,13 @@ export function SchoolOrganizationsBody() {
         <FourCardFramework
           ctaBelowCards
           layoutMode="orbit"
+          cardsCenterOverlay={<OrbitCenterPageTitle title="Schools" />}
           pillarTitles={["Explore", "Expand", "Evaluate", "Excel"]}
           copy={[
-            "Discover your hidden talents and interests through guided activities designed to help you understand what truly excites and motivates you at an early stage.",
-            "Step into different domains and skills with interactive experiences that allow you to experiment, learn, and find the paths that suit you best.",
-            "Understand your strengths, thinking patterns, and growth areas with smart evaluation tools that give you clarity about your future direction.",
-            "Start building confidence and real-world readiness with structured support, helping you grow beyond academics and prepare for bigger opportunities.",
+            "Explore what your present teaching experts do to set and measure the measure learning outcomes in your classes and subject areas in 9,10,11 and 12 classes (Shaping years)",
+            "Do a pilot with EN-THIRAN app for a subset of students to measure year level, class level  and subject level scores.",
+            "Verify the subject level (Maths, science, IT…) and standard level (9, 10, 11 and 12) achieved learning outcomes against your established targets",
+            "Adapt to include authentic assessments and insightful tests at subject and year level evaluations to achieve and exceed your target scores",
           ]}
           ctaTitle="Plan a conversation with our school partnerships team"
         >

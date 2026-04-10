@@ -79,27 +79,43 @@ const PARTNERSHIP_TEAM_GROUPS = [
     },
     members: [
       {
-        name: "Dr. N. Venkatachalam",
-        role: "Consultant",
-        org: "Kanavoogle",
-        initials: "NV",
+        name: "Mr G. Saravana Sundar",
+        role: "Public Relations Officer",
+        org: "HIFAi",
+        initials: "GS",
         gender: "male",
         orgKind: "partner",
       },
       {
-        name: "Mr. Madhu Raju",
-        role: "IT Director",
-        org: "HIfAi",
+        name: "Mr Madhu Raju",
+        role: "Director Digital ABCD",
+        org: "HIFAi",
         initials: "MR",
         gender: "male",
+        orgKind: "partner",
+      },
+      {
+        name: "Mrs Sayee Skanth Varshini",
+        role: "Consultant (Marketing & Sales)",
+        org: "HIfAi",
+        initials: "MS",
+        gender: "female",
         orgKind: "hifai",
       },
       {
-        name: "Mr. Saravanan",
-        role: "",
+        name: "Mrs. Sayee Baggia Lakshimi",
+        role: "Finance Officer",
         org: "HIfAi",
         initials: "MS",
-        gender: "male",
+        gender: "female",
+        orgKind: "hifai",
+      },
+      {
+        name: "N. Mythili",
+        role: "DGL based Expert in Learning Outcomes (Volunteer)",
+        org: "HIfAi",
+        initials: "MS",
+        gender: "female",
         orgKind: "hifai",
       },
     ],
@@ -119,18 +135,26 @@ const PARTNERSHIP_TEAM_GROUPS = [
     },
     members: [
       {
-        name: "Mr. G. Saravana Sundar",
-        role: "Public Relations Officer",
+        name: "Dr. N. Venkatachalam",
+        role: "21st Century Skills Development Consultant",
         org: "Kanavoogle",
-        initials: "GS",
+        initials: "NV",
         gender: "male",
         orgKind: "partner",
       },
       {
-        name: "?",
-        role: "",
+        name: "Mr Ruturaj Suryawanshi",
+        role: "Infrastructure Advisor",
         org: "Kanavoogle",
-        initials: "?",
+        initials: "RS",
+        gender: "male",
+        orgKind: "partner",
+      },
+      {
+        name: "Mr. Venkata Shashank Kesireddy",
+        role: "Solutions Architect",
+        org: "Kanavoogle",
+        initials: "VSK",
         gender: "male",
         orgKind: "partner",
       },
@@ -162,10 +186,11 @@ const PARTNERSHIP_TEAM_GROUPS = [
     ],
   },
   {
-    title: "A3 Application",
+    title: "A3i Systems",
     subtitle: "Platform enablement",
     icon: AppWindow,
     index: "04",
+    headerHref: "https://www.a3isystems.com/",
     theme: {
       bar: "from-emerald-800 via-emerald-600 to-teal-500",
       icon: "bg-emerald-600/18 text-emerald-900 ring-1 ring-inset ring-emerald-600/30 shadow-sm",
@@ -176,9 +201,9 @@ const PARTNERSHIP_TEAM_GROUPS = [
     },
     members: [
       {
-        name: "Appication Development Name",
+        name: "App Dev Partner ",
         role: "",
-        org: "A3 Application",
+        org: "A3i Systems",
         initials: "A3",
         gender: "male",
         orgKind: "neutral",
@@ -487,40 +512,73 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                         aria-hidden
                       />
                       <div className="flex flex-1 flex-col p-6 md:p-7">
-                        <div className="flex items-start gap-4">
-                          <span
-                            className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${theme.icon}`}
-                            aria-hidden
+                        {group.headerHref ? (
+                          <a
+                            href={group.headerHref}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-start gap-4 rounded-xl text-left no-underline outline-offset-2 transition-colors hover:bg-slate-50/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2"
+                            aria-label={`${group.title}: ${group.subtitle} (opens in new tab)`}
                           >
-                            <Icon
-                              className="h-[22px] w-[22px]"
-                              strokeWidth={1.65}
-                            />
-                          </span>
-                          <div className="min-w-0 flex-1">
-                            <div className="flex items-baseline justify-between gap-2">
-                              <p className="font-geom-heading text-sm font-normal tracking-[-0.02em] text-slate-900 md:text-sm">
-                                {group.title}
+                            <span
+                              className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${theme.icon}`}
+                              aria-hidden
+                            >
+                              <Icon
+                                className="h-[22px] w-[22px]"
+                                strokeWidth={1.65}
+                              />
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-baseline justify-between gap-2">
+                                <p className="font-geom-heading text-sm font-normal tracking-[-0.02em] text-slate-900 md:text-sm">
+                                  {group.title}
+                                </p>
+                              </div>
+                              <p className="mt-1.5 text-sm leading-snug text-slate-600">
+                                {group.subtitle}
                               </p>
                             </div>
-                            <p className="mt-1.5 text-sm leading-snug text-slate-600">
-                              {group.subtitle}
-                            </p>
+                          </a>
+                        ) : (
+                          <div className="flex items-start gap-4">
+                            <span
+                              className={`inline-flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${theme.icon}`}
+                              aria-hidden
+                            >
+                              <Icon
+                                className="h-[22px] w-[22px]"
+                                strokeWidth={1.65}
+                              />
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-baseline justify-between gap-2">
+                                <p className="font-geom-heading text-sm font-normal tracking-[-0.02em] text-slate-900 md:text-sm">
+                                  {group.title}
+                                </p>
+                              </div>
+                              <p className="mt-1.5 text-sm leading-snug text-slate-600">
+                                {group.subtitle}
+                              </p>
+                            </div>
                           </div>
-                        </div>
+                        )}
 
                         <ul className="mt-7 flex flex-col gap-3">
                           {group.members.map((m) => (
                             <li key={m.name}>
                               <div
-                                className={`flex gap-4 rounded-xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/80 p-4 shadow-sm transition-all duration-300 md:p-[1.125rem] ${theme.cardHover}`}
+                                className={`flex gap-4 rounded-xl border border-slate-200/90 bg-gradient-to-b from-white to-slate-50/80 p-4 shadow-sm transition-all duration-300 md:p-[1rem] ${theme.cardHover}`}
                               >
                                 <div
-                                  className={`flex h-[3.25rem] w-[3.25rem] shrink-0 items-center justify-center rounded-xl border text-[10px] font-bold uppercase tracking-[0.1em] ${theme.avatar}`}
+                                  className={`flex h-[2.25rem] w-[2.25rem] shrink-0 items-center justify-center rounded-xl border text-[10px] font-bold uppercase tracking-[0.1em] ${theme.avatar}`}
                                   aria-hidden
                                 >
                                   {isTeamEntry(m) ? (
-                                    <Users className="h-6 w-6 text-emerald-700" strokeWidth={2} />
+                                    <Users
+                                      className="h-6 w-6 text-emerald-700"
+                                      strokeWidth={2}
+                                    />
                                   ) : (
                                     <img
                                       src={getMemberAvatar(m)}
@@ -536,7 +594,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                                     {m.name}
                                   </p>
                                   {m.role ? (
-                                    <p className="mt-1 text-sm leading-relaxed text-slate-600">
+                                    <p className="mt-1 text-[12px] leading-relaxed text-slate-600">
                                       {m.role}
                                     </p>
                                   ) : null}
@@ -569,31 +627,31 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                 })}
               </div>
 
-              <div className="relative mt-8 flex justify-center md:mt-10">
+              <div className="relative mt-10 flex justify-center md:mt-12">
                 <a
                   href="https://anba.tv/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group relative inline-flex min-w-[min(100%,29rem)] max-w-[36rem] items-center justify-center gap-3 overflow-hidden rounded-2xl border border-blue-300/70 bg-gradient-to-r from-[#eff6ff] via-[#ecfeff] to-[#eef2ff] px-5 py-4 text-center shadow-[0_14px_34px_rgba(37,99,235,0.16)] ring-1 ring-blue-200/80 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_20px_42px_rgba(37,99,235,0.24)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                  className="group relative inline-flex min-w-[min(100%,30rem)] max-w-[40rem] items-center justify-center gap-3 overflow-hidden rounded-full border-2 border-blue-500/90 bg-gradient-to-r from-blue-100 via-sky-100 to-indigo-100 px-7 py-4 text-center shadow-[0_8px_0_rgba(29,78,216,0.12),0_20px_48px_-6px_rgba(37,99,235,0.35),0_0_0_1px_rgba(255,255,255,0.6)_inset] ring-2 ring-blue-400/50 ring-offset-2 ring-offset-slate-50 transition-all duration-300 hover:-translate-y-1 hover:border-blue-600 hover:shadow-[0_10px_0_rgba(29,78,216,0.15),0_28px_56px_-8px_rgba(37,99,235,0.45),0_0_0_1px_rgba(255,255,255,0.7)_inset] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 focus-visible:ring-offset-2"
                   aria-label="Open Anba TV in a new tab"
                 >
                   <span
-                    className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                    className="pointer-events-none absolute inset-0 opacity-40 transition-opacity duration-300 group-hover:opacity-70"
                     aria-hidden
                     style={{
                       background:
-                        "linear-gradient(120deg, rgba(59,130,246,0.12), rgba(34,211,238,0.12), rgba(99,102,241,0.14))",
+                        "linear-gradient(120deg, rgba(59,130,246,0.22), rgba(34,211,238,0.18), rgba(99,102,241,0.2))",
                     }}
                   />
-                  <span className="relative text-[15px] font-semibold leading-tight tracking-tight text-blue-950 md:text-base">
+                  <span className="relative text-base font-bold leading-tight tracking-tight text-blue-950 drop-shadow-[0_1px_0_rgba(255,255,255,0.8)] md:text-lg">
                     Brand Ambassador Alex
-                    <span className="mx-1.5 text-blue-300">|</span>
-                    <span className="underline decoration-blue-400/80 underline-offset-2 transition-colors group-hover:text-blue-700">
+                    <span className="mx-2 font-normal text-blue-500/90">|</span>
+                    <span className="font-extrabold text-blue-700 underline decoration-blue-600 decoration-2 underline-offset-[5px] transition-colors group-hover:text-blue-800">
                       Anba TV
                     </span>
                   </span>
                   <ExternalLink
-                    className="relative h-4 w-4 shrink-0 text-blue-700 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                    className="relative h-5 w-5 shrink-0 text-blue-700 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 md:h-[1.35rem] md:w-[1.35rem]"
                     aria-hidden
                   />
                 </a>

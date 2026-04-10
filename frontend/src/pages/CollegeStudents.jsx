@@ -1,7 +1,12 @@
 import InnerPageLink from "../components/InnerPageLink.jsx";
 import { useState } from "react";
 import { GetStartedFormModal } from "./GetStarted.jsx";
-import { FourCardFramework, SectionLabel } from "./subpageShared.jsx";
+import {
+  FourCardFramework,
+  ORBIT_ICONS_DISCOVER_CYCLE,
+  OrbitCenterPageTitle,
+  SectionLabel,
+} from "./subpageShared.jsx";
 
 function CollegeProjectDetails() {
   const rows = [
@@ -58,13 +63,15 @@ export function CollegeStudentsBody() {
     <>
       <FourCardFramework
         ctaBelowCards
-        layoutMode  ="orbit"
-        pillarTitles={["Discover", "Build", "Apply", "Validate"]}
+        layoutMode="orbit"
+        cardsCenterOverlay={<OrbitCenterPageTitle title="College" subtitle="Students" />}
+        pillarIcons={ORBIT_ICONS_DISCOVER_CYCLE}
+        pillarTitles={["Discover", "Design", "Develop and Validate", "Demonstrate"]}
         copy={[
-          "It starts with awareness. Explore possibilities, understand your strengths, and begin shaping a direction that feels truly yours.",
-          "This is where skills take form. Engage with real-time technologies, collaborate, and build projects that are designed around your strengths and thinking.",
-          "Step into real execution. Work on live project tasks, apply what you've learned, and start solving problems in a structured, real-time project environment.",
-          "Watch your progress turn into something real. With continuous evaluation and mentorship, every step is guided and helping you improve, refine, and grow with clarity.",
+          "Learn  Agility and Time management and choose a futuristic industry problem and choice of digital ABCD that aligns with your long term goals",
+          "Design a unique solution that makes novel use of Digital ABCD technologies to show your teams creativity",
+          "Develop the must have components and validate the quality of your outcomes with critical analysis and effective communications",
+          "Show your project outcomes to prospective employers to prove your 21st century skills"
         ]}
         betweenCardsAndCta={
           <>

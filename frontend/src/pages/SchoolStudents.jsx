@@ -1,6 +1,13 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import { Play, X } from "lucide-react";
+import {
+  ClipboardCheck,
+  Compass,
+  Play,
+  RefreshCw,
+  Trophy,
+  X,
+} from "lucide-react";
 import InnerPageLink from "../components/InnerPageLink.jsx";
 import enThiranDemoSrc from "../assets/videos/enthiran.mp4?url";
 import { GetStartedFormModal } from "./GetStarted.jsx";
@@ -41,9 +48,9 @@ function CenterPlayTrigger({ onClick }) {
         <defs>
           <path id={textPathId} d="M50,50 m-40,0 a40,40 0 1,1 80,0 a40,40 0 1,1 -80,0" />
         </defs>
-        <text fill="currentColor" style={{ fontSize: "8.5px", fontWeight: 600, letterSpacing: "1.6px" }}>
+        <text fill="currentColor" style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "1.6px" }}>
           <textPath href={`#${textPathId}`} startOffset="50%" textAnchor="middle">
-            CHECKOUT ENTHIRAN APP ✦
+          ✦ CHECKOUT ENTHIRAN APP ✦
           </textPath>
         </text>
       </svg>
@@ -161,58 +168,143 @@ function SchoolStudentVideoModal({ isOpen, onClose }) {
   );
 }
 
+// ─── Evaluate skill flow (hover → “Click me” → full modal) ───────────────────
+
+function EvaluateFlowModal({ isOpen, onClose }) {
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return undefined;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  return createPortal(
+    <div
+      className="fixed inset-0 z-[10000] flex min-h-[100dvh] w-full items-center justify-center bg-slate-950/75 p-4 backdrop-blur-sm"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="evaluate-flow-title"
+      onClick={onClose}
+    >
+      <div
+        className="relative max-h-[min(90dvh,840px)] w-full max-w-lg overflow-y-auto rounded-2xl border border-slate-200/90 bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.35)] sm:p-8"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-700 transition hover:bg-slate-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 sm:right-4 sm:top-4"
+          aria-label="Close"
+        >
+          <X className="h-4 w-4" />
+        </button>
+        <h2
+          id="evaluate-flow-title"
+          className="pr-10 font-geom-heading text-xl font-semibold tracking-tight text-slate-900 sm:text-2xl"
+        >
+          How to evaluate your skills
+        </h2>
+        <p className="mt-2 text-sm leading-relaxed text-slate-600">
+          Follow these steps for each skill. Work your way up to{" "}
+          <strong className="font-semibold text-slate-800">30-minute</strong>{" "}
+          questions and the{" "}
+          <strong className="font-semibold text-slate-800">
+            most complex
+          </strong>{" "}
+          category of test when you are ready.
+        </p>
+        <ol className="mt-6 list-decimal space-y-4 pl-5 text-sm leading-relaxed text-slate-800 sm:text-[15px]">
+          {EVALUATE_FLOW_STEPS.map((text, idx) => (
+            <li key={idx} className="pl-1 marker:font-semibold">
+              {text}
+            </li>
+          ))}
+        </ol>
+        <p className="mt-6 rounded-xl border border-amber-200/80 bg-amber-50/80 px-4 py-3 text-sm leading-relaxed text-amber-950/90">
+          Progress from shorter tests to{" "}
+          <strong>30-minute</strong> sessions and the{" "}
+          <strong>highest complexity</strong> items so your measure reflects real
+          depth—not just a quick check.
+        </p>
+        <button
+          type="button"
+          onClick={onClose}
+          className="mt-6 w-full rounded-xl bg-gradient-to-r from-[#1483ff] to-[#21b9ff] py-3 text-center text-sm font-semibold text-white shadow-md transition hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 sm:w-auto sm:px-8"
+        >
+          Got it
+        </button>
+      </div>
+    </div>,
+    document.body
+  );
+}
+
 // ─── Card data ────────────────────────────────────────────────────────────────
 
+/** Order matches CARDS: Explore → Evaluate → Expand → Excel (orbit positions top → right → bottom → left). */
 const CARD_ICONS = [
   ({ style }) => (
-    <svg style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="10" />
-      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-    </svg>
+    <Compass style={style} strokeWidth={1.65} aria-hidden />
   ),
   ({ style }) => (
-    <svg style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="15 3 21 3 21 9" /><polyline points="9 21 3 21 3 15" />
-      <line x1="21" y1="3" x2="14" y2="10" /><line x1="3" y1="21" x2="10" y2="14" />
-    </svg>
+    <ClipboardCheck style={style} strokeWidth={1.65} aria-hidden />
   ),
   ({ style }) => (
-    <svg style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" />
-      <rect x="9" y="3" width="6" height="4" rx="2" /><path d="m9 12 2 2 4-4" />
-    </svg>
+    <RefreshCw style={style} strokeWidth={1.65} aria-hidden />
   ),
   ({ style }) => (
-    <svg style={style} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-    </svg>
+    <Trophy style={style} strokeWidth={1.65} aria-hidden />
   ),
 ];
 
 const CARDS = [
   {
     label: "Explore",
-    copy: "Get a glimpse of your true potential with En-Thiran — our smart skill discovery experience where you interact and understand yourself in a whole new way.",
-  },
-  {
-    label: "Expand",
-    copy: "Explore different skills. Discover what clicks for you. Start building your foundation step by step with guided pathways designed for you.",
+    copy: "Learn the basics of Digital ABCD with the guides",
   },
   {
     label: "Evaluate",
-    copy: "We help you think digitally to innovate and lead global AI. Take a quick 5-minute trial and see your strengths unfold in real time.",
+    copy: "Take a test on any one of the 5 skills",
+    /** Right-side orbit card: hover popover + full flow modal */
+    evaluateFlow: true,
   },
   {
-    label: "Empower",
-    copy: "Grow with confidence. Move beyond academics. Get expert support — personalised, focused, and designed for you.",
+    label: "Expand",
+    copy: "Repeat your evaluation cycles for all 5 core skills",
   },
+  {
+    label: "Excel",
+    copy: "Take external competitive tests to verify you achieve the top 10% of the co-hort",
+  },
+];
+
+const EVALUATE_FLOW_STEPS = [
+  "Choose the easy 10-minute test to start measuring that skill (for example, problem solving and critical thinking).",
+  "Repeat this for all the subtopics of that skill.",
+  "Get an overall measure of your skill.",
+  "If you are happy, go to the next skill.",
+  "If not, check guides, learn from the Knowledge Hub, or use free Google-based resources.",
+  "Repeat the test until you are happy with the score you achieve.",
 ];
 
 const CARD_THEME = [
   { base: "#73A5CA", light: "#E8F3FC", deep: "#1E3A5F" }, // Explore
-  { base: "#6E1A37", light: "#F9EEF3", deep: "#3F1224" }, // Expand
-  { base: "#F08D39", light: "#FFF4E9", deep: "#5A3416" }, // Evaluate
-  { base: "#519A66", light: "#EBF8EF", deep: "#1F4A2E" }, // Empower
+  { base: "#6E1A37", light: "#F9EEF3", deep: "#3F1224" }, // Evaluate
+  { base: "#F08D39", light: "#FFF4E9", deep: "#5A3416" }, // Expand
+  { base: "#519A66", light: "#EBF8EF", deep: "#1F4A2E" }, // Excel
 ];
 
 // ─── Orbit cards ──────────────────────────────────────────────────────────────
@@ -225,6 +317,8 @@ const CARD_SIZE_PCT = 32;
 
 function OrbitCards({ onPlayClick }) {
   useEffect(() => { injectOrbitStyles(); }, []);
+
+  const [evaluateFlowOpen, setEvaluateFlowOpen] = useState(false);
 
   const [isMobileView, setIsMobileView] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -242,6 +336,7 @@ function OrbitCards({ onPlayClick }) {
 
   if (isMobileView) {
     return (
+      <>
       <div style={{ width: "100%", maxWidth: 640, margin: "0 auto" }}>
         <div
           style={{
@@ -250,12 +345,12 @@ function OrbitCards({ onPlayClick }) {
             gap: 12,
           }}
         >
-          {CARDS.map(({ label, copy }, i) => {
+          {CARDS.map(({ label, copy, evaluateFlow }, i) => {
             const Icon = CARD_ICONS[i];
             const theme = CARD_THEME[i];
             return (
               <article
-                key={label}
+                key={`school-card-${i}`}
                 style={{
                   display: "flex",
                   gap: 14,
@@ -316,6 +411,15 @@ function OrbitCards({ onPlayClick }) {
                   >
                     {copy}
                   </p>
+                  {evaluateFlow ? (
+                    <button
+                      type="button"
+                      onClick={() => setEvaluateFlowOpen(true)}
+                      className="mt-3 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-[#6E1A37] to-[#9a2349] px-5 py-2 text-sm font-semibold text-white shadow-md transition hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-2"
+                    >
+                      Click Me
+                    </button>
+                  ) : null}
                 </div>
               </article>
             );
@@ -327,10 +431,16 @@ function OrbitCards({ onPlayClick }) {
         </div>
 
       </div>
+      <EvaluateFlowModal
+        isOpen={evaluateFlowOpen}
+        onClose={() => setEvaluateFlowOpen(false)}
+      />
+      </>
     );
   }
 
   return (
+    <>
     <div
       style={{
         position: "relative",
@@ -375,16 +485,100 @@ function OrbitCards({ onPlayClick }) {
           zIndex: 2,
         }}
       >
-        {CARDS.map(({ label, copy }, i) => {
+        {CARDS.map(({ label, copy, evaluateFlow }, i) => {
           const angleRad = (i * 90 - 90) * (Math.PI / 180);
           const cx = 50 + ORBIT_R_PCT * Math.cos(angleRad);
           const cy = 50 + ORBIT_R_PCT * Math.sin(angleRad);
           const Icon = CARD_ICONS[i];
           const theme = CARD_THEME[i];
 
+          const cardInner = (
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                height: "100%",
+                borderRadius: 24,
+                overflow: "hidden",
+                background: `linear-gradient(155deg, ${theme.light} 0%, #ffffff 38%, ${theme.light} 100%)`,
+                border: `2.5px solid ${theme.base}`,
+                boxShadow: `0 10px 36px color-mix(in srgb, ${theme.base} 40%, transparent), 0 2px 10px rgba(0,0,0,0.08)`,
+              }}
+            >
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "9.5% 9%",
+                  gap: 6,
+                }}
+              >
+                <div
+                  style={{
+                    width: "29%",
+                    aspectRatio: "1/1",
+                    borderRadius: "50%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    background: `linear-gradient(135deg, ${theme.base}, color-mix(in srgb, ${theme.base} 74%, #ffffff))`,
+                    transition: "background 0.35s",
+                  }}
+                >
+                  <Icon
+                    style={{
+                      width: "54%",
+                      height: "54%",
+                      color: "#fff",
+                    }}
+                  />
+                </div>
+
+                <p
+                  style={{
+                    margin: 0,
+                    textAlign: "center",
+                    fontWeight: 700,
+                    color: theme.deep,
+                    fontSize: "15px",
+                    lineHeight: 1.12,
+                  }}
+                >
+                  {label}
+                </p>
+
+                <p
+                  style={{
+                    margin: 0,
+                    textAlign: "center",
+                    color: `color-mix(in srgb, ${theme.deep} 82%, #334155)`,
+                    fontSize: evaluateFlow ? "13px" : "16px",
+                    lineHeight: 1.36,
+                  }}
+                >
+                  {copy}
+                </p>
+                {evaluateFlow ? (
+                  <button
+                    type="button"
+                    onClick={() => setEvaluateFlowOpen(true)}
+                    className="mt-1 w-[min(100%,9.5rem)] shrink-0 rounded-lg bg-gradient-to-r from-[#6E1A37] to-[#9a2349] px-2.5 py-1.5 text-center text-[10px] font-bold uppercase tracking-wide text-white shadow-md transition hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-1 sm:text-[11px]"
+                  >
+                    Click Me
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          );
+
           return (
             <div
-              key={label}
+              key={`orbit-card-${i}`}
               style={{
                 position: "absolute",
                 width: `${CARD_SIZE_PCT}%`,
@@ -394,81 +588,7 @@ function OrbitCards({ onPlayClick }) {
                 transform: "translate(-50%, -50%)",
               }}
             >
-              {/* Counter-rotating card shell */}
-              <div
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: 24,
-                  overflow: "hidden",
-                  background: `linear-gradient(155deg, ${theme.light} 0%, #ffffff 38%, ${theme.light} 100%)`,
-                  border: `2.5px solid ${theme.base}`,
-                  boxShadow: `0 10px 36px color-mix(in srgb, ${theme.base} 40%, transparent), 0 2px 10px rgba(0,0,0,0.08)`,
-                }}
-              >
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: 0,
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    padding: "9.5% 9%",
-                    gap: 6,
-                  }}
-                >
-                  {/* Icon badge */}
-                  <div
-                    style={{
-                      width: "29%",
-                      aspectRatio: "1/1",
-                      borderRadius: "50%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      flexShrink: 0,
-                      background: `linear-gradient(135deg, ${theme.base}, color-mix(in srgb, ${theme.base} 74%, #ffffff))`,
-                      transition: "background 0.35s",
-                    }}
-                  >
-                    <Icon
-                      style={{
-                        width: "54%",
-                        height: "54%",
-                        color: "#fff",
-                      }}
-                    />
-                  </div>
-
-                  {/* Label */}
-                  <p
-                    style={{
-                      margin: 0,
-                      textAlign: "center",
-                      fontWeight: 700,
-                      color: theme.deep,
-                      fontSize: "15px",
-                      lineHeight: 1.12,
-                    }}
-                  >
-                    {label}
-                  </p>
-
-                  {/* Body copy */}
-                  <p
-                    style={{
-                      margin: 0,
-                      textAlign: "center",
-                      color: `color-mix(in srgb, ${theme.deep} 82%, #334155)`,
-                      fontSize: "16px",
-                      lineHeight: 1.36,
-                    }}
-                  >
-                    {copy}
-                  </p>
-                </div>
-              </div>
+              {cardInner}
             </div>
           );
         })}
@@ -492,6 +612,11 @@ function OrbitCards({ onPlayClick }) {
       </div>
 
     </div>
+    <EvaluateFlowModal
+      isOpen={evaluateFlowOpen}
+      onClose={() => setEvaluateFlowOpen(false)}
+    />
+    </>
   );
 }
 

@@ -25,6 +25,11 @@ const DURATION_OPTIONS = [
   { value: "1", label: "1 hour" },
   { value: "2", label: "2 hours" },
 ];
+/** Preferred time-of-day slots (Learning Hub tutor request). */
+const PREFERRED_TIME_OPTIONS = [
+  { value: "6-7", label: "6 to 7" },
+  { value: "7-8", label: "7 to 8" },
+];
 const BOARD_OPTIONS = ["State", "CBSE", "ICSE"];
 const AI_REFERENCE_TOOLS = [
   {
@@ -57,12 +62,15 @@ const AI_REFERENCE_TOOLS = [
   },
 ];
 
-function getUpcomingDateOptions(totalDays = 14) {
+/** Next `maxSlots` available dates, Mon / Wed / Fri only (skips today; same as before). */
+function getUpcomingDateOptions(maxSlots = 14) {
   const out = [];
   const today = new Date();
-  for (let i = 1; i <= totalDays; i += 1) {
+  const allowedWeekday = new Set([1, 3, 5]); // Monday, Wednesday, Friday
+  for (let i = 1; out.length < maxSlots && i <= 120; i += 1) {
     const d = new Date(today);
     d.setDate(today.getDate() + i);
+    if (!allowedWeekday.has(d.getDay())) continue;
     const iso = d.toISOString().slice(0, 10);
     const label = d.toLocaleDateString("en-IN", {
       weekday: "short",
@@ -92,13 +100,6 @@ function LearningHubRequestFormSection() {
   const [submitError, setSubmitError] = useState("");
 
   const dateOptions = useMemo(() => getUpcomingDateOptions(14), []);
-  const hourOptions = useMemo(
-    () => [
-      { value: "1", label: "1 hour" },
-      { value: "2", label: "2 hours" },
-    ],
-    [],
-  );
 
   const setField = (key, value) => {
     const nextValue = key === "email"
@@ -128,9 +129,9 @@ function LearningHubRequestFormSection() {
     }
     if (!form.grade) next.grade = "Please select a grade.";
     if (!form.date) next.date = "Please select a date.";
-    if (!form.hour) next.hour = "Please select an hour.";
-    if (form.hour && !["1", "2"].includes(form.hour)) {
-      next.hour = "Only 1 or 2 hours are allowed.";
+    if (!form.hour) next.hour = "Please select a preferred time.";
+    if (form.hour && !PREFERRED_TIME_OPTIONS.some((o) => o.value === form.hour)) {
+      next.hour = "Choose 6 to 7 or 7 to 8.";
     }
     if (!form.duration) next.duration = "Please select a duration.";
     if (!form.board) next.board = "Please select a board.";
@@ -147,6 +148,8 @@ function LearningHubRequestFormSection() {
     setSubmitting(true);
     setSubmitError("");
     try {
+      const preferredTimeLabel =
+        PREFERRED_TIME_OPTIONS.find((o) => o.value === form.hour)?.label ?? form.hour;
       const payload = {
         name: form.name.trim(),
         email: form.email.trim(),
@@ -155,7 +158,7 @@ function LearningHubRequestFormSection() {
           `Phone: ${form.phone}`,
           `Grade: ${form.grade}`,
           `Preferred Date: ${form.date}`,
-          `Preferred Time: ${form.hour} hour(s)`,
+          `Preferred Time: ${preferredTimeLabel}`,
           `Duration: ${form.duration} hour(s)`,
           `Board: ${form.board}`,
         ].join("\n"),
@@ -303,8 +306,10 @@ function LearningHubRequestFormSection() {
               onChange={(e) => setField("hour", e.target.value)}
               className={`${fieldBase} ${errors.hour ? "border-red-400 focus:ring-red-200" : ""}`}
             >
-              <option value="">Select hour</option>
-              {hourOptions.map((opt) => <option key={opt.value} value={opt.value}>{opt.label}</option>)}
+              <option value="">Select time slot</option>
+              {PREFERRED_TIME_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
             </select>
             {errors.hour ? <p className="mt-1.5 text-xs text-red-600">{errors.hour}</p> : null}
           </div>
@@ -322,7 +327,7 @@ function LearningHubRequestFormSection() {
             {errors.board ? <p className="mt-1.5 text-xs text-red-600">{errors.board}</p> : null}
           </div>
 
-          <div className="md:col-span-2 lg:col-span-3">
+          <div className="md:col-span-2 lg:col-span-3 text-center">
             <button
               type="submit"
               disabled={submitting}

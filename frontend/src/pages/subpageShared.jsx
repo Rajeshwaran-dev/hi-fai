@@ -1,12 +1,30 @@
 
-import { Award, Check, ClipboardCheck, Compass, Maximize2 } from "lucide-react";
+import {
+  Binoculars,
+  Check,
+  ClipboardCheck,
+  Compass,
+  PackageCheck,
+  PenTool,
+  Presentation,
+  TrendingUp,
+  Trophy,
+} from "lucide-react";
 
 /** Fixed 4-pillar titles and icons for inner marketing pages (Explore → Excel). */
 const FOUR_E_META = [
   { title: "Explore", Icon: Compass },
-  { title: "Expand", Icon: Maximize2 },
+  { title: "Expand", Icon: TrendingUp },
   { title: "Evaluate", Icon: ClipboardCheck },
-  { title: "Excel", Icon: Award },
+  { title: "Excel", Icon: Trophy },
+];
+
+/** Icons for Discover → Design → Develop and Validate → Demonstrate (university / college flows). */
+export const ORBIT_ICONS_DISCOVER_CYCLE = [
+  Binoculars,
+  PenTool,
+  PackageCheck,
+  Presentation,
 ];
 const ORBIT_THEMES = [
   { base: "#73A5CA", light: "#E8F3FC", deep: "#1E3A5F" },
@@ -16,6 +34,26 @@ const ORBIT_THEMES = [
 ];
 const ORBIT_R_PCT = 36;
 const ORBIT_CARD_SIZE_PCT = 32;
+
+/** Center hub for orbit layouts (mirrors the School Students play control footprint). */
+export function OrbitCenterPageTitle({ title, subtitle }) {
+  return (
+    <div
+      className="flex min-h-[5.25rem] min-w-[5.25rem] max-w-[9.5rem] flex-col items-center justify-center rounded-full border-[2.5px] border-sky-300/95 bg-white px-3 py-2 text-center shadow-[0_16px_40px_rgba(15,23,42,0.16)] ring-1 ring-blue-500/[0.08] sm:min-h-[6.5rem] sm:min-w-[6.5rem] sm:max-w-[10rem] sm:px-3.5"
+      role="status"
+      aria-label={subtitle ? `${title} ${subtitle}` : title}
+    >
+      <span className="font-geom-heading text-[14px] font-semibold leading-snug tracking-tight text-blue-950 sm:text-xs md:text-[16px]">
+        {title}
+      </span>
+      {subtitle ? (
+        <span className="font-geom-heading mt-0.5 text-[14px] font-semibold leading-snug tracking-tight text-blue-900/90 sm:text-[12px] md:text-[16px]">
+          {subtitle}
+        </span>
+      ) : null}
+    </div>
+  );
+}
 
 export function SectionLabel({ children }) {
   return (
@@ -284,14 +322,14 @@ export function FourCardFramework({
                     );
                   })}
                 </div>
+                {cardsCenterOverlay ? (
+                  <div className="pointer-events-none absolute inset-0 z-[10] hidden items-center justify-center md:flex">
+                    <div className="pointer-events-auto">{cardsCenterOverlay}</div>
+                  </div>
+                ) : null}
               </div>
             </>
           )}
-          {cardsCenterOverlay ? (
-            <div className="pointer-events-none absolute left-1/2 top-1/2 z-20 hidden -translate-x-1/2 -translate-y-1/2 md:block">
-              <div className="pointer-events-auto">{cardsCenterOverlay}</div>
-            </div>
-          ) : null}
         </div>
         {belowCardsContent ? (
           <div className="mt-6 md:mt-8">{belowCardsContent}</div>

@@ -6,7 +6,11 @@ import InnerPageLink from "../components/InnerPageLink.jsx";
 import { useReducedMotion, useIsMobile } from "../hooks/useReducedMotion.js";
 import { GetStartedFormModal } from "./GetStarted.jsx";
 import { ProjectsSection } from "./Home.jsx";
-import { FourCardFramework } from "./subpageShared.jsx";
+import {
+  FourCardFramework,
+  ORBIT_ICONS_DISCOVER_CYCLE,
+  OrbitCenterPageTitle,
+} from "./subpageShared.jsx";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -27,12 +31,14 @@ export function CollegeOrganizationsBody() {
         <FourCardFramework
           ctaBelowCards
           layoutMode="orbit"
-          pillarTitles={["Discover", "Build", "Apply", "Validate"]}
+          cardsCenterOverlay={<OrbitCenterPageTitle title="Universities" />}
+          pillarIcons={ORBIT_ICONS_DISCOVER_CYCLE}
+          pillarTitles={["Discover", "Design", "Develop and Validate", "Demonstrate"]}
           copy={[
-            "Identify your career direction by connecting your skills, interests, and industry demands to make smarter and more focused decisions.",
-            "Work on practical skills through real-time learning experiences, collaborative tasks, and hands-on exposure tailored to your career goals.",
-            "Apply your knowledge in real-world scenarios by working on projects that simulate industry challenges and expectations.",
-            "Strengthen your profile with expert guidance, continuous feedback, and performance tracking to help you confidently step into your career.",
+            "Discover and get an inventory of what kind of authentic assessments are in your IT course and how many of the make use of Digital ABCD",
+            "In consultation with HiFAI Define authentic assessments and relevant 21st century skills measuring rubrics  to measure the learning outcomes  in all your IT courses and units",
+            "Develop evaluation expertise with creative problems design that enables the students to make novel use of Digital ABCD and solve the given problem. Validate the impact with recruitment results",
+            "Be the leader in designing and implementing  evaluation process and achieve your students long term success with measurable 21st century skills",
           ]}
           ctaTitle="Invite HIfAi into your next term"
         >

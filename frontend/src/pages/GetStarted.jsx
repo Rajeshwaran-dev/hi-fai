@@ -32,6 +32,24 @@ const sanitizeEmailInput = (value = "") =>
 const sanitizePhoneInput = (value = "") =>
   String(value).replace(/\D/g, "").slice(0, 10);
 
+const COLLEGE_PRICE_PER_STUDENT = 12_000;
+const COLLEGE_STUDENT_COUNT_MIN = 3;
+const COLLEGE_STUDENT_COUNT_MAX = 5;
+
+function formatPayAmountInr(amount) {
+  if (amount == null || amount <= 0) return "—";
+  return `₹${Number(amount).toLocaleString("en-IN")}`;
+}
+
+/** Total due for `count` students (₹12,000 each). */
+function getCollegeTotalAmount(count) {
+  const n = Number(count);
+  if (!Number.isFinite(n) || n < COLLEGE_STUDENT_COUNT_MIN || n > COLLEGE_STUDENT_COUNT_MAX) {
+    return null;
+  }
+  return n * COLLEGE_PRICE_PER_STUDENT;
+}
+
 export function GetStartedFormPanel({
   initialTab = "school-org",
   lockTab = false,
@@ -52,12 +70,14 @@ export function GetStartedFormPanel({
     phone: "",
     email: "",
   });
-  const [studentCount, setStudentCount] = useState(1);
+  /** Empty until user selects; one student row is shown before selection. */
+  const [studentCount, setStudentCount] = useState("");
   const [studentEntries, setStudentEntries] = useState([
-    { name: "", email: "" },
-    { name: "", email: "" },
-    { name: "", email: "" },
-    { name: "", email: "" },
+    { name: "", email: "", phone: "" },
+    { name: "", email: "", phone: "" },
+    { name: "", email: "", phone: "" },
+    { name: "", email: "", phone: "" },
+    { name: "", email: "", phone: "" },
   ]);
   const [errors, setErrors] = useState({});
   const [isPaying, setIsPaying] = useState(false);
@@ -84,7 +104,12 @@ export function GetStartedFormPanel({
     if (submitError) setSubmitError("");
   };
   const setStudentField = (index, field, value) => {
-    const nextValue = field === "email" ? sanitizeEmailInput(value) : value;
+    const nextValue =
+      field === "email"
+        ? sanitizeEmailInput(value)
+        : field === "phone"
+          ? sanitizePhoneInput(value)
+          : value;
     setStudentEntries((prev) =>
       prev.map((item, i) => (i === index ? { ...item, [field]: nextValue } : item))
     );
@@ -95,7 +120,16 @@ export function GetStartedFormPanel({
   const validate = () => {
     const nextErrors = {};
     const isCollegeStudent = tab === "college-student";
-    const activeStudents = studentEntries.slice(0, studentCount);
+    const collegeSlots =
+      tab === "college-student"
+        ? studentCount === ""
+          ? 1
+          : Number(studentCount)
+        : 0;
+    const activeStudents =
+      tab === "college-student"
+        ? studentEntries.slice(0, collegeSlots)
+        : studentEntries.slice(0, studentCount);
 
     if (!isCollegeStudent) {
       if (!formData.fullName.trim()) nextErrors.fullName = "Full name is required.";
@@ -104,9 +138,9 @@ export function GetStartedFormPanel({
     if (!formData.institution.trim()) nextErrors.institution = "This field is required.";
     if (!formData.notes.trim()) nextErrors.notes = "Please add your goals / notes.";
     const phoneDigits = formData.phone.replace(/\D/g, "");
-    if (!phoneDigits) nextErrors.phone = "Phone is required.";
-    else if (!PHONE_RE.test(phoneDigits)) nextErrors.phone = "Phone number must be exactly 10 digits.";
     if (!isCollegeStudent) {
+      if (!phoneDigits) nextErrors.phone = "Phone is required.";
+      else if (!PHONE_RE.test(phoneDigits)) nextErrors.phone = "Phone number must be exactly 10 digits.";
       if (!formData.email.trim()) nextErrors.email = "Email is required.";
       else if (!EMAIL_RE.test(formData.email.trim())) nextErrors.email = "Enter a valid email address.";
     }
@@ -119,10 +153,18 @@ export function GetStartedFormPanel({
     }
     if (tab === "college-student") {
       if (!formData.major.trim()) nextErrors.major = "Major / focus area is required.";
+      if (studentCount === "" || getCollegeTotalAmount(studentCount) == null) {
+        nextErrors.studentCount = "Please select how many students are registering.";
+      }
       activeStudents.forEach((student, i) => {
         if (!student.name.trim()) nextErrors[`student-name-${i}`] = "Student name is required.";
         if (!student.email.trim()) nextErrors[`student-email-${i}`] = "Student email is required.";
         else if (!EMAIL_RE.test(student.email.trim())) nextErrors[`student-email-${i}`] = "Enter a valid student email.";
+        const sp = (student.phone || "").replace(/\D/g, "");
+        if (!sp) nextErrors[`student-phone-${i}`] = "Phone number is required.";
+        else if (!PHONE_RE.test(sp)) {
+          nextErrors[`student-phone-${i}`] = "Phone number must be exactly 10 digits.";
+        }
       });
     }
 
@@ -276,14 +318,24 @@ export function GetStartedFormPanel({
               <span className="mb-2 block text-sm font-semibold text-slate-800">How many students</span>
               <select
                 value={studentCount}
-                onChange={(e) => setStudentCount(Number(e.target.value))}
+                onChange={(e) =>
+                  setStudentCount(e.target.value === "" ? "" : Number(e.target.value))
+                }
                 className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20 md:max-w-[18rem]"
               >
-                <option value={1}>1</option>
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
+                <option value="">Select number of students</option>
+                {Array.from({ length: COLLEGE_STUDENT_COUNT_MAX - COLLEGE_STUDENT_COUNT_MIN + 1 }, (_, j) => {
+                  const n = COLLEGE_STUDENT_COUNT_MIN + j;
+                  return (
+                    <option key={n} value={n}>
+                      {n}
+                    </option>
+                  );
+                })}
               </select>
+              {errors.studentCount ? (
+                <span className="mt-1 block text-xs text-red-600">{errors.studentCount}</span>
+              ) : null}
             </label>
           ) : null}
 
@@ -303,40 +355,88 @@ export function GetStartedFormPanel({
                 </label>
               </>
             ) : (
-              Array.from({ length: studentCount }).map((_, i) => (
-                <div key={`student-${i}`} className="contents">
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold text-slate-800">
-                      Student Name {studentCount > 1 ? i + 1 : ""}
-                    </span>
-                    <input
-                      type="text"
-                      placeholder="Student name"
-                      value={studentEntries[i].name}
-                      onChange={(e) => setStudentField(i, "name", e.target.value)}
-                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
-                    />
-                    {errors[`student-name-${i}`] ? (
-                      <span className="mt-1 block text-xs text-red-600">{errors[`student-name-${i}`]}</span>
-                    ) : null}
-                  </label>
-                  <label className="block">
-                    <span className="mb-2 block text-sm font-semibold text-slate-800">
-                      Student Email ID {studentCount > 1 ? i + 1 : ""}
-                    </span>
-                    <input
-                      type="email"
-                      placeholder="student@email.com"
-                      value={studentEntries[i].email}
-                      onChange={(e) => setStudentField(i, "email", e.target.value)}
-                      className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
-                    />
-                    {errors[`student-email-${i}`] ? (
-                      <span className="mt-1 block text-xs text-red-600">{errors[`student-email-${i}`]}</span>
-                    ) : null}
-                  </label>
-                </div>
-              ))
+              <div className="md:col-span-2 space-y-5">
+                {Array.from({
+                  length: studentCount === "" ? 1 : Number(studentCount),
+                }).map((_, i) => {
+                  const nStudents = studentCount === "" ? 1 : Number(studentCount);
+                  const payPerStudentDisplay = formatPayAmountInr(COLLEGE_PRICE_PER_STUDENT);
+                  return (
+                    <div
+                      key={`student-${i}`}
+                      className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
+                    >
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-semibold text-slate-800">
+                          Student Name {nStudents > 1 ? i + 1 : ""}
+                        </span>
+                        <input
+                          type="text"
+                          placeholder="Student name"
+                          value={studentEntries[i].name}
+                          onChange={(e) => setStudentField(i, "name", e.target.value)}
+                          className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                        />
+                        {errors[`student-name-${i}`] ? (
+                          <span className="mt-1 block text-xs text-red-600">{errors[`student-name-${i}`]}</span>
+                        ) : null}
+                      </label>
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-semibold text-slate-800">
+                          Student Email ID {nStudents > 1 ? i + 1 : ""}
+                        </span>
+                        <input
+                          type="email"
+                          placeholder="student@email.com"
+                          value={studentEntries[i].email}
+                          onChange={(e) => setStudentField(i, "email", e.target.value)}
+                          className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                        />
+                        {errors[`student-email-${i}`] ? (
+                          <span className="mt-1 block text-xs text-red-600">{errors[`student-email-${i}`]}</span>
+                        ) : null}
+                      </label>
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-semibold text-slate-800">
+                          Phone Number {nStudents > 1 ? i + 1 : ""}
+                        </span>
+                        <input
+                          type="tel"
+                          placeholder="10-digit mobile"
+                          value={studentEntries[i].phone}
+                          onChange={(e) => setStudentField(i, "phone", e.target.value)}
+                          inputMode="numeric"
+                          maxLength={10}
+                          className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                        />
+                        {errors[`student-phone-${i}`] ? (
+                          <span className="mt-1 block text-xs text-red-600">{errors[`student-phone-${i}`]}</span>
+                        ) : null}
+                      </label>
+                      <label className="block">
+                        <span className="mb-2 block text-sm font-semibold text-slate-800">Pay Amount</span>
+                        <input
+                          type="text"
+                          readOnly
+                          tabIndex={-1}
+                          aria-readonly="true"
+                          value={payPerStudentDisplay}
+                          className="w-full cursor-not-allowed rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-semibold text-slate-800 outline-none"
+                        />
+                        <span
+                          className={`mt-1 block min-h-[1.125rem] text-xs ${i === 0 ? "text-slate-500" : ""}`}
+                        >
+                          {i === 0 && studentCount !== ""
+                            ? `Per student · Total ${formatPayAmountInr(getCollegeTotalAmount(studentCount))} for ${studentCount} students`
+                            : i === 0
+                              ? "Per student (total updates when you select headcount)"
+                              : null}
+                        </span>
+                      </label>
+                    </div>
+                  );
+                })}
+              </div>
             )}
             <label className="block">
               <span className="mb-2 block text-sm font-semibold text-slate-800">
@@ -490,20 +590,22 @@ export function GetStartedFormPanel({
               />
               {errors.notes ? <span className="mt-1 block text-xs text-red-600">{errors.notes}</span> : null}
             </label>
-            <label className="block">
-              <span className="mb-2 block text-sm font-semibold text-slate-800">Phone</span>
-              <input
-                type="tel"
-                placeholder="Enter Your Phone Number"
-                value={formData.phone}
-                onChange={(e) => setField("phone", e.target.value)}
-                inputMode="numeric"
-                maxLength={10}
-                pattern="[0-9]{10}"
-                className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
-              />
-              {errors.phone ? <span className="mt-1 block text-xs text-red-600">{errors.phone}</span> : null}
-            </label>
+            {tab !== "college-student" ? (
+              <label className="block">
+                <span className="mb-2 block text-sm font-semibold text-slate-800">Phone</span>
+                <input
+                  type="tel"
+                  placeholder="Enter Your Phone Number"
+                  value={formData.phone}
+                  onChange={(e) => setField("phone", e.target.value)}
+                  inputMode="numeric"
+                  maxLength={10}
+                  pattern="[0-9]{10}"
+                  className="w-full rounded-xl border border-blue-100 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-400/50 focus:ring-2 focus:ring-blue-400/20"
+                />
+                {errors.phone ? <span className="mt-1 block text-xs text-red-600">{errors.phone}</span> : null}
+              </label>
+            ) : null}
             {tab !== "college-student" ? (
               <label className="block">
                 <span className="mb-2 block text-sm font-semibold text-slate-800">Email</span>
@@ -602,6 +704,11 @@ export function GetStartedFormPanel({
             <p className="mt-1 text-sm text-slate-600">
               Scan this QR using Google Pay to continue checkout.
             </p>
+            {tab === "college-student" && getCollegeTotalAmount(studentCount) ? (
+              <p className="mt-3 rounded-lg border border-blue-100 bg-blue-50/80 px-3 py-2 text-center text-sm font-semibold text-blue-950">
+                Amount due: {formatPayAmountInr(getCollegeTotalAmount(studentCount))}
+              </p>
+            ) : null}
 
             <div className="mt-4 rounded-xl border border-slate-200 bg-slate-50 p-3">
               <img

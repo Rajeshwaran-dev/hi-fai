@@ -84,12 +84,9 @@ const API_BASE_URL =
 
 const HOW_CAN_HIFAI_IMAGE_URLS = {
   enthiranApp: "/enthiran.jpeg",
-  digitalAbcdProjects:
-    "/abcd.jpeg",
-  highSchools:
-    "/school.jpeg",
-  engineeringColleges:
-    "engineering-college.jpeg",
+  digitalAbcdProjects: "/abcd.jpeg",
+  highSchools: "/school.jpeg",
+  engineeringColleges: "engineering-college.jpeg",
 };
 
 const HOW_CAN_HIFAI_SLIDES = [
@@ -115,7 +112,7 @@ const HOW_CAN_HIFAI_SLIDES = [
     image: HOW_CAN_HIFAI_IMAGE_URLS.highSchools,
     points: [
       "Consulting and implementation services.",
-      "Measure and deliver learning outcomes to year 9, 10, 11 and 12.",
+      "Measure and Improve student’s learning outcomes across years 9, 10, 11 and 12",
     ],
   },
   {
@@ -593,8 +590,8 @@ const HIFAI_UNIQUE_STEPS = [
 const HIFAI_OFFERS_CARDS = [
   {
     step: "01",
-    title: "Skills that scale",
-    body: "Explore, evaluate, expand and excel in their unique skills and capabilities.",
+    title: "Scale Your Skills",
+    body: "Explore, evaluate, expand and excel in your unique skills and institutional capabilities",
     icon: TrendingUp,
     ring: "from-blue-500 via-indigo-500 to-violet-600",
     glow: "bg-blue-500/25",
@@ -602,8 +599,8 @@ const HIFAI_OFFERS_CARDS = [
   },
   {
     step: "02",
-    title: "Digital ABCD in practice",
-    body: "With effective and novel use of Digital ABCD (AI, Blockchain, Cloud and Data) technologies.",
+    title: "Practice with Digital ABCD",
+    body: "Make effective and novel use of Digital ABCD (AI, Blockchain, Cloud and Data) technologies.",
     icon: Cpu,
     ring: "from-cyan-500 via-blue-600 to-indigo-700",
     glow: "bg-cyan-500/25",
@@ -611,8 +608,8 @@ const HIFAI_OFFERS_CARDS = [
   },
   {
     step: "03",
-    title: "21st Century Skills",
-    body: "At the core, we focus on creative thinking, problem solving, critical analysis, communication, and digital use — helping individuals understand how they think, respond, and grow.",
+    title: "Excel in 21st Century Skills",
+    body: "Help individuals and institutions to think, adapt, solve problems with Creativity, Critical Analysis, Communication & digital use skills",
     icon: BrainCircuit,
     ring: "from-sky-500 via-blue-600 to-blue-800",
     glow: "bg-sky-500/20",
@@ -936,7 +933,8 @@ const SERVICE_CARDS = [
     id: "s1",
     title: "Artificial Intelligence (AI)",
     image: skillDevelopmentImg,
-    short: "Simulation of human intelligence processes by machines and systems.",
+    short:
+      "Simulation of human intelligence processes by machines and systems.",
     description:
       "Artificial Intelligence (AI) refers to the simulation of human intelligence processes by machines and systems. Every day is evolving with something new in the AI world.",
     details: [
@@ -1436,7 +1434,9 @@ function SchoolInquiryForm({
                 className={inquiryControlClass(variant, !!errors.phone)}
                 placeholder="Enter 10-digit phone number"
                 onInput={(e) => {
-                  e.currentTarget.value = sanitizePhoneInput(e.currentTarget.value);
+                  e.currentTarget.value = sanitizePhoneInput(
+                    e.currentTarget.value,
+                  );
                 }}
                 onChange={() => clearErr("phone")}
               />
@@ -1466,7 +1466,9 @@ function SchoolInquiryForm({
                 className={inquiryControlClass(variant, !!errors.email)}
                 placeholder="Enter Your Email ID"
                 onInput={(e) => {
-                  e.currentTarget.value = sanitizeEmailInput(e.currentTarget.value);
+                  e.currentTarget.value = sanitizeEmailInput(
+                    e.currentTarget.value,
+                  );
                 }}
                 onChange={() => clearErr("email")}
               />
@@ -1868,7 +1870,9 @@ function UniversityInquiryForm({
                 className={inquiryControlClass(variant, !!errors.phone)}
                 placeholder="Enter 10-digit phone number"
                 onInput={(e) => {
-                  e.currentTarget.value = sanitizePhoneInput(e.currentTarget.value);
+                  e.currentTarget.value = sanitizePhoneInput(
+                    e.currentTarget.value,
+                  );
                 }}
                 onChange={() => clearErr("phone")}
               />
@@ -1898,7 +1902,9 @@ function UniversityInquiryForm({
                 className={inquiryControlClass(variant, !!errors.email)}
                 placeholder="Enter Your Email ID"
                 onInput={(e) => {
-                  e.currentTarget.value = sanitizeEmailInput(e.currentTarget.value);
+                  e.currentTarget.value = sanitizeEmailInput(
+                    e.currentTarget.value,
+                  );
                 }}
                 onChange={() => clearErr("email")}
               />
