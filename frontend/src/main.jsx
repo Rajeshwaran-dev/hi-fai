@@ -27,7 +27,8 @@ import Footer from "./components/Footer.jsx";
 import { RouteTransitionProvider } from "./components/RouteTransitionProvider.jsx";
 import ScrollToTop from "./components/ScrollToTop.jsx";
 import FloatingWhatsApp from "./components/FloatingWhatsApp.jsx";
-import { useReducedMotion } from "./hooks/useReducedMotion.js";
+import CustomCursor from "./components/CustomCursor.jsx";
+import { useIsMobile, useReducedMotion } from "./hooks/useReducedMotion.js";
 import { SchoolStudentsBody } from "./pages/SchoolStudents.jsx";
 import { CollegeStudentsBody } from "./pages/CollegeStudents.jsx";
 import { SchoolOrganizationsBody } from "./pages/SchoolOrganizations.jsx";
@@ -35,6 +36,78 @@ import { CollegeOrganizationsBody } from "./pages/CollegeOrganizations.jsx";
 import { LearningHubBody } from "./pages/LearningHub.jsx";
 import { GetStartedBody } from "./pages/GetStarted.jsx";
 import { AboutBody } from "./pages/About.jsx";
+
+function RootLayout() {
+  const reducedMotion = useReducedMotion();
+  const isMobile = useIsMobile(768);
+  return (
+    <>
+      <CustomCursor reducedMotion={reducedMotion} isMobile={isMobile} />
+      <ScrollToTop />
+      <FloatingWhatsApp />
+      <Routes>
+        <Route path="/" element={<App />} />
+        <Route
+          path="/students/school-students"
+          element={
+            <InnerPageLayout>
+              <SchoolStudentsBody />
+            </InnerPageLayout>
+          }
+        />
+        <Route
+          path="/students/college-students"
+          element={
+            <InnerPageLayout>
+              <CollegeStudentsBody />
+            </InnerPageLayout>
+          }
+        />
+        <Route
+          path="/school-organizations"
+          element={
+            <InnerPageLayout>
+              <SchoolOrganizationsBody />
+            </InnerPageLayout>
+          }
+        />
+        <Route
+          path="/college-organizations"
+          element={
+            <InnerPageLayout>
+              <CollegeOrganizationsBody />
+            </InnerPageLayout>
+          }
+        />
+        <Route
+          path="/learning-hub"
+          element={
+            <InnerPageLayout>
+              <LearningHubBody />
+            </InnerPageLayout>
+          }
+        />
+        <Route
+          path="/get-started"
+          element={
+            <InnerPageLayout>
+              <GetStartedBody />
+            </InnerPageLayout>
+          }
+        />
+        <Route
+          path="/about"
+          element={
+            <InnerPageLayout>
+              <AboutBody />
+            </InnerPageLayout>
+          }
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
+  );
+}
 
 function InnerPageLayout({ children }) {
   const reducedMotion = useReducedMotion();
@@ -52,68 +125,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <RouteTransitionProvider>
-        <ScrollToTop />
-        <FloatingWhatsApp />
-        <Routes>
-          <Route path="/" element={<App />} />
-          <Route
-            path="/students/school-students"
-            element={
-              <InnerPageLayout>
-                <SchoolStudentsBody />
-              </InnerPageLayout>
-            }
-          />
-          <Route
-            path="/students/college-students"
-            element={
-              <InnerPageLayout>
-                <CollegeStudentsBody />
-              </InnerPageLayout>
-            }
-          />
-          <Route
-            path="/school-organizations"
-            element={
-              <InnerPageLayout>
-                <SchoolOrganizationsBody />
-              </InnerPageLayout>
-            }
-          />
-          <Route
-            path="/college-organizations"
-            element={
-              <InnerPageLayout>
-                <CollegeOrganizationsBody />
-              </InnerPageLayout>
-            }
-          />
-          <Route
-            path="/learning-hub"
-            element={
-              <InnerPageLayout>
-                <LearningHubBody />
-              </InnerPageLayout>
-            }
-          />
-          <Route
-            path="/get-started"
-            element={
-              <InnerPageLayout>
-                <GetStartedBody />
-              </InnerPageLayout>
-            }
-          />
-          <Route
-            path="/about"
-            element={
-              <InnerPageLayout>
-                <AboutBody />
-              </InnerPageLayout>
-            }
-          />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <RootLayout />
       </RouteTransitionProvider>
     </BrowserRouter>
   </StrictMode>

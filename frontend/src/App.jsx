@@ -10,7 +10,6 @@ import {
   WhatIsHifaiSection,
 } from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
-import CustomCursor from "./components/CustomCursor.jsx";
 import useCardTilt from "./hooks/useCardTilt.js";
 import useMagneticButtons from "./hooks/useMagneticButtons.js";
 import useSmoothScroll from "./hooks/Usesmoothscroll.js";
@@ -49,7 +48,6 @@ export default function App() {
           onComplete={() => setShowPreloader(false)}
         />
       )}
-      <CustomCursor reducedMotion={reducedMotion} isMobile={isMobile} />
       <Navbar reducedMotion={reducedMotion} />
       <main>
         <Hero reducedMotion={reducedMotion} isMobile={isMobile} />
