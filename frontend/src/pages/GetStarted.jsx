@@ -231,6 +231,7 @@ export function GetStartedFormPanel({
           email: formData.email.trim(),
           subject: subjectByTab[tab] || "Get Started Inquiry",
           message: messageLines.join("\n"),
+          recipientRoute: "default",
         };
 
         const response = await fetch(`${API_BASE_URL}/api/contact`, {
@@ -253,10 +254,56 @@ export function GetStartedFormPanel({
     }
 
     setSubmitError("");
-    setVerificationCountdown(10);
-    setIsVerifyingPayment(false);
-    setShowPaymentSuccessPopup(false);
-    setShowGpayQrPopup(true);
+    setIsPaying(true);
+    try {
+      const n = Number(studentCount);
+      const slots = studentEntries.slice(0, n);
+      const primary = slots[0];
+      const total = getCollegeTotalAmount(studentCount);
+      const messageLines = [
+        "Form: Get Started — College Students (Pay Now)",
+        `Students registering: ${n}`,
+        `Total due: ${formatPayAmountInr(total)}`,
+        `Program: ${formData.gradeOrProgram}`,
+        `University: ${formData.institution}`,
+        `Major / focus: ${formData.major}`,
+        `Learning goals / notes: ${formData.notes}`,
+        "",
+        ...slots.flatMap((s, i) => [
+          `Student ${i + 1}`,
+          `  Name: ${s.name.trim()}`,
+          `  Email: ${s.email.trim()}`,
+          `  Phone: ${String(s.phone || "").replace(/\D/g, "")}`,
+        ]),
+      ];
+
+      const response = await fetch(`${API_BASE_URL}/api/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: primary.name.trim(),
+          email: primary.email.trim(),
+          subject: "Get Started - College Student payment (Pay Now)",
+          message: messageLines.join("\n"),
+          recipientRoute: "college_students",
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Request failed");
+      }
+
+      setVerificationCountdown(10);
+      setIsVerifyingPayment(false);
+      setShowPaymentSuccessPopup(false);
+      setShowGpayQrPopup(true);
+    } catch (_error) {
+      setSubmitError(
+        "Could not notify our team right now. Please try again in a moment.",
+      );
+    } finally {
+      setIsPaying(false);
+    }
   };
 
   const startPaymentVerification = () => {

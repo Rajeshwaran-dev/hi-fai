@@ -1183,6 +1183,7 @@ function SchoolInquiryForm({
           `Institution: ${String(fd.get("institution") ?? "").trim()}`,
           `Phone: ${String(fd.get("phone") ?? "").trim()}`,
         ].join("\n"),
+        recipientRoute: "default",
       };
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: "POST",
@@ -1607,6 +1608,7 @@ function UniversityInquiryForm({
           `Phone: ${String(fd.get("phone") ?? "").trim()}`,
           `Resume: ${resumeInfo}`,
         ].join("\n"),
+        recipientRoute: "default",
       };
 
       const response = await fetch(`${API_BASE_URL}/api/contact`, {

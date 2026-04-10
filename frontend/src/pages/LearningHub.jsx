@@ -209,7 +209,7 @@ function LearningHubRequestFormSection() {
       const payload = {
         name: form.name.trim(),
         email: form.email.trim(),
-        subject: "Learning Hub - School Inquiry",
+        subject: "Learning Hub - For Students (Maths tutor request)",
         message: [
           `Phone: ${form.phone}`,
           `Grade: ${form.grade}`,
@@ -218,6 +218,7 @@ function LearningHubRequestFormSection() {
           `Preferred Date: ${form.preferredDate}`,
           `Board: ${form.board}`,
         ].join("\n"),
+        recipientRoute: "learning_hub_maths",
       };
 
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
@@ -524,6 +525,7 @@ function ExpertGuidanceQuickForm() {
         email: form.email.trim(),
         subject: "Learning Hub - Expert session callback",
         message: `Phone: ${form.phone}`,
+        recipientRoute: "default",
       };
       const response = await fetch(`${API_BASE_URL}/api/contact`, {
         method: "POST",
@@ -823,8 +825,8 @@ export function LearningHubBody() {
 
   return (
     <>
-      <ExpertGuidanceSection />
       <LearningHubRequestFormSection />
+      <ExpertGuidanceSection />
       <Services reducedMotion={reducedMotion} isMobile={isMobile} />
 
       <LearningHubReferencesSection />

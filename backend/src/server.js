@@ -53,6 +53,24 @@ const escapeHtml = (value = "") =>
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#39;");
 
+/** Inbound routing for POST /api/contact (client sends `recipientRoute`). Unknown values → default inbox. */
+function resolveRecipientEmail(recipientRoute) {
+  const r = String(recipientRoute ?? "").trim();
+  if (r === "college_students") {
+    return (
+      process.env.MAIL_TO_COLLEGE?.trim() || "chitra@hifaiskills.io"
+    );
+  }
+  if (r === "learning_hub_maths") {
+    return process.env.MAIL_TO_MATHS?.trim() || "tutor@hifaiskills.io";
+  }
+  return (
+    process.env.MAIL_TO_DEFAULT?.trim() ||
+    process.env.RECIPIENT_EMAIL?.trim() ||
+    "venkat@kanavoo.live"
+  );
+}
+
 const parseMessageFields = (message = "") => {
   if (typeof message !== "string") return {};
 
@@ -71,11 +89,19 @@ const parseMessageFields = (message = "") => {
     }, {});
 };
 
-const coreRequired = ["MONGODB_URI", "RECIPIENT_EMAIL"];
+const coreRequired = ["MONGODB_URI"];
 for (const key of coreRequired) {
   if (!process.env[key]) {
     console.warn(`[warning] Missing environment variable: ${key}`);
   }
+}
+if (
+  !process.env.MAIL_TO_DEFAULT?.trim() &&
+  !process.env.RECIPIENT_EMAIL?.trim()
+) {
+  console.warn(
+    "[warning] No MAIL_TO_DEFAULT or RECIPIENT_EMAIL; default contact inbox falls back to venkat@kanavoo.live in code",
+  );
 }
 
 /** Verified SendPulse “from” address (preferred over SENDER_EMAIL for API sends). */
@@ -164,7 +190,9 @@ app.get("/api/health", (_req, res) => {
 
 app.post("/api/contact", async (req, res) => {
   const payload = req.body || {};
-  const { name, email, subject, message, ...extraFields } = payload;
+  const { name, email, subject, message, recipientRoute, ...extraFields } =
+    payload;
+  const recipientEmail = resolveRecipientEmail(recipientRoute);
 
   if (!name || !email || !message) {
     return res.status(400).json({
@@ -203,7 +231,7 @@ app.post("/api/contact", async (req, res) => {
 
   const mailOptions = {
     from: outboundFrom,
-    to: process.env.RECIPIENT_EMAIL,
+    to: recipientEmail,
     replyTo: email,
     subject: subject || `New website enquiry from ${name}`,
     text: [`Name: ${name}`, `Email: ${email}`, "", "Message:", message].join(
@@ -321,7 +349,7 @@ app.post("/api/contact", async (req, res) => {
         subject: mailOptions.subject,
         fromEmail: fromAddr,
         fromName: getSendPulseFromName(),
-        toEmail: process.env.RECIPIENT_EMAIL,
+        toEmail: recipientEmail,
         toName: process.env.RECIPIENT_NAME || "Hi Fai",
         replyToEmail: email,
         replyToName: name,
