@@ -1,4 +1,4 @@
-
+import { Fragment } from "react";
 import {
   ArrowRight,
   Binoculars,
@@ -213,32 +213,38 @@ export function FourCardFramework({
                   const PillarIcon = pillarIcons?.[i] ?? Icon;
                   const theme = ORBIT_THEMES[i];
                   return (
-                    <article
-                      key={`${i}-${title}`}
-                      className="rounded-3xl border p-5 shadow-sm"
-                      style={{
-                        borderColor: theme.base,
-                        background: `linear-gradient(160deg, #ffffff 0%, ${theme.light} 100%)`,
-                        boxShadow: `0 10px 28px color-mix(in srgb, ${theme.base} 20%, transparent)`,
-                      }}
-                    >
-                      <div className="flex items-start gap-3">
-                        <span
-                          className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
-                          style={{
-                            background: `linear-gradient(135deg, ${theme.base}, color-mix(in srgb, ${theme.base} 74%, #ffffff))`,
-                          }}
-                        >
-                          <PillarIcon className="h-5 w-5 text-white" strokeWidth={2.2} aria-hidden />
-                        </span>
-                        <div>
-                          <h3 className="text-lg font-bold" style={{ color: theme.deep }}>{title}</h3>
-                          <p className="mt-2 text-sm leading-relaxed" style={{ color: "color-mix(in srgb, #334155 55%, #0f172a)" }}>
-                            {bodies[i]}
-                          </p>
+                    <Fragment key={`${i}-${title}-m`}>
+                      {i === 2 && cardsCenterOverlay ? (
+                        <div className="col-span-full flex w-full flex-col items-center py-4">
+                          {cardsCenterOverlay}
                         </div>
-                      </div>
-                    </article>
+                      ) : null}
+                      <article
+                        className="rounded-3xl border p-5 shadow-sm"
+                        style={{
+                          borderColor: theme.base,
+                          background: `linear-gradient(160deg, #ffffff 0%, ${theme.light} 100%)`,
+                          boxShadow: `0 10px 28px color-mix(in srgb, ${theme.base} 20%, transparent)`,
+                        }}
+                      >
+                        <div className="flex items-start gap-3">
+                          <span
+                            className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl"
+                            style={{
+                              background: `linear-gradient(135deg, ${theme.base}, color-mix(in srgb, ${theme.base} 74%, #ffffff))`,
+                            }}
+                          >
+                            <PillarIcon className="h-5 w-5 text-white" strokeWidth={2.2} aria-hidden />
+                          </span>
+                          <div>
+                            <h3 className="text-lg font-bold" style={{ color: theme.deep }}>{title}</h3>
+                            <p className="mt-2 text-sm leading-relaxed" style={{ color: "color-mix(in srgb, #334155 55%, #0f172a)" }}>
+                              {bodies[i]}
+                            </p>
+                          </div>
+                        </div>
+                      </article>
+                    </Fragment>
                   );
                 })}
               </div>
