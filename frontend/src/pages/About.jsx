@@ -17,7 +17,7 @@ const PARTNER_SITE_URL = "https://kanavoogle.com/";
 const PARTNER_SITE_DISPLAY = "kanavoogle.com";
 
 const kanavoogleLinkClass =
-  "font-medium text-blue-700 no-underline rounded-md px-1.5 py-0.5 transition-colors hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
+  "font-medium text-blue-700 no-underline rounded-md py-0.5 transition-colors hover:bg-blue-200 hover:text-blue-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2";
 
 const hifaiHighlightClass = "font-semibold text-blue-700";
 
@@ -84,7 +84,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr G. Saravana Sundar",
         role: "Public Relations Officer",
-        org: "HIfAi",
         initials: "GS",
         gender: "male",
         orgKind: "partner",
@@ -92,7 +91,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr Madhu Raju",
         role: "Director Digital ABCD",
-        org: "HIfAi",
         initials: "MR",
         gender: "male",
         orgKind: "partner",
@@ -100,7 +98,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Ms. S. Sayee Skantha Varshini ",
         role: "Consultant (Marketing & Sales)",
-        org: "HIfAi",
         initials: "MS",
         gender: "female",
         orgKind: "HIfAi",
@@ -108,7 +105,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mrs. M. Sayee Baggialakshmi",
         role: "Finance Officer",
-        org: "HIfAi",
         initials: "MS",
         gender: "female",
         orgKind: "HIfAi",
@@ -116,7 +112,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mrs. N. Mythili",
         role: "DGL based Expert in Learning Outcomes (Volunteer)",
-        org: "HIfAi",
         initials: "MS",
         gender: "female",
         orgKind: "HIfAi",
@@ -141,7 +136,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Dr. N. Venkatachalam",
         role: "21st Century Skills Development Consultant",
-        org: "Kanavoogle",
         initials: "NV",
         gender: "male",
         orgKind: "partner",
@@ -149,7 +143,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr Ruturaj Suryawanshi",
         role: "Infrastructure Advisor",
-        org: "Kanavoogle",
         initials: "RS",
         gender: "male",
         orgKind: "partner",
@@ -157,7 +150,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mr. Venkata Shashank Kesireddy",
         role: "Solutions Architect",
-        org: "Kanavoogle",
         initials: "VSK",
         gender: "male",
         orgKind: "partner",
@@ -182,7 +174,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Lr Mohamed Safiudin & Team",
         role: "Executive Director-Business Development",
-        org: "Netzy",
         initials: "NT",
         gender: "group",
         orgKind: "neutral",
@@ -209,7 +200,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "App Dev Partner ",
         role: "",
-        org: "A3i Systems",
         initials: "A3",
         gender: "group",
         orgKind: "neutral",
@@ -235,7 +225,6 @@ const PARTNERSHIP_TEAM_GROUPS = [
       {
         name: "Mrs. Lekashri",
         role: "Project Manager",
-        org: "Geniebox",
         initials: "GL",
         gender: "female",
         orgKind: "partner",
@@ -452,7 +441,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                         {m.role}
                       </p>
                     ) : null}
-                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                    {/* <div className="mt-3 flex flex-wrap items-center gap-2">
                       <span
                         className={
                           m.orgKind === "partner" || m.org === "HIfAi"
@@ -466,7 +455,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                           m.org
                         )}
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </li>
@@ -480,7 +469,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-slate-200/80 bg-white py-8 md:py-8 sm:px-2 px-4"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white py-4 md:py-8 sm:px-2 px-4"
       aria-labelledby="kanavoogle-partnership-heading"
     >
       <div

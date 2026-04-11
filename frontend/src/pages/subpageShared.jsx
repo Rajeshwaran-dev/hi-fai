@@ -42,17 +42,22 @@ const ORBIT_RING_SCALE = 3.2;
 /** Center hub for orbit layouts (mirrors the School Students play control footprint). */
 export function OrbitCenterPageTitle({ title, subtitle, onClick, className = "" }) {
   const baseClass =
-    "flex min-h-[5.25rem] min-w-[5.25rem] max-w-[9.5rem] flex-col items-center justify-center rounded-full border-[2.5px] border-sky-300/95 bg-white px-3 py-2 text-center shadow-[0_16px_40px_rgba(15,23,42,0.16)] ring-1 ring-blue-500/[0.08] sm:min-h-[8.5rem] sm:min-w-[8.5rem] sm:max-w-[10rem] sm:px-3.5";
+    "flex min-h-[8rem] min-w-[8rem] max-w-[11rem] flex-col items-center justify-center rounded-full border-[2.5px] border-sky-300/95 bg-white px-5 py-5 text-center shadow-[0_16px_40px_rgba(15,23,42,0.16)] ring-1 ring-blue-500/[0.08] sm:min-h-[11rem] sm:min-w-[11rem] sm:max-w-[14rem] sm:px-6";
   const label = subtitle ? `${title} ${subtitle}` : title;
   const inner = (
     <>
-      <span className="font-geom-heading text-[18px] font-semibold leading-snug tracking-tight text-blue-950 sm:text-xs md:text-[20px]">
+      <span className="font-geom-heading text-[20px] font-semibold leading-snug tracking-tight text-blue-950 sm:text-[20px] md:text-[22px]">
         {title}
       </span>
       {subtitle ? (
-        <span className="font-geom-heading mt-0.5 text-[14px] font-semibold leading-snug tracking-tight text-blue-900/90 sm:text-[12px] md:text-[16px]">
+        <span className="font-geom-heading mt-1 text-[16px] font-semibold leading-snug tracking-tight text-blue-900/90 sm:text-[16px] md:text-[18px]">
           {subtitle}
         </span>
+      ) : null}
+      {onClick ? (
+        <button className="mt-2.5 w-[min(100%,10rem)] shrink-0 rounded-xl bg-gradient-to-r from-[#6E1A37] to-[#9a2349] px-4 py-2 text-center text-[13px] font-bold uppercase tracking-wide text-white shadow-md transition hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:ring-offset-1 sm:text-[14px]">
+          Click Me
+        </button>
       ) : null}
     </>
   );

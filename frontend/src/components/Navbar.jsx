@@ -6,7 +6,7 @@ import { SiInstagram, SiWhatsapp } from "react-icons/si";
 import { useRouteTransition } from "./RouteTransitionProvider.jsx";
 import logo1Url from "../assets/images/logo-1.png?url";
 
-const TOP_BAR_EMAIL = "venkat@kanavoo.live";
+const TOP_BAR_EMAIL = "innovate@hifaiskills.io";
 const TOP_BAR_PHONE_DISPLAY = "+91 93848 82012";
 const TOP_BAR_PHONE_TEL = "+919384882012";
 const TOP_BAR_MAILTO = `mailto:${TOP_BAR_EMAIL}?subject=${encodeURIComponent("Enquiry — HIfAi")}`;
@@ -45,6 +45,21 @@ export default function Navbar({ reducedMotion }) {
   const { transitionTo } = useRouteTransition(); // kept for logo route transition consistency
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isStudentsMenuOpen, setIsStudentsMenuOpen] = useState(false);
+  const currentPath = location.pathname;
+
+  const getPageTitle = () => {
+    if (currentPath === "/") return "Home";
+    const item = navItems.find((i) => i.to === currentPath);
+    if (item) return item.label;
+    for (const item of navItems) {
+      if (item.submenu) {
+        const sub = item.submenu.find((s) => s.to === currentPath);
+        if (sub) return sub.label;
+      }
+    }
+    if (currentPath === "/get-started") return "Let's HIfAi";
+    return "";
+  };
 
   useEffect(() => {
     if (reducedMotion || !barRef.current) return;
@@ -229,9 +244,17 @@ export default function Navbar({ reducedMotion }) {
           style={{ transform: "scale(1.3)"}}
             src={logo1Url}
             alt="HIfAi — human hand and robotic hand high-five"
-            className="h-11 w-auto object-contain object-left md:h-[56px] lg:h-[62px] xl:h-[80px]"
+            className="h-[64px] w-auto object-contain object-left md:h-[56px] lg:h-[62px] xl:h-[80px]"
           />
         </Link>
+
+        {/* Mobile Page Title */}
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none md:hidden pt-0.5">
+          <span className="font-geom-heading text-[1.05rem] font-normal tracking-tight text-white/95 brightness-110">
+            {getPageTitle()}
+          </span>
+        </div>
+
         <ul className="hidden flex-1 items-center justify-center gap-7 text-sm font-semibold text-white/90 md:flex">
           {navItems.map((item) => (
             <li
@@ -355,7 +378,7 @@ export default function Navbar({ reducedMotion }) {
             <img
               src={logo1Url}
               alt="HIfAi logo"
-              className="h-10 w-auto object-contain"
+              className="h-14 w-auto object-contain"
             />
           </Link>
           <button

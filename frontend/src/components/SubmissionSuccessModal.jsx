@@ -20,7 +20,7 @@ export default function SubmissionSuccessModal({
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[1200] flex items-center justify-center bg-slate-950/65 p-4 backdrop-blur-[3px]">
+    <div className="fixed inset-0 z-[11000] flex items-center justify-center bg-slate-950/65 p-4 backdrop-blur-[3px]">
       <div
         role="dialog"
         aria-modal="true"

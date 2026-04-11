@@ -24,7 +24,7 @@ function getInitialTabFromSearch(search) {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 const PHONE_RE = /^\d{10}$/;
-const SCHOOL_STUDENT_APP_LINK = "/learning-hub";
+const SCHOOL_STUDENT_APP_LINK = "/students/school-students";
 const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:3003";
 const sanitizeEmailInput = (value = "") =>
@@ -261,7 +261,7 @@ export function GetStartedFormPanel({
       const primary = slots[0];
       const total = getCollegeTotalAmount(studentCount);
       const messageLines = [
-        "Form: Get Started — College Students (Pay Now)",
+        "Form: Get Started — College Students (Register Now)",
         `Students registering: ${n}`,
         `Total due: ${formatPayAmountInr(total)}`,
         `Program: ${formData.gradeOrProgram}`,
@@ -283,7 +283,7 @@ export function GetStartedFormPanel({
         body: JSON.stringify({
           name: primary.name.trim(),
           email: primary.email.trim(),
-          subject: "Get Started - College Student payment (Pay Now)",
+          subject: "Get Started - College Student payment (Register Now)",
           message: messageLines.join("\n"),
           recipientRoute: "college_students",
         }),
@@ -296,7 +296,8 @@ export function GetStartedFormPanel({
       setVerificationCountdown(10);
       setIsVerifyingPayment(false);
       setShowPaymentSuccessPopup(false);
-      setShowGpayQrPopup(true);
+      // setShowGpayQrPopup(true);
+      setShowSuccessPopup(true);
     } catch (_error) {
       setSubmitError(
         "Could not notify our team right now. Please try again in a moment.",
@@ -680,16 +681,16 @@ export function GetStartedFormPanel({
                   : "Enquire Now"
                 : isPaying
                   ? "Processing..."
-                  : "Pay Now"}
+                  : "Register Now"}
             </button>
             {tab === "school-student" ? (
               <a
                 href={SCHOOL_STUDENT_APP_LINK}
-                target="_blank"
+                // target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex min-h-[48px] items-center justify-center rounded-full border border-slate-300 bg-white px-8 py-3 text-sm font-semibold text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
               >
-                App Link
+                ENTHIRAN APP LINK
               </a>
             ) : null}
           </div>
@@ -699,8 +700,8 @@ export function GetStartedFormPanel({
       {showEmailHint ? (
         <p className="mx-auto mt-8 max-w-xl text-center text-sm text-slate-500">
           Prefer email? Reach us directly at{" "}
-          <a href="mailto:venkat@kanavoo.live" className="font-semibold text-blue-600 hover:underline">
-            venkat@kanavoo.live
+          <a href="mailto:innovate@hifaiskills.io" className="font-semibold text-blue-600 hover:underline">
+            innovate@hifaiskills.io
           </a>
           .
         </p>
@@ -712,6 +713,7 @@ export function GetStartedFormPanel({
         onClose={() => setShowSuccessPopup(false)}
       />
 
+      {/* 
       {showGpayQrPopup ? (
         <div
           className="fixed inset-0 z-[1000] flex items-center justify-center bg-slate-950/65 p-4 backdrop-blur-[2px]"
@@ -798,37 +800,33 @@ export function GetStartedFormPanel({
 
             {showPaymentSuccessPopup ? (
               <div className="absolute inset-0 z-20 flex items-center justify-center rounded-2xl p-4">
-                <div className="relative w-full max-w-[320px] rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-center shadow-[0_20px_50px_-30px_rgba(5,150,105,0.55)]">
-                  <button
-                    type="button"
-                    onClick={closePaymentFlow}
-                    className="absolute right-2 top-2 inline-flex h-7 w-7 items-center justify-center rounded-full border border-emerald-200 bg-white/80 text-emerald-700 transition hover:bg-white"
-                    aria-label="Close success popup"
-                  >
-                    ×
-                  </button>
-                  <p className="relative text-sm font-semibold uppercase tracking-[0.14em] text-emerald-700">
-                    Payment Successful
+                <div className="flex h-full w-full flex-col items-center justify-center rounded-xl bg-white/95 p-6 text-center backdrop-blur-sm">
+                  <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-green-600">
+                    <svg
+                      className="h-8 w-8"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M5 13l4 4L19 7"
+                      />
+                    </svg>
+                  </div>
+                  <h4 className="text-lg font-bold text-slate-900">Payment Successful</h4>
+                  <p className="mt-1 text-sm text-slate-600">
+                    Your details have been recorded.
                   </p>
-                  <h4 className="relative mt-2 text-lg font-bold text-emerald-900">
-                    Check your email ID, we have sent the app link.
-                  </h4>
-                  <p className="relative mt-2 text-sm text-emerald-800">
-                    You can now close this popup.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={closePaymentFlow}
-                    className="relative mt-4 inline-flex min-h-[38px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-4 py-2 text-sm font-semibold text-white"
-                  >
-                    Close
-                  </button>
                 </div>
               </div>
             ) : null}
           </div>
         </div>
       ) : null}
+      */}
     </div>
   );
 }

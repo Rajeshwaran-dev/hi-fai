@@ -253,7 +253,7 @@ function LearningHubRequestFormSection() {
     "w-full rounded-xl border border-slate-200 bg-white px-3.5 py-3 text-sm text-slate-800 shadow-[0_1px_2px_rgba(15,23,42,0.04)] focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200";
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-blue-50/35 px-4 pt-14 pb-10 md:px-8 md:pt-8 md:pb-12">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white to-blue-50/35 px-4 pb-4 md:px-8 md:pt-8 md:pb-12">
       <div
         aria-hidden
         className="pointer-events-none absolute -left-24 top-6 h-72 w-72 rounded-full bg-blue-300/20 blur-3xl"
@@ -360,7 +360,7 @@ function LearningHubRequestFormSection() {
 
           <div>
             <label className="mb-1.5 block text-sm font-medium text-slate-700">
-              Available slots *
+              Preferred Day *
             </label>
             <select
               value={form.date}
@@ -641,7 +641,7 @@ function ExpertGuidanceQuickForm() {
 
 function ExpertGuidanceSection() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-blue-50/40 px-4 py-14 md:px-8 md:py-18">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white to-blue-50/40 px-4 py-2 md:px-8 md:py-18">
       <div
         aria-hidden
         className="pointer-events-none absolute -left-20 top-8 h-64 w-64 rounded-full bg-blue-300/20 blur-3xl"
@@ -770,7 +770,7 @@ function LearningHubReferencesSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden px-4 pb-16 pt-10 md:px-8 md:pb-20">
+    <section className="relative overflow-hidden px-4 pb-4 pt-4 md:px-8 md:pb-20">
       <div
         aria-hidden
         className="pointer-events-none absolute -left-16 top-12 h-64 w-64 rounded-full bg-blue-300/15 blur-3xl"
@@ -797,9 +797,9 @@ function LearningHubReferencesSection() {
           ))}
         </div>
 
-        <h3 className="mb-4 mt-10 text-lg font-bold tracking-tight text-slate-900 md:mb-5 md:mt-12 md:text-xl">
-          Blockchain platforms
-        </h3>
+        <h2 className="mt-6 text-2xl font-extrabold tracking-tight text-slate-900 md:text-4xl">
+          Top Blockchain Platforms for Innovation
+        </h2>
         <div className="grid max-w-5xl grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-5">
           {BLOCKCHAIN_REFERENCE_TOOLS.map((tool, idx) => (
             <LearningHubReferenceCard
