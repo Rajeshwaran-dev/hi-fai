@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -240,24 +240,6 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
   const mainRef = useRef(null);
   const awardsRef = useRef(null);
   const teamRef = useRef(null);
-  const [isAlexModalOpen, setIsAlexModalOpen] = useState(false);
-
-  useEffect(() => {
-    if (!isAlexModalOpen) return undefined;
-
-    const onEsc = (event) => {
-      if (event.key === "Escape") setIsAlexModalOpen(false);
-    };
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onEsc);
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onEsc);
-    };
-  }, [isAlexModalOpen]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -704,7 +686,7 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
 
                 <div className="rounded-2xl border border-slate-200/80 bg-white/70 px-4 py-3 md:px-5 md:py-4">
                   <h4 className="font-geom-heading text-base font-normal tracking-[-0.01em] text-slate-900 md:text-lg">
-                  HIfAi Eco System Partners
+                    HIfAi Eco System Partners
                   </h4>
                 </div>
 
@@ -752,10 +734,50 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                       <h4 className="mt-3 text-2xl font-bold tracking-tight text-white md:text-3xl">
                         Brand Ambassador Alex
                       </h4>
-                      <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-200/90 md:text-base">
-                        Follow featured talks, stories, and updates from our
-                        ambassador community on Anba TV.
-                      </p>
+                      <div className="mt-4 space-y-3 rounded-2xl border border-white/20 bg-white/10 p-4 text-left text-sm leading-relaxed text-slate-100/95 backdrop-blur-sm md:text-[0.95rem]">
+                        <p>
+                          HiFAI proudly welcomes Alex Babu as our Brand
+                          Ambassador, a personality who truly represents the
+                          spirit of passion-driven success. With a strong
+                          academic background, including a Master’s degree from
+                          the United States, and professional experience at a
+                          global tech giant like Amazon, Alex’s journey reflects
+                          excellence in the world of software and innovation.
+                        </p>
+                        <p>
+                          Here is Alex message to all our "HIFAI" followers:
+                        </p>
+                        <p>
+                          "I am a stand-up comedian and musician, and an
+                          ex(hausted) software engineer based in Chennai, India.
+                          I worked as a software engineer for fifteen years
+                          while pursuing music and performing arts on the side.
+                          In 2014, I transitioned to stand-up comedy full-time.
+                          It has been a fulfilling 12 years of working in the
+                          performing arts full-time.
+                        </p>
+                        <p>
+                          My engineering background and 15 years of corporate
+                          life have given me valuable perspectives that I now
+                          bring into my artistic work. In today's rapidly
+                          changing world-especially with the fast growth of AI
+                          technologies-the needs of the industry are evolving as
+                          well. I am glad that HIFAI is focusing on this area
+                          and helping students adapt to these changing times".
+                        </p>
+                        <p>
+                          You can know more about Alex at{" "}
+                          <a
+                            href={ALEX_MESSAGE_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-semibold text-sky-200 underline decoration-sky-200/80 underline-offset-2 hover:text-white"
+                          >
+                            anba.tv
+                          </a>
+                          .
+                        </p>
+                      </div>
 
                       <div className="mt-6 flex flex-wrap items-center justify-center gap-3 md:justify-start">
                         <a
@@ -779,14 +801,6 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                             aria-hidden
                           />
                         </a>
-
-                        <button
-                          type="button"
-                          onClick={() => setIsAlexModalOpen(true)}
-                          className="inline-flex items-center justify-center rounded-full border border-white/45 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-                        >
-                          Read More
-                        </button>
                       </div>
                     </div>
                   </div>
@@ -796,75 +810,6 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
           </div>
         </div>
       </div>
-      {isAlexModalOpen ? (
-        <div
-          className="fixed inset-0 z-[220] flex items-center justify-center bg-slate-950/75 px-4 py-6 backdrop-blur-[2px]"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Brand Ambassador Alex details"
-          onClick={() => setIsAlexModalOpen(false)}
-        >
-          <div
-            className="relative max-h-[90vh] w-full max-w-3xl overflow-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl md:p-7"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <button
-              type="button"
-              onClick={() => setIsAlexModalOpen(false)}
-              className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
-              aria-label="Close Alex details"
-            >
-              ×
-            </button>
-
-            <h4 className="pr-10 text-xl font-bold tracking-tight text-slate-900 md:text-2xl">
-              Brand Ambassador Alex - Read More
-            </h4>
-            <div className="mt-4 space-y-4 text-sm leading-relaxed text-slate-700 md:text-base">
-              <p>
-                <span className="font-semibold text-slate-900">Intro:</span>{" "}
-                HiFAI is proud to have Mr Alex Babu as our Brand Ambassador. We
-                love this since, Alex perfectly captures how a software expert
-                (Completed MS in US and Worked with Amazon) can transform into
-                a global superstar by pursuing his passion as a music lover and
-                his 21st century skills (creativity and innovation with digital
-                use).
-              </p>
-              <p>
-                Here is Alex message to all our "HIFAI" followers:
-              </p>
-              <p>
-                "I am a stand-up comedian and musician, and an ex(hausted)
-                software engineer based in Chennai, India. I worked as a
-                software engineer for fifteen years while pursuing music and
-                performing arts on the side. In 2014, I transitioned to stand-up
-                comedy full-time. It has been a fulfilling 12 years of working
-                in the performing arts full-time.
-              </p>
-              <p>
-                My engineering background and 15 years of corporate life have
-                given me valuable perspectives that I now bring into my
-                artistic work. In today's rapidly changing world-especially with
-                the fast growth of AI technologies-the needs of the industry are
-                evolving as well. I am glad that HIFAI is focusing on this area
-                and helping students adapt to these changing times".
-              </p>
-              <p>
-                You can know more about Alex at{" "}
-                <a
-                  href={ALEX_MESSAGE_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-semibold text-blue-700 underline decoration-blue-600 decoration-2 underline-offset-2"
-                >
-                  anba.tv
-                </a>
-                .
-              </p>
-            </div>
-          </div>
-        </div>
-      ) : null}
     </section>
   );
 }
