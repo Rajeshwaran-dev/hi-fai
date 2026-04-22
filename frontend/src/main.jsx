@@ -115,7 +115,7 @@ function InnerPageLayout({ children }) {
   return (
     <div className="relative min-h-screen overflow-x-hidden bg-white">
       <Navbar reducedMotion={reducedMotion} />
-      <main className="pt-24 md:pt-48 pb-12">{children}</main>
+      <main className="pt-24 md:pt-48 pb-6">{children}</main>
       <Footer reducedMotion={reducedMotion} />
     </div>
   );

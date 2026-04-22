@@ -106,7 +106,7 @@ if (
   !process.env.RECIPIENT_EMAIL?.trim()
 ) {
   console.warn(
-    "[warning] No MAIL_TO_DEFAULT or RECIPIENT_EMAIL; default contact inbox falls back to venkat@kanavoo.live in code",
+    "[warning] No MAIL_TO_DEFAULT or RECIPIENT_EMAIL; default contact inbox falls back to innovate@hifaiskills.io in code",
   );
 }
 

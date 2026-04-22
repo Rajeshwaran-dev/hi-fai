@@ -24,6 +24,8 @@ import abcdProblemImg from "../assets/images/blcok-chain.jpg?url";
 import highSchoolImg from "../assets/images/cloud.jpg?url";
 import universityConsultingImg from "../assets/images/data.jpg?url";
 
+const STATIC_ASSET_BASE = import.meta.env.BASE_URL;
+
 gsap.registerPlugin(ScrollTrigger);
 
 const HERO_HOOK_ACCENTS = {
@@ -83,10 +85,10 @@ const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:3003";
 
 const HOW_CAN_HIFAI_IMAGE_URLS = {
-  enthiranApp: "/enthiran.jpeg",
-  digitalAbcdProjects: "/abcd.jpeg",
-  highSchools: "/school.jpeg",
-  engineeringColleges: "engineering-college.jpeg",
+  enthiranApp: `${STATIC_ASSET_BASE}enthiran.jpeg`,
+  digitalAbcdProjects: `${STATIC_ASSET_BASE}abcd.jpeg`,
+  highSchools: `${STATIC_ASSET_BASE}school.jpeg`,
+  engineeringColleges: `${STATIC_ASSET_BASE}engineering-college.jpeg`,
 };
 
 const HOW_CAN_HIFAI_SLIDES = [
@@ -254,7 +256,7 @@ export function Hero({ reducedMotion, isMobile }) {
       <div className="absolute inset-0 z-0 overflow-hidden" aria-hidden>
         <div
           ref={heroBgRef}
-          className="bg-slate-950 bg-cover bg-center bg-no-repeat will-change-transform"
+          className="absolute left-1/2 top-1/2 h-[106%] w-[110%] -translate-x-1/2 -translate-y-1/2 bg-slate-950 bg-cover bg-center bg-no-repeat will-change-transform"
           style={{ backgroundImage: `url(${heroBgUrl})` }}
           aria-hidden
         />
@@ -324,11 +326,11 @@ export function Hero({ reducedMotion, isMobile }) {
               className="mt-9 flex flex-col items-stretch gap-3 sm:mt-10 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4"
             >
               <Link
-                to=""
+                to="/students/school-students"
                 data-magnetic
                 className="group relative inline-flex min-h-[44px] shrink-0 items-center justify-center overflow-hidden rounded-full bg-blue-600 px-8 py-3.5 text-center text-[0.98rem] font-semibold text-white shadow-lg shadow-blue-950/40 transition-[transform,box-shadow] duration-300 hover:scale-[1.02] hover:bg-blue-500 hover:shadow-xl md:text-base"
               >
-                <span className="relative z-10">Explore Services</span>
+                <span className="relative z-10">EN-THIRAN APP</span>
                 <span className="absolute inset-0 -translate-x-full bg-white/20 transition-transform duration-500 group-hover:translate-x-0" />
               </Link>
               <Link
@@ -358,13 +360,12 @@ export function Hero({ reducedMotion, isMobile }) {
 
 const hifaiHighlightClass = "font-semibold text-blue-700";
 
-const STATIC_ASSET_BASE = import.meta.env.BASE_URL;
 const BRAIN_IMAGE_URL = `${STATIC_ASSET_BASE}brain.png`;
 
 export function HowCanHiFAISection() {
   return (
     <section
-      className="relative border-t border-slate-200/80 bg-white px-4 py-10 md:px-8 md:py-12"
+      className="relative border-t border-slate-200/80 bg-white px-4 py-4 md:px-8 md:py-12"
       aria-labelledby="how-can-hifai-heading"
     >
       <div className="mx-auto max-w-7xl">
@@ -710,7 +711,7 @@ export function WhatIsHifaiSection({ reducedMotion, isMobile }) {
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-12 md:px-8 md:py-14"
+      className="relative overflow-hidden border-t border-slate-200/80 bg-white px-4 py-4 md:px-8 md:py-14"
       aria-labelledby="what-makes-unique-heading"
     >
       <div
@@ -2097,14 +2098,10 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
 
       <div
         ref={panelRef}
-        className={`relative z-10 overflow-hidden rounded-[1.6rem] border border-white/70 bg-white/95 p-6 shadow-[0_28px_80px_rgba(9,15,26,0.28)] backdrop-blur-2xl md:p-7 ${
-          isInquiry
-            ? "w-[min(92vw,720px)] flex flex-col"
-            : "w-[min(92vw,700px)]"
-        }`}
+        className="relative z-10 flex w-[min(92vw,720px)] flex-col overflow-hidden rounded-[1.6rem] border border-white/70 bg-white/95 p-6 shadow-[0_28px_80px_rgba(9,15,26,0.28)] backdrop-blur-2xl md:p-7"
         style={{
           transformStyle: "preserve-3d",
-          height: isInquiry ? "min(92vh,860px)" : undefined,
+          maxHeight: "min(92vh, 860px)",
         }}
       >
         <div
@@ -2136,11 +2133,7 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
         </div>
 
         <div
-          className={
-            isInquiry
-              ? "relative z-10 mt-4 flex-1 overflow-y-auto min-h-0 pr-1 pb-4 service-modal-scroll"
-              : "relative z-10 mt-4"
-          }
+          className="service-modal-scroll relative z-10 mt-4 min-h-0 flex-1 overflow-y-auto pr-1 pb-4"
           onWheelCapture={(e) => {
             // Prevent Lenis (global wheel handler) from hijacking wheel events.
             e.stopPropagation();
@@ -2178,14 +2171,14 @@ function ServiceModal({ open, onClose, service, reducedMotion }) {
           ) : (
             <>
               {Array.isArray(service.details) && service.details.length ? (
-                <div
+                <ul
                   ref={listRef}
                   className="relative z-10 mt-5 space-y-3 rounded-2xl border border-slate-200/85 bg-white/90 p-4 text-sm leading-relaxed text-ink/80 md:p-5"
                 >
                   {service.details.map((line, i) => (
-                    <p key={`${service.id}-detail-${i}`}>{line}</p>
+                    <li key={`${service.id}-detail-${i}`}>{line}</li>
                   ))}
-                </div>
+                </ul>
               ) : null}
             </>
           )}
@@ -2499,7 +2492,7 @@ export function Services({ reducedMotion, isMobile }) {
     <section
       id="services"
       ref={sectionRef}
-      className="relative overflow-hidden px-4 py-12 md:px-8 md:py-12"
+      className="relative overflow-hidden px-4 py-4 md:px-8 md:py-12"
     >
       <div
         className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(255,255,255,0.18),rgba(237,247,255,0.38))]"
@@ -2518,7 +2511,7 @@ export function Services({ reducedMotion, isMobile }) {
 
       <div className="mx-auto max-w-7xl">
         {/* ── Section heading ── */}
-        <div ref={introRef} className="mb-12 max-w-4xl md:mb-16">
+        <div ref={introRef} className="mb-4 max-w-4xl md:mb-16">
           <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
             What we offer
           </p>
@@ -2895,10 +2888,10 @@ export function ProjectsSection({ reducedMotion, isMobile }) {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative py-20 image.pngmd:py-24"
+      className="relative py-6 image.pngmd:py-24"
     >
       <div className="mx-auto max-w-7xl px-4">
-        <div ref={introRef} className="mb-12 max-w-3xl md:mb-16">
+        <div ref={introRef} className="mb-4 max-w-3xl md:mb-16">
           <p className="text-sm font-bold uppercase tracking-widest text-blue-600">
             Projects in action
           </p>

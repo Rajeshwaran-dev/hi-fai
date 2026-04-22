@@ -23,14 +23,12 @@ const FOOTER_ADDRESS_LINE =
   "24, Renuga Devi Amman Koil Street, Main Road, Dindigul-624001, Tamil Nadu, India";
 const FOOTER_PHONE_DISPLAY = "+91 93848 82012";
 const FOOTER_PHONE_TEL = "+919384882012";
-const FOOTER_EMAIL = "venkat@kanavoo.live";
+const FOOTER_EMAIL = "innovate@hifaiskills.io";
 const FOOTER_WHATSAPP_URL = "https://wa.me/message/PQNSXRG6VDSCI1";
 const FOOTER_INSTAGRAM_URL =
   "https://www.instagram.com/hifai2026?igsh=MXJzODhuemU5ZHFiMQ==";
 
-/** Google Maps embed — HIfAi place (Dindigul) */
-const FOOTER_MAP_EMBED_SRC =
-  "https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d493.78774831078425!2d77.97051!3d10.3618454!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b00ab09fa3836eb%3A0xc2981c3295ec6fab!2sHIfAi!5e1!3m2!1sen!2sin!4v1775460424439!5m2!1sen!2sin";
+const FOOTER_MAP_URL = "https://maps.app.goo.gl/RXZhjKYApMCQT3LL6";
 
 export default function Footer({ reducedMotion }) {
   const location = useLocation();
@@ -86,7 +84,7 @@ export default function Footer({ reducedMotion }) {
   };
 
   return (
-    <footer className="relative overflow-hidden border-t border-accent/10 bg-ink px-4 pt-20 pb-14 md:px-8">
+    <footer className="relative overflow-hidden border-t border-accent/10 bg-ink px-4 pt-8 pb-8 md:px-8">
       {/* Decorative blobs */}
       <div className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-[radial-gradient(70%_120%_at_50%_-20%,rgba(65,105,225,0.36),transparent)]" aria-hidden />
       <div className="pointer-events-none absolute -left-24 -top-8 h-72 w-72 rounded-full bg-accent/25 blur-3xl" aria-hidden />
@@ -157,15 +155,32 @@ export default function Footer({ reducedMotion }) {
             {/* Col 3 — Map */}
             <div ref={col3Ref} className="min-w-0 lg:pl-2">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-cyan">Location</p>
-              <div className="mt-4 w-full max-w-[300px] overflow-hidden rounded-2xl border border-white/15 bg-black/20 shadow-inner md:w-[300px] md:max-w-none lg:w-[240px]">
-                <iframe
-                  title="HIfAi on Google Maps"
-                  src={FOOTER_MAP_EMBED_SRC}
-                  className="h-[200px] w-full border-0 sm:h-[220px]"
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  allowFullScreen
-                />
+              <div className="mt-4">
+                <a
+                  href={FOOTER_MAP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group inline-flex items-center gap-3 rounded-2xl border border-white/15 bg-white/5 px-6 py-4 text-sm font-semibold text-white shadow-lg backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-accent/10 hover:shadow-accent/5"
+                >
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/20 text-accent transition-transform duration-300 group-hover:scale-110">
+                    <svg
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="h-5 w-5"
+                    >
+                      <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  </span>
+                  <div className="flex flex-col items-start leading-tight">
+                    <span className="text-[11px] uppercase tracking-wider text-accent-cyan/80">View Our</span>
+                    <span className="text-base">Location on Maps</span>
+                  </div>
+                </a>
               </div>
             </div>
 
@@ -173,7 +188,6 @@ export default function Footer({ reducedMotion }) {
             <div ref={col4Ref} className="lg:pl-2">
               <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent-cyan">Contact</p>
               <address className="mt-4 space-y-4 text-sm not-italic leading-relaxed text-white/75">
-                <p>{FOOTER_ADDRESS_LINE}</p>
                 <p>
                   <a
                     href={`tel:${FOOTER_PHONE_TEL}`}

@@ -47,7 +47,7 @@ export function CollegeOrganizationsBody() {
             onClick={() => setIsFormOpen(true)}
             className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-gradient-to-r from-[#1483ff] to-[#21b9ff] px-8 py-3 text-sm font-bold text-white shadow-lg transition hover:shadow-[0_8px_28px_rgba(20,131,255,0.45)]"
           >
-            Contact partnerships
+            Enquiry Now
           </button>
           <InnerPageLink
             to="/learning-hub"
