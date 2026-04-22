@@ -324,11 +324,25 @@ export function GetStartedFormPanel({
   return (
     <div className={containerClassName}>
       {showHeader ? (
-        <div className="mb-10 text-center">
-          <SectionHeading>Start your journey</SectionHeading>
-          <Lead className="mx-auto">
-            Tell us a little about you and we&apos;ll take it from there to guide you in the right direction.
-          </Lead>
+        <div className="mb-10 grid items-center gap-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-[0_4px_32px_rgba(15,23,42,0.06)] md:grid-cols-[minmax(0,1fr)_260px] md:gap-8 md:p-7">
+          <div className="text-center md:text-left">
+            <SectionHeading className="mb-2">Start your journey</SectionHeading>
+            <Lead className="mx-auto md:mx-0">
+              Tell us a little about you and we&apos;ll take it from there to guide you in the right direction.
+            </Lead>
+          </div>
+
+          <div className="mx-auto w-full max-w-[220px] md:mx-0 md:justify-self-end">
+            <div className="rounded-xl border border-slate-200 bg-slate-50 p-2">
+              <img
+                src={sampleQrImage}
+                alt="HiFAI quick access QR code"
+                className="mx-auto aspect-square w-full rounded-lg border border-slate-200 bg-white object-contain p-1"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
         </div>
       ) : null}
 
