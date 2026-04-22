@@ -66,19 +66,19 @@ const HERO_HOOK_POINTS = [
     variant: "short",
     label: "Short Term",
     title: "MARKS",
-    text: "Help you for your next steps",
+    text: "Help you in the short term",
     Icon: Target,
   },
   {
     variant: "long",
     label: "Long Term",
     title: "SKILLS",
-    text: "Help you to achieve your goals",
+    text: "Help you achieve your long term goals",
     Icon: BrainCircuit,
   },
 ];
 const HERO_SUBTEXT =
-  "There's a side of you beyond marks that remains undiscovered and HIfAi got you discover it differently.";
+  "There’s a side of you beyond marks that often goes undiscovered HIfAi helps you explore and unlock it in a whole new way.";
 const API_BASE_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost:3003";
 
@@ -290,11 +290,6 @@ export function Hero({ reducedMotion, isMobile }) {
                     className={`hero-line group relative flex min-h-0 min-w-0 flex-col justify-center rounded-2xl border px-3.5 py-4 backdrop-blur-md transition-[transform,box-shadow,border-color] duration-300 sm:min-h-[98px] sm:px-5 sm:py-5 md:min-h-[112px] md:rounded-[1.35rem] md:px-6 md:py-5 ${a.border} ${a.surface} ${a.shadow}`}
                   >
                     <div className="flex min-w-0 flex-col gap-2.5 sm:flex-row sm:items-center sm:gap-2.5 sm:overflow-hidden md:gap-3">
-                      <span
-                        className={`inline-flex w-fit shrink-0 rounded-full border border-white/25 px-2.5 py-1 text-[0.64rem] font-semibold uppercase leading-none tracking-[0.14em] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_6px_20px_-12px_rgba(15,23,42,0.7)] sm:px-3 sm:text-[0.7rem] md:text-[0.78rem] ${a.labelWrap} ${a.labelText}`}
-                      >
-                        {item.label}
-                      </span>
                       <div className="flex min-w-0 flex-1 flex-wrap items-baseline gap-x-2 gap-y-1">
                         <span
                           className={`font-display text-[clamp(1.2rem,5.2vw,2rem)] font-medium leading-snug tracking-[-0.025em] sm:shrink-0 sm:leading-[1.5] sm:text-[clamp(1.35rem,3.1vw,2rem)] ${a.titleWord}`}

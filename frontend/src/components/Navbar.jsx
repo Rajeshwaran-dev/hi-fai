@@ -174,13 +174,6 @@ export default function Navbar({ reducedMotion }) {
             >
               Enquire
             </button>
-            <button
-              type="button"
-              onClick={() => navigateTo("/get-started?tab=college-student")}
-              className="rounded-md border border-cyan-300/35 bg-gradient-to-r from-[#1483ff]/90 to-[#21b9ff]/90 px-2.5 py-1.5 text-[10px] font-semibold uppercase tracking-wide text-white shadow-[0_4px_14px_rgba(20,131,255,0.35)] transition hover:brightness-110 focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/55 sm:px-3 sm:text-[11px] md:px-4 md:text-xs"
-            >
-              Enroll
-            </button>
             <a
               href={`tel:${TOP_BAR_PHONE_TEL}`}
               aria-label={`Call ${TOP_BAR_PHONE_DISPLAY}`}

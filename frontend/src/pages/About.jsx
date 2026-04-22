@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
@@ -50,6 +50,7 @@ const FEMALE_AVATAR_URL = `${STATIC_ASSET_BASE}human.png`;
 const MALE_AVATAR_URL = `${STATIC_ASSET_BASE}man.png`;
 const GROUP_AVATAR_URL = `${STATIC_ASSET_BASE}group.png`;
 const AMBASSADOR_IMAGE_URL = `${STATIC_ASSET_BASE}ambassador.png`;
+const ALEX_MESSAGE_URL = "https://anba.tv/";
 
 function isTeamEntry(member) {
   const text = `${member?.name ?? ""} ${member?.role ?? ""}`.toLowerCase();
@@ -250,6 +251,24 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
   const mainRef = useRef(null);
   const awardsRef = useRef(null);
   const teamRef = useRef(null);
+  const [isAlexModalOpen, setIsAlexModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isAlexModalOpen) return undefined;
+
+    const onEsc = (event) => {
+      if (event.key === "Escape") setIsAlexModalOpen(false);
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onEsc);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onEsc);
+    };
+  }, [isAlexModalOpen]);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -749,27 +768,37 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
                         ambassador community on Anba TV.
                       </p>
 
-                      <a
-                        href="https://anba.tv/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group relative mt-6 inline-flex items-center justify-center gap-3 overflow-hidden rounded-full border-2 border-blue-300/80 bg-gradient-to-r from-blue-100 via-sky-100 to-indigo-100 px-7 py-3.5 text-center shadow-[0_8px_0_rgba(29,78,216,0.12),0_20px_48px_-6px_rgba(37,99,235,0.35),0_0_0_1px_rgba(255,255,255,0.6)_inset] transition-all duration-300 hover:-translate-y-1 hover:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
-                        aria-label="Open Anba TV in a new tab"
-                      >
-                        <span className="relative text-base font-bold leading-tight tracking-tight text-blue-950">
-                          Watch on
-                          <span className="mx-2 font-normal text-blue-500/90">
-                            |
+                      <div className="mt-6 flex flex-wrap items-center justify-center gap-3 md:justify-start">
+                        <a
+                          href="https://anba.tv/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full border-2 border-blue-300/80 bg-gradient-to-r from-blue-100 via-sky-100 to-indigo-100 px-7 py-3.5 text-center shadow-[0_8px_0_rgba(29,78,216,0.12),0_20px_48px_-6px_rgba(37,99,235,0.35),0_0_0_1px_rgba(255,255,255,0.6)_inset] transition-all duration-300 hover:-translate-y-1 hover:border-blue-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-200 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+                          aria-label="Open Anba TV in a new tab"
+                        >
+                          <span className="relative text-base font-bold leading-tight tracking-tight text-blue-950">
+                            Watch on
+                            <span className="mx-2 font-normal text-blue-500/90">
+                              |
+                            </span>
+                            <span className="font-extrabold text-blue-700 underline decoration-blue-600 decoration-2 underline-offset-[5px] transition-colors group-hover:text-blue-800">
+                              Anba TV
+                            </span>
                           </span>
-                          <span className="font-extrabold text-blue-700 underline decoration-blue-600 decoration-2 underline-offset-[5px] transition-colors group-hover:text-blue-800">
-                            Anba TV
-                          </span>
-                        </span>
-                        <ExternalLink
-                          className="relative h-5 w-5 shrink-0 text-blue-700 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-                          aria-hidden
-                        />
-                      </a>
+                          <ExternalLink
+                            className="relative h-5 w-5 shrink-0 text-blue-700 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                            aria-hidden
+                          />
+                        </a>
+
+                        <button
+                          type="button"
+                          onClick={() => setIsAlexModalOpen(true)}
+                          className="inline-flex items-center justify-center rounded-full border border-white/45 bg-white/10 px-6 py-3 text-sm font-semibold text-white transition-colors duration-200 hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-200 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900"
+                        >
+                          Read More
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -778,6 +807,75 @@ function KanavooglePartnershipSection({ reducedMotion, isMobile }) {
           </div>
         </div>
       </div>
+      {isAlexModalOpen ? (
+        <div
+          className="fixed inset-0 z-[220] flex items-center justify-center bg-slate-950/75 px-4 py-6 backdrop-blur-[2px]"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Brand Ambassador Alex details"
+          onClick={() => setIsAlexModalOpen(false)}
+        >
+          <div
+            className="relative max-h-[90vh] w-full max-w-3xl overflow-auto rounded-2xl border border-slate-200 bg-white p-5 shadow-2xl md:p-7"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setIsAlexModalOpen(false)}
+              className="absolute right-3 top-3 inline-flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-600 transition-colors hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              aria-label="Close Alex details"
+            >
+              ×
+            </button>
+
+            <h4 className="pr-10 text-xl font-bold tracking-tight text-slate-900 md:text-2xl">
+              Brand Ambassador Alex - Read More
+            </h4>
+            <div className="mt-4 space-y-4 text-sm leading-relaxed text-slate-700 md:text-base">
+              <p>
+                <span className="font-semibold text-slate-900">Intro:</span>{" "}
+                HiFAI is proud to have Mr Alex Babu as our Brand Ambassador. We
+                love this since, Alex perfectly captures how a software expert
+                (Completed MS in US and Worked with Amazon) can transform into
+                a global superstar by pursuing his passion as a music lover and
+                his 21st century skills (creativity and innovation with digital
+                use).
+              </p>
+              <p>
+                Here is Alex message to all our "HIFAI" followers:
+              </p>
+              <p>
+                "I am a stand-up comedian and musician, and an ex(hausted)
+                software engineer based in Chennai, India. I worked as a
+                software engineer for fifteen years while pursuing music and
+                performing arts on the side. In 2014, I transitioned to stand-up
+                comedy full-time. It has been a fulfilling 12 years of working
+                in the performing arts full-time.
+              </p>
+              <p>
+                My engineering background and 15 years of corporate life have
+                given me valuable perspectives that I now bring into my
+                artistic work. In today's rapidly changing world-especially with
+                the fast growth of AI technologies-the needs of the industry are
+                evolving as well. I am glad that HIFAI is focusing on this area
+                and helping students adapt to these changing times".
+              </p>
+              <p>
+                You can know more about Alex at{" "}
+                <a
+                  href={ALEX_MESSAGE_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-blue-700 underline decoration-blue-600 decoration-2 underline-offset-2"
+                >
+                  anba.tv
+                </a>
+                .
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </section>
   );
 }

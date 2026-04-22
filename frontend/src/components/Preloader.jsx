@@ -14,6 +14,29 @@ function waitForWindowLoad() {
   });
 }
 
+/** iOS / WebKit may never fire `load` if a subresource hangs — do not block the preloader forever. */
+function waitForWindowLoadOrTimeout(ms) {
+  return Promise.race([
+    waitForWindowLoad(),
+    new Promise((resolve) => {
+      setTimeout(resolve, ms);
+    }),
+  ]);
+}
+
+/**
+ * iOS Safari (and Chrome on iOS) often ignores `preload="auto"` on cellular / Low Power Mode.
+ * Decoding may not start until `load()` / `play()` runs; waiting only for `canplay` can deadlock.
+ */
+function configureIosFriendlyVideo(video) {
+  video.muted = true;
+  video.defaultMuted = true;
+  video.playsInline = true;
+  video.setAttribute("playsinline", "");
+  video.setAttribute("webkit-playsinline", "");
+  video.setAttribute("muted", "");
+}
+
 /**
  * Homepage entry preloader: fullscreen demo video (bundled via Vite).
  * Only mounted from `App.jsx` (route `/`).
@@ -47,8 +70,15 @@ export default function Preloader({ onComplete, reducedMotion = false }) {
     let cancelled = false;
     let maxTimerId = 0;
 
-    const loadP = waitForWindowLoad();
+    const loadP = waitForWindowLoadOrTimeout(12000);
     const minP = new Promise((r) => setTimeout(r, MIN_VISIBLE_MS));
+
+    configureIosFriendlyVideo(video);
+    try {
+      video.load();
+    } catch {
+      /* ignore */
+    }
 
     let videoFinished = false;
     const videoP = new Promise((resolve) => {
@@ -59,15 +89,28 @@ export default function Preloader({ onComplete, reducedMotion = false }) {
         resolve();
       };
 
+      let playAttempted = false;
       const tryPlay = () => {
+        if (playAttempted) return;
+        playAttempted = true;
+        configureIosFriendlyVideo(video);
         video.play().catch(() => finish());
       };
 
       video.addEventListener("ended", finish, { once: true });
       video.addEventListener("error", finish, { once: true });
 
-      if (video.readyState >= 2) tryPlay();
-      else video.addEventListener("canplay", tryPlay, { once: true });
+      const kickPlayback = () => {
+        if (video.readyState >= 2) tryPlay();
+      };
+
+      kickPlayback();
+      video.addEventListener("loadedmetadata", kickPlayback, { once: true });
+      video.addEventListener("loadeddata", tryPlay, { once: true });
+      video.addEventListener("canplay", tryPlay, { once: true });
+      requestAnimationFrame(() => {
+        if (!cancelled) kickPlayback();
+      });
 
       maxTimerId = window.setTimeout(finish, MAX_WAIT_MS);
     });
