@@ -4,7 +4,7 @@ import { X } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import SubmissionSuccessModal from "../components/SubmissionSuccessModal.jsx";
 import { Lead, SectionHeading } from "./subpageShared.jsx";
-import sampleQrImage from "../assets/images/qr.png?url";
+import sampleQrImage from "../assets/images/qr.jpeg?url";
 
 const tabOptions = [
   { id: "school-org", label: "Schools" },
